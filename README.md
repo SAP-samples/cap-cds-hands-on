@@ -27,6 +27,17 @@ options.
 
 ## Exercises
 
+To get started, clone this repository and open it in your favourite editor or
+IDE.
+
+```bash
+git clone https://github.com/qmacro/hands-on-with-cap-cds \
+  && cd $_
+```
+
+Unless otherwise stated, all command line invocations are based on being in the
+clone directory, i.e. within `hands-on-with-cap-cds/`.
+
 ### Part 1 - understanding the context
 
 When, where and why does one use CDL? To define CDS models that reflect the
