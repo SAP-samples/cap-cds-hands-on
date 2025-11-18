@@ -137,12 +137,12 @@ server landing page:
 
 👉 Examine some of the resources available via the various hyperlinks:
 
-- [http://localhost:4004/odata/v4/simple](/odata/v4/simple) (the OData service
+- [http://localhost:4004/odata/v4/simple](http://localhost:4004/odata/v4/simple) (the OData service
   document)
-- [http://localhost:4004/odata/v4/simple/\$metadata](/odata/v4/simple/$metadata)
+- [http://localhost:4004/odata/v4/simple/\$metadata](http://localhost:4004/odata/v4/simple/$metadata)
   (the OData metadata document)
-- [http://localhost:4004/$fiori-preview/Simple/Products#preview-app](Fiori preview) (a basic Fiori elements List Report app where the Products data can be viewed)
-- [http://localhost:4004/odata/v4/simple/Products](/odata/v4/simple/Products) (an entityset with the Products data)
+- [Fiori preview](http://localhost:4004/$fiori-preview/Simple/Products#preview-app) (a basic Fiori elements List Report app where the Products data can be viewed)
+- [http://localhost:4004/odata/v4/simple/Products](http://localhost:4004/odata/v4/simple/Products) (an entityset with the Products data)
 
 👉 Riff on this last resource by trying out some standard OData URL-based query mechanisms (admittedly these are somewhat limited, given the rather limited nature of our dataset), such as:
 
