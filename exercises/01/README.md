@@ -160,7 +160,7 @@ lastid="$(
     jq '.value|first|.ID'
 )" # get latest ID
 nextid="$((lastid + 1))" # increment it
-curl -d '{"ID":'"$nextid"',"name":"New Product ('"$nextid"')"}' \
+curl -d '{"ID":'"$nextid"',"name":"New Product ('"$nextid"')","stock":10}' \
   --url 'localhost:4004/odata/v4/simple/Products' # use for a new record
 ```
 
