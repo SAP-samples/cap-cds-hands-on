@@ -168,7 +168,7 @@ curl -d '{"ID":'"$nextid"',"name":"New Product ('"$nextid"')"}' \
 
 ```bash
 curl --request PATCH \
-  --data '{"name": "Aniseed Sauce"}'
+  --data '{"name": "Aniseed Sauce"}' \
   --url 'localhost:4004/odata/v4/simple/Products/3'
 ```
 
