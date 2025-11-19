@@ -49,8 +49,8 @@ way that can be used as the foundation for a service, solution or application.
 The exercises in this part help us understand better the context of domain
 modelling with CDS.
 
-[01 - Create a simple definition for a first service](exercises/01/)
-[02 - Understand the basic model, service and persistence features](exercises/02/)
+- [01 - Create a simple definition for a first service](exercises/01/)
+- [02 - Understand the basic model, service and persistence features](exercises/02/)
 
 #### Further reading
 
