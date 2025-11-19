@@ -84,6 +84,13 @@ entity Products {
 }
 ```
 
+> [!NOTE]
+> Here we come across the
+> [namespace](https://cap.cloud.sap/docs/cds/cdl#the-namespace-directive)
+> directive which is used to define a prefix for all subsequent definition
+> names in the file; thus the fully qualified name of the entity will be
+> `workshop.Products`.
+
 👉 Now create another file `simple.cds` in the `srv/` directory to define the
 `Simple` service, bringing in the `Products` entity definition from where it
 now is:
@@ -95,6 +102,12 @@ service Simple {
   entity Products as projection on workshop.Products;
 }
 ```
+
+> [!NOTE]
+> The [using](https://cap.cloud.sap/docs/cds/cdl#using) directive is a key
+> enabler of componentisation, separation of concerns and model reuse. The CDL
+> in this `simple.cds` file starts by importing the definitions from the
+> `schema.cds` file at the `db/` layer, by their top-level name (namespace).
 
 👉 Now delete the original `services.cds` file, and re-align the name of
 the CSV file to fit the namespaced entity name so it will be picked up
