@@ -108,6 +108,14 @@ service Simple {
 > enabler of componentisation, separation of concerns and model reuse. The CDL
 > in this `simple.cds` file starts by importing the definitions from the
 > `schema.cds` file at the `db/` layer, by their top-level name (namespace).
+>
+> Moreover, we have `as projection on` which is [one of
+> two](https://cap.cloud.sap/docs/cds/cdl#views-projections) variants that
+> allow us to derive new entities from existing ones. Here the simplest case is
+> in play, where there's a 1:1 relationship, a "pass-through" projection. But
+> the power to limit, re-imagine and otherwise manipulate existing entities as
+> new ones is great. Think of projections as
+> [views](https://en.wikipedia.org/wiki/View_(SQL)) in relational databases.
 
 👉 Now delete the original `services.cds` file, and re-align the name of
 the CSV file to fit the namespaced entity name so it will be picked up
