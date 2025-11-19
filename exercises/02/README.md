@@ -241,10 +241,17 @@ CREATE TABLE Simple_Products (
 ### Deployments (bonus)
 
 If you're curious about how this ends up in production, say, with an SAP HANA
-Cloud backend, you can use `cds build --profile production` to see what is
-generated, and inspect the individual assets such as the HDI container
-artifacts and the table data (`.hdbtable`) files, shown in the output to the
-invocation here:
+Cloud backend, you can prepare a deployment to see what's generated, and inspect
+the individual assets such as HDI container artifacts and table data (`.hdbtable`)
+files.
+
+👉 To do this, use:
+
+```bash
+cds build --profile production
+```
+
+which will produce output something like this:
 
 ```log
 building project with {
@@ -271,15 +278,22 @@ build completed in 780 ms
 ```
 
 And to finish off, back to design (non-production) time, you can even deploy to
-a SQLite database file using `cds deploy --to sqlite` which emits something
-like this:
+a SQLite database file which you can explore using the SQLite command line interface.
+
+👉 Use this command:
+
+```bash
+cds deploy --to sqlite
+```
+
+which emits something like this:
 
 ```log
 /> successfully deployed to db.sqlite
 ```
 
-and creates a `db.sqlite` file, which you can explore using the SQLite command
-line interface, like this:
+👉 Then invoke the SQLite command line interface, specifying the name of the
+file created:
 
 ```bash
 sqlite3 db.sqlite
@@ -324,3 +338,14 @@ sqlite>
 
 > `cds_outbox_Messages` is a built-in table related to the
 > [Queuing](https://cap.cloud.sap/docs/node.js/queue) facilities.
+
+👉 If you've run the `cds build` command, clean up before moving on to the next
+exercise, by removing the `gen/` directory, as we won't need it:
+
+```bash
+rm -rf gen/
+```
+
+---
+
+[Next](../03/)
