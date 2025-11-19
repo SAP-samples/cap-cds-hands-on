@@ -69,6 +69,13 @@ service Simple {
 > Technically we're combining a model definition inside a simple service
 > definition here, but again, that distinction is for later.
 
+> [!NOTE]
+> There are three new CDL keywords here:
+>
+> - `service` to declare a [service definition](https://cap.cloud.sap/docs/cds/cdl#service-definitions), an interface to the outside world, generally speaking
+> - `entity` to introduce a [structured type that represents persisted data](https://cap.cloud.sap/docs/cds/cdl#entity-definitions), in other words, a business object (in the loosest sense)
+> - `key` to indicate that the element is to be considered a primary key
+
 As we've started the CAP server in [watch
 mode](https://cap.cloud.sap/docs/tools/cds-cli#cds-watch), it should notice
 these changes and restart, and this time, the log output includes, amongst
