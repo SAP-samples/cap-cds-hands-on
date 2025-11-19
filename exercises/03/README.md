@@ -125,3 +125,50 @@ and used for initial data:
 rm services.cds
 mv db/data/Simple.Products.csv db/data/workshop-Products.csv
 ```
+
+## Examine the data definition language constructs
+
+Before we leave the depths of the persistence layer and the corresponding Data
+Definition Language
+([DDL](https://en.wikipedia.org/wiki/Data_definition_language)) statements,
+let's remind ourselves of what the initial incarnation of our service
+definition [translated to in DDL](../02#sql-and-ddl):
+
+```sql
+CREATE TABLE Simple_Products (
+  ID INTEGER NOT NULL,
+  name NVARCHAR(255),
+  stock INTEGER,
+  PRIMARY KEY(ID)
+);
+```
+
+Now, with our first foray into separating the concerns, and the layers, things
+look different.
+
+👉 Request a compilation to SQL again, like this:
+
+```bash
+cds compile --to sql srv/simple.cds
+```
+
+This time there are two distinct objects - a table, and a view:
+
+```sql
+CREATE TABLE workshop_Products (
+  ID INTEGER NOT NULL,
+  name NVARCHAR(255),
+  stock INTEGER,
+  PRIMARY KEY(ID)
+);
+
+CREATE VIEW Simple_Products AS SELECT
+  Products_0.ID,
+  Products_0.name,
+  Products_0.stock
+FROM workshop_Products AS Products_0;
+```
+
+The reification of the projection as a view at the persistence layer is what we
+expected, given the explanation of `as projection on` earlier.
+

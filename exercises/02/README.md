@@ -174,7 +174,7 @@ While we won't need to look much further at CSN in this workshop, it's
 important to understand that it exists and is the "processable" version of the
 definitions we construct in our CDS models.
 
-### SQL
+### SQL and DDL
 
 At some point the data model part of our definitions will need to have some
 form of presence at a persistence layer. In other words, we'll want to store
@@ -182,7 +182,11 @@ the data in our model, the records that make up the data in our entities, and
 the projections upon them, and so on.
 
 When we started our CAP server with `cds watch` earlier, this compiled the CDL
-into SQL, in order to be able to deploy the data model to a persistence layer.
+into SQL (more accurately
+[DDL](https://en.wikipedia.org/wiki/Data_definition_language), a specific
+syntax in the SQL world for defining database objects themselves, rather than
+working with the data within), in order to be able to deploy the data model to
+a persistence layer.
 
 In development mode, by default, this persistence layer is provided by the
 quietly powerful and ubiquitous [SQLite](https://sqlite.org/) database engine.
