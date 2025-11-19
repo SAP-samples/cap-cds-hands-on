@@ -1,13 +1,13 @@
 # 02 - Understand the basic model, service and persistence features
 
 In the previous exercise we conjured up a simple but fully functional OData
-service from a few lines of declarative model definition. In this exercise
-we'll explore what we have to understand the central importance of the model,
+service from just a few lines of declarative model definition. In this exercise
+we'll explore what we have, to understand the central importance of the model,
 what the service is, and how the definition relates to a database layer.
 
 ## Explore the service
 
-👉 Open up `http://localhost:4004/` in your browser to see the default CAP
+👉 Open up <http://localhost:4004/> in your browser to see the default CAP
 server landing page:
 
 ![Default CAP server landing page](assets/default-cap-server-landing-page.png)
