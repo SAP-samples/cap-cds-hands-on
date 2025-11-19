@@ -14,6 +14,8 @@ such as `tree -F -I node_modules`, which will reveal:
 ├── README.md
 ├── app/
 ├── db/
+│   └── data/
+│       └── Simple.Products.csv
 ├── db.sqlite
 ├── eslint.config.mjs
 ├── package-lock.json
@@ -21,7 +23,7 @@ such as `tree -F -I node_modules`, which will reveal:
 ├── services.cds
 └── srv/
 
-4 directories, 6 files
+5 directories, 7 files
 ```
 
 The simple OData service we have so far is in a single file `services.cds` at
@@ -50,6 +52,10 @@ Location|Contains
 This is the first glimpse into, and a 30,000 feet level example of, one of
 CAP's fundamental design tenets - [separation of
 concerns](https://cap.cloud.sap/docs/cds/aspects#separation-of-concerns).
+
+> We already noticed the use of `db/` as the default location for a `data/`
+> directory to hold [initial data](../01#add-some-initial-data), and we'll
+> revisit that later in this exercise.
 
 This workshop is focusing on what CAP and in particular CDS modelling can
 bring, so we can safely ignore the `app/` directory for the rest of the
