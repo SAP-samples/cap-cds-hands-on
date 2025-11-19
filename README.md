@@ -51,6 +51,7 @@ modelling with CDS.
 
 - [01 - Create a simple definition for a first service](exercises/01/)
 - [02 - Understand the basic model, service and persistence features](exercises/02/)
+- [03 - Separate out the data model from the service definition](exercises/03/)
 
 #### Further reading
 
