@@ -38,7 +38,7 @@ git clone https://github.com/qmacro/hands-on-with-cap-cds \
 Unless otherwise stated, all command line invocations are based on being in the
 clone directory, i.e. within `hands-on-with-cap-cds/`.
 
-### Part 1 - understanding the context
+### Part 1 - Understanding the context
 
 When, where and why does one use CDL? To define CDS models that reflect the
 problem domain, the business entities that make up the solution landscape. Who
