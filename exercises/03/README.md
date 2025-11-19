@@ -6,7 +6,7 @@ far into different layers, and understand why.
 ## Review what we have
 
 In our IDE we can see the files and directories that we have in our project so
-far, either in the Explorer column or via a traditional command in the shell
+far, either in an Explorer style column or via a traditional command in the shell
 such as `tree -F -I node_modules`, which will reveal:
 
 ```log
@@ -68,8 +68,8 @@ server (i.e. the server you started with `cds watch`) - this is just so we
 don't get too many log messages during the restarts that will take place as we
 create files and edit their content.
 
-Teasing apart the content of `services.cds` we see the keywords `service` and
-`entity`; these logically belong at separate levels, so let's remedy that now.
+Examining the content of `services.cds` we see the keywords `service` and
+`entity`; these logically belong at separate levels, so let's adjust that now.
 
 👉 Create a file `schema.cds` in the `db/` directory, with the following
 contents, i.e. extracting the `entity` definition into this new file:
@@ -96,8 +96,11 @@ service Simple {
 }
 ```
 
-👉 Now delete the original `services.cds` file:
+👉 Now delete the original `services.cds` file, and re-align the name of
+the CSV file to fit the namespaced entity name so it will be picked up
+and used for initial data:
 
 ```bash
 rm services.cds
+mv db/data/Simple.Products.csv db/data/workshop-Products.csv
 ```

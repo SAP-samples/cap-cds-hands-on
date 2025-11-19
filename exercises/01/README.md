@@ -123,7 +123,7 @@ successfully added features to your project
 
 tells us where file is.
 
-👉 Open the file and add the following records to it:
+👉 Open the file and add the following records to it, after the header line:
 
 ```csv
 1,Chai,39
