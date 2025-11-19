@@ -187,8 +187,7 @@ into SQL, in order to be able to deploy the data model to a persistence layer.
 In development mode, by default, this persistence layer is provided by the
 quietly powerful and ubiquitous [SQLite](https://sqlite.org/) database engine.
 Also by default in this context, it will be started in "in-memory" mode, i.e.
-ephemeral persistence (if that is not an oxymoron) for the duration of the CAP
-server's lifetime. This is incredibly useful for rapid turnaround and
+ephemeral persistence (if that is not an oxymoron) for the duration of the CAP server's lifetime. This is incredibly useful for rapid turnaround and
 local-first development.
 
 > If you want to learn more about what CAP has to offer for local-first
@@ -238,3 +237,90 @@ CREATE TABLE Simple_Products (
 >   PRIMARY KEY(ID)
 > )
 > ```
+
+### Deployments (bonus)
+
+If you're curious about how this ends up in production, say, with an SAP HANA
+Cloud backend, you can use `cds build --profile production` to see what is
+generated, and inspect the individual assets such as the HDI container
+artifacts and the table data (`.hdbtable`) files, shown in the output to the
+invocation here:
+
+```log
+building project with {
+  versions: { cds: '9.4.4', compiler: '6.4.6', dk: '9.4.3' },
+  target: 'gen',
+  tasks: [
+    { src: 'db', for: 'hana', options: { model: [ 'db', 'srv', 'app', 'services', '@sap/cds/srv/outbox' ] } },
+    { src: 'srv', for: 'nodejs', options: { model: [ 'db', 'srv', 'app', 'services', '@sap/cds/srv/outbox' ] } }
+  ]
+}
+done > wrote output to:
+   gen/db/package.json
+   gen/db/src/gen/.hdiconfig
+   gen/db/src/gen/.hdinamespace
+   gen/db/src/gen/Simple.Products.hdbtable
+   gen/db/src/gen/cds.outbox.Messages.hdbtable
+   gen/srv/package-lock.json
+   gen/srv/package.json
+   gen/srv/srv/_i18n/i18n.json
+   gen/srv/srv/csn.json
+   gen/srv/srv/odata/v4/Simple.xml
+
+build completed in 780 ms
+```
+
+And to finish off, back to design (non-production) time, you can even deploy to
+a SQLite database file using `cds deploy --to sqlite` which emits something
+like this:
+
+```log
+/> successfully deployed to db.sqlite
+```
+
+and creates a `db.sqlite` file, which you can explore using the SQLite command
+line interface, like this:
+
+```bash
+sqlite3 db.sqlite
+```
+
+This gives you a prompt:
+
+```log
+SQLite version 3.40.1 2022-12-28 14:03:47
+Enter ".help" for usage hints.
+sqlite>
+```
+
+where you can explore with commands such as `.tables` and query the schema with
+`select * from sqlite_schema;` for example:
+
+```log
+sqlite> .tables
+Simple_Products      cds_outbox_Messages
+sqlite> select * from sqlite_schema;
+table|Simple_Products|Simple_Products|2|CREATE TABLE Simple_Products (
+  ID INTEGER NOT NULL,
+  name NVARCHAR(255),
+  stock INTEGER,
+  PRIMARY KEY(ID)
+)
+table|cds_outbox_Messages|cds_outbox_Messages|3|CREATE TABLE cds_outbox_Messages (
+  ID NVARCHAR(36) NOT NULL,
+  timestamp TIMESTAMP_TEXT,
+  target NVARCHAR(255),
+  msg NCLOB,
+  attempts INTEGER DEFAULT 0,
+  "partition" INTEGER DEFAULT 0,
+  lastError NCLOB,
+  lastAttemptTimestamp TIMESTAMP_TEXT,
+  status NVARCHAR(23),
+  PRIMARY KEY(ID)
+)
+index|sqlite_autoindex_cds_outbox_Messages_1|cds_outbox_Messages|4|
+sqlite>
+```
+
+> `cds_outbox_Messages` is a built-in table related to the
+> [Queuing](https://cap.cloud.sap/docs/node.js/queue) facilities.
