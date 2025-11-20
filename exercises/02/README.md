@@ -1,9 +1,10 @@
 # 02 - Understand the basic model, service and persistence features
 
 In the previous exercise we conjured up a simple but fully functional OData
-service from just a few lines of declarative model definition. In this exercise
-we'll explore what we have, to understand the central importance of the model,
-what the service is, and how the definition relates to a database layer.
+service from a declarative definition that is just a few lines long. In this
+exercise we'll explore what we have, to understand the central importance of
+the model, what the service is, and how the definition relates to a database
+layer.
 
 ## Explore the service
 
@@ -31,13 +32,15 @@ nature of our dataset), such as:
 - [http://localhost:4004/odata/v4/simple/Products/3](http://localhost:4004/odata/v4/simple/Products/3)
   (retrieve the Product with ID 3)
 - [http://localhost:4004/odata/v4/simple/Products?\$filter=contains(name,%27Syrup%27)](http://localhost:4004/odata/v4/simple/Products?$filter=contains(name,'Syrup'))
-  (return an entityset with products that have "Syrup" in their names)
+  (return an entityset with products that have "Syrup" in their name)
 - [http://localhost:4004/odata/v4/simple/Products?\$select=name](http://localhost:4004/odata/v4/simple/Products?$select=name)
   (all the products, just with the name property for each entity)
 
-> By default the key property, in this case `ID`, is returned as well.
+> By default the key property (`ID` here) is returned as well.
 
-👉 At the shell prompt, add a new product:
+At the shell prompt, try one or more of these:
+
+👉 Add a new product:
 
 ```bash
 lastid="$(
@@ -49,7 +52,7 @@ curl -d '{"ID":'"$nextid"',"name":"New Product ('"$nextid"')","stock":10}' \
   --url 'localhost:4004/odata/v4/simple/Products' # use for a new record
 ```
 
-👉 Change the name of product with ID 3:
+👉 Change the name of product ID 3:
 
 ```bash
 curl --request PATCH \
@@ -96,7 +99,7 @@ service Simple {
 }
 ```
 
-👉 Create the CSN equivalent of this model, in a JSON representation:
+👉 Generate the CSN equivalent of this model, in a JSON representation:
 
 ```bash
 cds compile --to json services.cds
@@ -141,9 +144,10 @@ This emits:
 > contains a single `services.cds` source file at this point anyway.
 
 While JSON is arguably "the default", YAML is easier on the eye so we'll use
-that as our go-to representation throughout this workshop.
+that as our go-to representation throughout this workshop whenever we want to
+look at CSN.
 
-👉 Re-create the CSN equivalent of this model, this time in a YAML representation:
+👉 Re-generate the CSN equivalent of this model, this time in a YAML representation:
 
 ```bash
 cds compile --to yaml services.cds
@@ -166,9 +170,9 @@ meta: { creator: CDS Compiler v6.4.6, flavor: inferred }
 $version: 2.0
 ```
 
-> Here, for purposes of display and readability in this workshop, the YAML has
-> been passed through [Prettier](https://prettier.io/), "an opinionated code
-> formatter".
+> Here, for purposes of display and readability in these workshop exercises,
+> the YAML has been passed through [Prettier](https://prettier.io/), "an
+> opinionated code formatter".
 
 While we won't need to look much further at CSN in this workshop, it's
 important to understand that it exists and is the "processable" version of the
@@ -200,8 +204,8 @@ local-first development.
 > Model](https://virtual.oxfordabstracts.com/event/75555/submission/127)
 > tomorrow (Mon 01 Dec).
 
-When looking at the log output from the CAP server earlier, you may have
-noticed these lines:
+When looking at the log output from the CAP server in the previous exercise, we
+saw:
 
 ```log
 [cds] - connect to db > sqlite { url: ':memory:' }
@@ -210,6 +214,10 @@ noticed these lines:
 
 This reflects what's happening - the model is compiled and deployed to a SQLite
 powered in-memory persistence layer.
+
+> This mode is employed directly because of the design-time options we
+> requested implicitly with `cds watch`, which were (as you also may have
+> noticed in the log output): `cds serve all --with-mocks --in-memory?`.
 
 👉 Take a look at what that looks like by asking for the SQL equivalent:
 
@@ -293,7 +301,9 @@ cds deploy --to sqlite
 which emits something like this:
 
 ```log
+  > init from db/data/Simple.Products.csv
 /> successfully deployed to db.sqlite
+
 ```
 
 👉 Then invoke the SQLite command line interface, specifying the name of the
@@ -311,12 +321,17 @@ Enter ".help" for usage hints.
 sqlite>
 ```
 
-where you can explore with commands such as `.tables` and query the schema with
-`select * from sqlite_schema;` for example:
+where you can explore with commands such as `.tables`, request data with
+`select * from Simple_Products;` and query the schema with `select * from
+sqlite_schema;` for example:
 
 ```log
 sqlite> .tables
 Simple_Products      cds_outbox_Messages
+sqlite> select * from Simple_Products;
+1|Chai|39
+2|Chang|17
+3|Aniseed Syrup|13
 sqlite> select * from sqlite_schema;
 table|Simple_Products|Simple_Products|2|CREATE TABLE Simple_Products (
   ID INTEGER NOT NULL,
@@ -343,12 +358,16 @@ sqlite>
 > `cds_outbox_Messages` is a built-in table related to the
 > [Queuing](https://cap.cloud.sap/docs/node.js/queue) facilities.
 
+You can exit the `sqlite3` prompt with `Ctrl-D`.
+
 👉 If you've run the `cds build` command, clean up before moving on to the next
 exercise, by removing the `gen/` directory, as we won't need it:
 
 ```bash
 rm -rf gen/
 ```
+
+Good work!
 
 ---
 

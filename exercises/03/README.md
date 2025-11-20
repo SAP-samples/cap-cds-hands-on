@@ -5,9 +5,10 @@ far into different layers, and understand why.
 
 ## Review what we have
 
-In our IDE we can see the files and directories that we have in our project so
-far, either in an Explorer style column or via a traditional command in the shell
-such as `tree -F -I node_modules`, which will reveal:
+In our working environment we can see the files and directories that we
+have in our project so far, either in an Explorer style column or via a
+traditional command in the shell such as `tree -F -I node_modules`, which
+will reveal:
 
 ```log
 ./
@@ -26,8 +27,9 @@ such as `tree -F -I node_modules`, which will reveal:
 5 directories, 7 files
 ```
 
-The simple OData service we have so far is in a single file `services.cds` at
-the project root level, and based upon a few declarative lines:
+The simple OData service we have so far is the result of definitions in a
+single file `services.cds` at the project root level, and based upon a few
+declarative lines:
 
 ```cds
 service Simple {
@@ -64,9 +66,9 @@ exercises.
 ## Rework the content of services.cds into the service and persistence layers
 
 👉 Before making these changes, stop (with `Ctrl-C`) any currently running CAP
-server (i.e. the server you started with `cds watch`) - this is just so we
-don't get too many log messages during the restarts that will take place as we
-create files and edit their content.
+server (i.e. the server you started with `cds watch` in a previous exercise) -
+this is just so we don't get too many log messages during the restarts that
+will take place as we create files and edit their content.
 
 Examining the content of `services.cds` we see the keywords `service` and
 `entity`; these logically belong at separate levels, so let's adjust that now.
@@ -92,7 +94,8 @@ entity Products {
 > `workshop.Products`.
 
 👉 Now create another file `simple.cds` in the `srv/` directory to define the
-`Simple` service, bringing in the `Products` entity definition from where it
+`Simple` service, bringing in the `workshop` name (through which we can
+reference the `Products` entity definition within) from where it
 now is:
 
 ```cds
@@ -172,3 +175,18 @@ FROM workshop_Products AS Products_0;
 The reification of the projection as a view at the persistence layer is what we
 expected, given the explanation of `as projection on` earlier.
 
+## Check the service works as before
+
+Before finishing this exercise and this first part, let's make sure the modifications we've made still result in what we intend, i.e. the simple OData service exposing product information.
+
+👉 Start the CAP server up again:
+
+```bash
+cds watch
+```
+
+> This can be shortened to `cds w`, helpful if you're typing things in manually.
+
+👉 Revisit <http://localhost:4004> and explore the service [like you did in the previous exercise](../02#explore-the-service).
+
+Well done!

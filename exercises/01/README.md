@@ -1,10 +1,10 @@
 # 01 - Create a simple definition for a first service
 
-In this exercise we'll create a very basic definition and see how that becomes
-the heart of everything. [The simplest thing that could possibly
+In this exercise we'll create a very basic declarative definition and see how
+that becomes the heart of everything ([the simplest thing that could possibly
 work](https://creators.spotify.com/pod/profile/tech-aloud/episodes/The-Simplest-Thing-that-Could-Possibly-Work--A-conversation-with-Ward-Cunningham--Part-V---Bill-Venners-e5dpts),
-pretty much. After all, every technical solution to a business problem has a
-well thought out model at its core.
+pretty much). After all, every good technical solution to a business problem
+has a well thought out model at its core.
 
 ## Start a new CAP Node.js project
 
@@ -47,14 +47,20 @@ cds serve all --with-mocks --in-memory?
 
 The CAP server is started but is telling us (correctly) that there are no
 models defined in any place it expects, so will not start listening for any
-incoming requests as there is nothing to wrap a service around.
+incoming requests as there is nothing to wrap a service around and serve.
 
 > The words "model" and "service" are chosen specificially and their meaning
 > and distinction will become clear later on.
 
 ## Define a simple domain model
 
-👉 Add the following content to a new file in the `simple/` directory called `services.cds`:
+For the rest of this exercise (and the other exercises in this part of the
+workshop) you can remain in the `simple/` directory.
+
+👉 Add the following content to a new file called `services.cds`:
+
+> The name of the file (`services.cds`) is important in this example, it is one
+> of the default places the CAP server will look for definitions.
 
 ```cds
 service Simple {
@@ -79,7 +85,7 @@ service Simple {
 As we've started the CAP server in [watch
 mode](https://cap.cloud.sap/docs/tools/cds-cli#cds-watch), it should notice
 these changes and restart, and this time, the log output includes, amongst
-others (which have been redacted to keep things simple), these extra lines:
+other info (which has been redacted to keep things simple), these extra lines:
 
 ```log
 [cds] - loaded model from 2 file(s):
@@ -99,6 +105,12 @@ others (which have been redacted to keep things simple), these extra lines:
 [cds] - server listening on { url: 'http://localhost:4004' }
 ```
 
+It has:
+
+- found our definitions in `services.cds`
+- established an in-memory SQLite mechanism
+- started serving the service we've defined
+
 > From the `odata` component of the relative URL path (`/odata/v4/simple`) we
 > can correctly surmise that, by default, services such as this are made
 > available in OData form, which is often going to be exactly what we need to
@@ -108,8 +120,8 @@ others (which have been redacted to keep things simple), these extra lines:
 ## Add some initial data
 
 The `Simple` service is fully functional as the CAP framework provides
-everything for a complete CRUD (Create, Read, Update, Delete) out of the box.
-But let's add some data to make it a little easier to explore.
+everything for a complete CRUD implementation (Create, Read, Update, Delete)
+out of the box. But let's add some data to make it a little easier to explore.
 
 👉 Use the `data` facet of `cds add` to have a CSV file with a header line
 added for the entities (just `Products` in this simple setup):
@@ -130,13 +142,25 @@ successfully added features to your project
 
 tells us where file is.
 
-👉 Open the file and add the following records to it, after the header line:
+👉 Open the file and append the following records to it, after the header line:
 
 ```csv
 1,Chai,39
 2,Chang,17
 3,Aniseed Syrup,13
 ```
+
+In the section of the CAP server log that we saw before announcing the use of
+SQLite, we now see an extra line telling us this CSV file has been found and
+initial data is being loaded from it:
+
+```log
+[cds] - connect to db > sqlite { url: ':memory:' }
+  > init from db/data/Simple.Products.csv
+/> successfully deployed to in-memory database.
+```
+
+Great!
 
 ---
 

@@ -42,9 +42,9 @@ clone directory, i.e. within `hands-on-with-cap-cds/`.
 
 When, where and why does one use CDL? To define CDS models that reflect the
 problem domain, the business entities that make up the solution landscape. Who
-is responsible for this? Teams of developers and domain experts combined;
-between them the domain knowledge can be accurately expressed and modelled in a
-way that can be used as the foundation for a service, solution or application.
+is responsible for this? Teams of developers and business domain experts combined;
+between them the domain knowledge can be accurately expressed and modelled as the
+foundation for a service, solution or application.
 
 The exercises in this part help us understand better the context of domain
 modelling with CDS.
