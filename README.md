@@ -25,6 +25,11 @@ In order to work through the exercises, you'll need a development environment
 for CAP Node.js. See the [prerequisites](prerequisites.md) page for details and
 options.
 
+The exercises presume no prior knowledge; nor do they attempt to cover
+everything there is to know about CDS modelling and CDL. For that, see the
+relevant sections of [Capire](https://cap.cloud.sap/docs), particularly the
+[CDS](https://cap.cloud.sap/docs/cds/) topic.
+
 ## Exercises
 
 To get started, clone this repository and open it in your favourite editor or
@@ -38,7 +43,7 @@ git clone https://github.com/qmacro/hands-on-with-cap-cds \
 Unless otherwise stated, all command line invocations are based on being in the
 clone directory, i.e. within `hands-on-with-cap-cds/`.
 
-### Part 1 - Understanding the context
+### Part 1 - Understanding the context and some basic definitions
 
 When, where and why does one use CDL? To define CDS models that reflect the
 problem domain, the business entities that make up the solution landscape. Who
@@ -59,3 +64,27 @@ modelling with CDS.
   [Jumpstart & Grow As You
   Go](https://cap.cloud.sap/docs/about/#jumpstart-grow-as-you-go) sections of
   the Getting Started topic in Capire.
+
+### Part 2 - More on structure with types, aspects and reuse
+
+The definition we have so far is deliberately very basic. What are the
+facilities in CDL to expand on that, to allow for the definition of custom
+types, to bring consistency and at the same time avoid repetition? Perhaps most
+importantly, how can we define our domain models in a way that reuse is always
+possible, both in and of what we are building?
+
+In this part we'll expand our basic definitions as a way of learning about the
+answers to these questions.
+
+- [04 - Design and use custom types for a richer entity definition](exercises/04/)
+
+#### Further reading
+
+- The [Language
+  Preliminaries](https://cap.cloud.sap/docs/cds/cdl#language-preliminaries)
+  section of the CDL topic in Capire
+- The sections on type definitions and structured types in the [Entities & Type
+  Definitions](https://cap.cloud.sap/docs/cds/cdl#entities-type-definitions)
+  section of the CDL topic in Capire
+- The section on [Aspects](https://cap.cloud.sap/docs/cds/cdl#aspects) in the
+  CDL topic in Capire
