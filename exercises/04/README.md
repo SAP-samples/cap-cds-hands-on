@@ -69,8 +69,8 @@ when values belong together.
 
 ## Add price information
 
-Let's add cost information. While a price is typically represented
-as a decimal, they are meaningless without a currency.
+Let's add price information. While a price is typically represented
+as a decimal, it is meaningless without a currency.
 
 What does good look like here? Well, it depends. But for the sake of
 learning about types, let's explore a custom [structured
@@ -78,13 +78,64 @@ type](https://cap.cloud.sap/docs/cds/cdl#structured-types).
 
 👉 Add a custom type `Price` to `db/schema.cds` and use it for a new element `price`:
 
+👉 Add a new element `price` described by a structure like this:
+
+```cds
+namespace workshop;
+
+entity Products {
+  key ID    : Integer;
+      name  : String;
+      stock : Integer;
+      price : {
+        amount   : Decimal;
+        currency : String;
+      }
+
+}
+```
+
+👉 Look at what this turns into from a CSN point of view:
+
+```bash
+cds compile --to yaml srv/ # specifying the entire srv/ dir
+```
+
+This shows us:
+
+```yaml
+namespace: workshop
+definitions:
+  workshop.Products:
+    kind: entity
+    elements:
+      ID: { key: true, type: cds.Integer }
+      name: { type: cds.String }
+      stock: { type: cds.Integer }
+      price:
+        {
+          elements:
+            {
+              amount: { type: cds.Decimal },
+              currency: { type: cds.String },
+            },
+        }
+meta: { creator: CDS Compiler v6.4.6, flavor: inferred }
+$version: 2.0
+```
+
+This is effectively ad hoc, as this structure cannot be used anywhere else we
+might want to have an element representing a monetary value.
+
+👉 Instead, declare a named custom type and use that, like this:
+
 ```cds
 namespace workshop;
 
 type Price {
-  amount   : Decimal;
-  currency : String;
-}
+        amount   : Decimal;
+        currency : String;
+      }
 
 entity Products {
   key ID    : Integer;
@@ -93,3 +144,41 @@ entity Products {
       price : Price;
 }
 ```
+
+If we were to run the `cds compile` command again to get the CSN, it would look
+like this:
+
+```yaml
+namespace: workshop
+definitions:
+  workshop.Price:
+    {
+      kind: type,
+      elements:
+        {
+          amount: { type: cds.Decimal },
+          currency: { type: cds.String },
+        },
+    }
+  workshop.Products:
+    kind: entity
+    elements:
+      ID: { key: true, type: cds.Integer }
+      name: { type: cds.String }
+      stock: { type: cds.Integer }
+      price: { type: workshop.Price }
+meta: { creator: CDS Compiler v6.4.6, flavor: inferred }
+$version: 2.0
+```
+
+Note how this named custom type is a first class citizen now, in the form of
+`workshop.Price`.
+
+The advantage of this approach is of course that this new custom type can be
+used in other entity definitions as the model grows.
+
+> [!TIP] Try to remain aware of CDS modelling best practices, one of which is
+> to [prefer flat
+> models](https://cap.cloud.sap/docs/guides/domain-modeling#prefer-flat-models).
+> Avoid complexity when something simpler will do. There's always a balance
+> to be found between "too simple" and "over engineered".
