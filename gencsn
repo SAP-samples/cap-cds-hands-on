@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+declare model="${1:-srv/}"
+
+cds compile --to yaml "$model" \
+  | prettier --parser yaml --print-width 60 \
+  | bat --language yaml --plain
