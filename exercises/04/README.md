@@ -184,7 +184,8 @@ Note how this named custom type is a first class citizen now, in the form of
 The advantage of this approach is of course that this new custom type can be
 used in other entity definitions as the model grows.
 
-> [!TIP] Try to remain aware of CDS modelling best practices, one of which is
+> [!TIP]
+> Try to remain aware of CDS modelling best practices, one of which is
 > to [prefer flat
 > models](https://cap.cloud.sap/docs/guides/domain-modeling#prefer-flat-models).
 > Avoid complexity when something simpler will do. There's always a balance
