@@ -47,12 +47,21 @@ entity Products {
 > but it's optional and usually left off. The same goes for `define
 > entity` too, for that matter.
 
-While this looks neat and has an academic and abstract appeal,
-this is considered bad practice. In domain modelling terms, CAP
-[encourages the KISS
+This looks neat and has an academic and abstract appeal, especially perhaps to
+those schooled in ABAP development in the context of the all important Data
+Dictionary, where there are Domains and Data Elements and Data Types supplying metadata
+at different layers, bringing about this kind of relationship:
+
+```text
+Type -> Domain -> Data Element -> Field
+```
+
+But on the whole this is considered bad practice in CAP, where there is no
+(need for a) Data Dictionary and a fresher approach to design. In domain
+modelling terms, CAP [encourages the KISS
 approach](https://cap.cloud.sap/docs/guides/domain-modeling#keep-it-simple-stupid).
-This custom type merely causes us to have to think harder to
-understand what we're looking at:
+This custom type merely causes us to have to think harder to understand what
+we're looking at:
 
 ```text
 stock -> Stock -> Integer
