@@ -76,8 +76,6 @@ What does good look like here? Well, it depends. But for the sake of
 learning about types, let's explore a custom [structured
 type](https://cap.cloud.sap/docs/cds/cdl#structured-types).
 
-👉 Add a custom type `Price` to `db/schema.cds` and use it for a new element `price`:
-
 👉 Add a new element `price` described by a structure like this:
 
 ```cds
