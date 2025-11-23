@@ -105,7 +105,8 @@ entity Products {
 }
 ```
 
-> [!INFO] Here we see a new CDL construct - the
+> [!INFO]
+> Here we see a new CDL construct - the
 > [using](https://cap.cloud.sap/docs/cds/cdl#using) directive, which we're
 > employing to import a definition from another CDS model (`@sap/cds/common`).
 
