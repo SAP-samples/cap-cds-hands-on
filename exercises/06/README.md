@@ -34,9 +34,8 @@ elements that are to be used to extend existing entities. Let's drive this home
 a little by modifying how our custom `Currencies` entity inherits the `name`
 and `descr` elements that are defined in the `CodeList` aspect.
 
-👉 Modify the definitions inside the `sap.common` context in `db/common.cds` by
-removing both the definition of the `CodeList` aspect and its inclusion, via
-the `:` shortcut syntax, in the `Currencies` entity, so it looks like this:
+👉 Modify the definitions inside the `sap.common` context in `db/common.cds` so
+it looks like this:
 
 ```cds
 context sap.common {
@@ -55,7 +54,14 @@ context sap.common {
 }
 ```
 
-> [!NOTE] This is the first time we're seeing the somewhat imperative
+This modification:
+
+- removes the inclusion of the `CodeList` aspect in the `Currencies` definition
+- removes the definition of `CodeList` as an aspect
+- replaces it with the use of the `extend` directive
+
+> [!NOTE]
+> This is the first time we're seeing the somewhat imperative
 > [extend](https://cap.cloud.sap/docs/cds/cdl#the-extend-directive) directive
 > but it's really what's happening behind the [syntactic
 > sugar](https://en.wikipedia.org/wiki/Syntactic_sugar) scenes when we employ
