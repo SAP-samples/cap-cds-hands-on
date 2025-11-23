@@ -89,8 +89,11 @@ which should be the same as before:
 code,symbol,minorUnit,name,descr
 ```
 
-The end result is the same. The difference is that a named aspect can be used
-and reused in different places.
+The end result is the same - the three elements from `Currencies` plus the two
+from the structure in the `extend`.
+
+A key advantage of named aspects is that they can be used and reused in
+different places.
 
 Let's riff on this alternative extension scenario for a bit longer to drive
 home another feature we have already learned about.
@@ -147,11 +150,11 @@ say about this:
 with name “Currencies” (in extend:“Currencies”)
 ```
 
-This is because context (literally!) matters. If we want to refer to a
-definition that's inside a context, from outside of it, we need to use the
-fully qualified (scoped) name.
+This is because context (literally!) matters. If we want to refer to
+definitions that are inside a context, from outside of it, we need to use their
+fully qualified (scoped) names.
 
-👉 Fix the issue by rewriting the `extend` line thus:
+👉 Fix the issue by rewriting the `extend` line like this:
 
 ```cds
 context sap.common {
@@ -189,7 +192,7 @@ extend sap.common.Currencies with sap.common.CodeList;
 >     descr : String(1000);
 >   }
 >
-> extend Currencies with CodeList;
+>   extend Currencies with CodeList;
 >
 > }
 >
@@ -197,3 +200,56 @@ extend sap.common.Currencies with sap.common.CodeList;
 >
 > But at this point the `:` shortcut syntax is likely the better choice anyway.
 
+## Explore common aspects
+
+While the `CodeList` aspect we've looked at so far is useful and was helpful to
+gain an initial understanding, we can think of it more as a building block for
+underlying structures and extensions. Now that we have that understanding,
+let's take a look at a couple of more immediately useful aspects from
+`@sap/cds/common` and how they're often employed.
+
+Before we start, let's add a second entity.
+
+👉 Add a new entity `Suppliers` to the `db/schema.cds` file so that it looks
+like this:
+
+```cds
+using Currency from '@sap/cds/common';
+
+namespace workshop;
+
+type Price {
+  amount   : Decimal;
+  currency : Currency;
+}
+
+entity Products {
+  key ID    : Integer;
+      name  : String;
+      stock : Integer;
+      price : Price;
+}
+
+entity Suppliers {
+  key ID      : Integer;
+      company : String;
+}
+```
+
+> You may have spotted at this point that the `type` name is in the singular
+> and the `entity` names are in the plural. This is not a coincidence, it
+> follows domain modelling [naming
+> conventions](https://cap.cloud.sap/docs/guides/domain-modeling#naming-conventions)
+> (that also include the recommendation to capitalise such names, while keeping
+> element names in lower case, as is also evident here).
+
+Notice that both entities have a single primary key `ID`, defined as an
+`Integer`. This is fine for such simple examples, but numeric (integer) IDs
+have their challenges (as anyone who has worked with number range management
+and value generation can attest to).
+
+A primary key like this is common, and there is an aspect that can be applied
+to both entities here that can replace the explicit and manual definition of
+such. That aspect is `cuid`.
+
+## TODO - cuid and managed

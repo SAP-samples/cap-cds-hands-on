@@ -96,5 +96,9 @@ answers to these questions.
   default content based on the ISO specifications for CAP common reuse types
   for countries, languages, currencies and timezones
 - The blog post [Modelling contained-in relationships with compositions in
-  CDS](https://qmacro.org/blog/posts/2025/10/14/modelling-contained-in-relationships-with-compositions-in-cds/)
-  which talks about the use of anonymous aspects
+  CDS](https://qmacro.org/blog/posts/2025/10/14/modelling-contained-in-relationships-with-compositions-in-cds/) which talks about the use of anonymous aspects
+
+### Part 3 - Describing relationships with associations and compositions
+
+### Part 4 - Exposing models via services - interfaces for the outside world
+
