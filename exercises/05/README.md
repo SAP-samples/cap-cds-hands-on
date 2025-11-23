@@ -176,13 +176,18 @@ First, we can and should ignore those sections of the CDL source above that
 start with `@` - they are annotations which we will cover in a later part of
 this workshop.
 
-The same goes for `localized`, which is a construct that allows
+We can also ignore `localized`, which is a construct that allows
 the model to reflect the reality of internationalisation where we can and
 should provide texts in different locales for different audiences (think of the
 tables that are suffixed with `T` in the core ERP system, such as `TCURT` as
 mentioned earlier in this exercise).
 
 This leaves us with a simpler version.
+
+👉 Add this simpler version to a new file `db/common.cds` and then take a
+moment to
+[stare](https://qmacro.org/blog/posts/2017/02/19/the-beauty-of-recursion-and-list-machinery/#initial-recognition)
+at it.
 
 ```cds
 type Currency : Association to sap.common.Currencies;
@@ -203,9 +208,6 @@ context sap.common {
 }
 ```
 
-👉 Add this simpler version to a new file `db/common.cds` and then take a moment to
-[Stare](https://qmacro.org/blog/posts/2017/02/19/the-beauty-of-recursion-and-list-machinery/#initial-recognition) at it.
-
 👉 Now temporarily modify the existing import in `db/schema.cds` from:
 
 ```cds
@@ -218,9 +220,11 @@ to
 using Currency from './common';
 ```
 
+to use our `Currency` definition in this simpler version.
+
 > This is purely illustrative and deliberately simplified to aid comprehension.
 > In normal modelling we would use the `Currency` as-is from `@sap/cds/common`.
-> A bonus side effect of this simplification is that it shows us the similarity
+> A bonus side effect of this simplified illustration is that it shows us the similarity
 > between importing from a CDS model in a module, and from a CDS model in a file.
 
 ## Study the component parts of the Currency construct
@@ -241,10 +245,103 @@ therefore have these fully qualified names:
 - `sap.common.Currencies`
 - `sap.common.CodeList`
 
+Knowing this helps us to understand the "target" of the `type` definition:
 
+```cds
+type Currency : Association to sap.common.Currencies;
+```
 
+The word "target" is relevant here, as the `Association to` part is a so-called
+[managed to-one
+association](https://cap.cloud.sap/docs/guides/domain-modeling#managed-1-associations),
+a type of relationship. Here, it means that the possible currencies themselves
+are maintained elsewhere, and a "currency key" pointing to a specific, single
+("to-one") currency with the rest of that currency's details is what is to be
+stored in an element that is described with this `Currency` type.
 
+We'll look at associations and other relationships in a later exercise.
 
+### Generate initial data CSV headers
+
+Earlier in this workshop we [added some initial
+data](../01#add-some-initial-data) for our fledgling `Products` entity. We
+used `cds add data` to generate the file, pre-populated for us
+with appropriate header line:
+
+```csv
+ID,name,stock
+```
+
+Asking for this to be done for us again, based on our new definitions, can be illustrative.
+
+👉 Do that now, using the `--force` option to overwrite the existing
+`db/data/workshop-Products.csv` file:
+
+```bash
+cds add data --force
+```
+
+This should emit something like this:
+
+```log
+using '--force' ... existing files will be overwritten
+
+adding data
+adding headers only, use --records to create random entries
+  creating db/data/sap.common-Currencies.csv
+  overwriting db/data/workshop-Products.csv
+
+successfully added features to your project
+```
+
+What is the result of this?
+
+👉 Open the two files to take a look at the headers.
+
+In `db/data/workshop-Products.csv` we'll see:
+
+```csv
+ID,name,stock,price_amount,price_currency_code
+```
+
+And in `db/data/sap.common-Currencies.csv`, we'll see:
+
+```csv
+code,symbol,minorUnit,name,descr
+```
+
+> Note how the elements of our custom `Price` type have been referenced, with
+> the names prefixed with the name of the entity's element that it describes.
+>
+> For example, the `amount` element from the `Price` type, which itself has
+> been used to describe the `price` element in the `Products` entity, becomes
+> `price_amount` as a CSV field.
+
+Given that contents of our `db/data/sap.common-Currencies.csv` might represent
+the initial data for our base currency configuration (`TCURC` et al.), we might
+have some core currency information in that file, and then references to that
+information, by currency code, in the `db/data/workshop-Products.csv` file,
+like this:
+
+```text
+db/data/workshop-Products.csv:
+ID,name,stock,price_amount,price_currency_code
+----------------------------------------------
+1,Chai,39,18,GBP
+2,Chang,17,19,EUR
+3,Aniseed Syrup,13,10,GBP
+                       |    db/data/sap.common-Currencies.csv:
+                       |    code,symbol,minorUnit,name,descr
+                       |    --------------------------------
+                       +--> GBP,£,2,Pound,Great British Pound
+                            EUR,€,2,Euro,European Currency Unit
+                            USD,$,2,Dollar,United States Dollar
+```
+
+> Note also how the names of the CSV files themselves are constructed - from
+> the "scope"-prefixed entity names, whether that scope was defined using the
+> `namespace` directive (in the case of `workshop-Products`) or the `context`
+> directive (in the case of `sap.common-Currencies`).
 
 
 
