@@ -77,6 +77,7 @@ In this part we'll expand our basic definitions as a way of learning about the
 answers to these questions.
 
 - [04 - Design and use custom types for a richer entity definition](exercises/04/)
+- [05 - Explore reuse and standard common definitions](exercises/05/)
 
 #### Further reading
 
