@@ -211,3 +211,7 @@ used in other entity definitions as the model grows.
 > In other words, having `currency` flattened into the entity means that it can
 > be shared across multiple currency-based values such as (here) `price` and
 `cost`.
+
+---
+
+[Next](../05/)
