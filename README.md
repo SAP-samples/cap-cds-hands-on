@@ -78,6 +78,7 @@ answers to these questions.
 
 - [04 - Design and use custom types for a richer entity definition](exercises/04/)
 - [05 - Explore reuse and standard common definitions](exercises/05/)
+- [06 - Understand and use aspects](exercises/06/)
 
 #### Further reading
 
@@ -89,3 +90,8 @@ answers to these questions.
   section of the CDL topic in Capire
 - The section on [Aspects](https://cap.cloud.sap/docs/cds/cdl#aspects) in the
   CDL topic in Capire
+- The blog post [ISO content for common CAP
+  types](https://qmacro.org/blog/posts/2024/03/12/iso-content-for-common-cap-types/)
+  that describes and demonstrates the use of an NPM package that provides
+  default content based on the ISO specifications for CAP common reuse types
+  for countries, languages, currencies and timezones.

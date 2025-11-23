@@ -346,8 +346,9 @@ ID,name,stock,price_amount,price_currency_code
 ## Take the briefest of looks at the aspect construct
 
 The feature that we haven't looked at any real level yet is the [CodeList
-aspect](https://cap.cloud.sap/docs/cds/common#aspect-codelist). Before
-finishing this exercise, it behoves us to take a first look.
+aspect](https://cap.cloud.sap/docs/cds/common#aspect-codelist).
+
+👉 Before finishing this exercise, take a first look, by first revisiting our definitions:
 
 ```cds
 type Currency : Association to sap.common.Currencies;
@@ -376,7 +377,7 @@ This appears twice in our `sap.common` context:
 > The order in which these appearances are actually made also teaches us that
 > in CDS models, definitions don't have to come before their first use.
 
-For now, think of aspects as a sibling of types. Like types, they can be
+👉 For now, think of aspects as a sibling of types. Like types, they can be
 anonymous, or be given a name (as `CodeList` here). Unlike types, they cannot
 be "scalar", i.e. they must contain elements (i.e. have a `{ ... }` structure).
 
@@ -388,8 +389,10 @@ and include the elements in this aspect too".
 The upshot of this is that the `Currencies` entity, when fully defined, has the
 three elements directly defined with it (`code`, which is a key element, and
 `symbol` & `minorUnit`) and, in addition, the two elements from the `CodeList`
-aspect (`name` and `descr`). This explains the 5 fields in the header for the
-corresponding initial CSV data file:
+aspect (`name` and `descr`).
+
+👉 Consider the five fields in the header for the corresponding initial CSV
+data file, where their origin now should make sense:
 
 ```csv
 code,symbol,minorUnit,name,descr
@@ -398,7 +401,3 @@ code,symbol,minorUnit,name,descr
 We'll look at aspects in more detail in the next exercise.
 
 ---
-
-## TODO
-
-- <https://qmacro.org/blog/posts/2024/03/12/iso-content-for-common-cap-types/>
