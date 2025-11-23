@@ -105,7 +105,7 @@ entity Products {
 }
 ```
 
-> [!INFO]
+> [!NOTE]
 > Here we see a new CDL construct - the
 > [using](https://cap.cloud.sap/docs/cds/cdl#using) directive, which we're
 > employing to import a definition from another CDS model (`@sap/cds/common`).
@@ -152,7 +152,7 @@ context sap.common {
 }
 ```
 
-> [!INFO]
+> [!NOTE]
 > There are quite a few more CDL features here:
 >
 > - `Association to`
