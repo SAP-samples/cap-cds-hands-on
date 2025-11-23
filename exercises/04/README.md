@@ -189,4 +189,22 @@ used in other entity definitions as the model grows.
 > to [prefer flat
 > models](https://cap.cloud.sap/docs/guides/domain-modeling#prefer-flat-models).
 > Avoid complexity when something simpler will do. There's always a balance
-> to be found between "too simple" and "over engineered".
+> to be found between "too simple" and "over engineered". If we were to consider 
+> this for our `Products` entity, it might look something like this:
+>
+> ```cds
+> namespace workshop;
+> 
+> entity Products {
+>   key ID       : Integer;
+>       name     : String;
+>       stock    : Integer;
+>       price    : Decimal;
+>       cost     : Decimal;
+>       currency : String;
+> }
+> ```
+>
+> In other words, having `currency` flattened into the entity means that it can
+> be shared across multiple currency-based values such as (here) `price` and
+`cost`.
