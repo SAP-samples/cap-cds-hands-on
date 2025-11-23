@@ -20,7 +20,7 @@ entity Products {
 
 Note how the elements are defined using simple built-in types `Integer` and `String`.
 
-> "Element" is CAP's term for what we might call a "property" or
+> "Element" is the term in CDS modelling for what we might call a "property" or
 > "field" in other contexts.
 
 There are some schools of thought that would promote the use of
@@ -49,28 +49,29 @@ entity Products {
 
 This looks neat and has an academic and abstract appeal, especially perhaps to
 those schooled in ABAP development in the context of the all important Data
-Dictionary, where there are Domains and Data Elements and Data Types supplying metadata
+Dictionary, where there are Domains, Data Elements and Data Types supplying metadata
 at different layers, bringing about this kind of relationship:
 
 ```text
-Type -> Domain -> Data Element -> Field
+Field <- Data Element <- Domain <- Type
 ```
 
-But on the whole this is considered bad practice in CAP, where there is no
-(need for a) Data Dictionary and a fresher approach to design. In domain
+But on the whole this is considered bad practice in CAP, where there is a fresh
+approach to design and no (need for a) Data Dictionary. In domain
 modelling terms, CAP [encourages the KISS
 approach](https://cap.cloud.sap/docs/guides/domain-modeling#keep-it-simple-stupid).
-This custom type merely causes us to have to think harder to understand what
+
+This custom type `Stock` merely causes us to have to think harder to understand what
 we're looking at:
 
 ```text
-stock -> Stock -> Integer
+stock <- Stock <- Integer
 ```
 
 than if we'd simply had:
 
 ```text
-stock -> Integer
+stock <- Integer
 ```
 
 That said, there are some circumstances where types add value, such as
@@ -131,18 +132,19 @@ meta: { creator: CDS Compiler v6.4.6, flavor: inferred }
 $version: 2.0
 ```
 
-This is effectively ad hoc, as this structure cannot be used anywhere else we
-might want to have an element representing a monetary value.
+This anonymous type structure is effectively ad hoc, as it cannot be
+used anywhere else we might want to have an element representing a monetary 
+value.
 
-👉 Instead, declare a named custom type and use that, like this:
+👉 To address this, declare a named custom type and use that, like this:
 
 ```cds
 namespace workshop;
 
 type Price {
-        amount   : Decimal;
-        currency : String;
-      }
+  amount   : Decimal;
+  currency : String;
+}
 
 entity Products {
   key ID    : Integer;
@@ -189,8 +191,9 @@ used in other entity definitions as the model grows.
 > to [prefer flat
 > models](https://cap.cloud.sap/docs/guides/domain-modeling#prefer-flat-models).
 > Avoid complexity when something simpler will do. There's always a balance
-> to be found between "too simple" and "over engineered". If we were to consider 
-> this for our `Products` entity, it might look something like this:
+> to be found between "too simple" and "over engineered". If we were to
+> consider this for our `Products` entity, it might even look something like
+> this:
 >
 > ```cds
 > namespace workshop;
