@@ -343,7 +343,36 @@ ID,name,stock,price_amount,price_currency_code
 > `namespace` directive (in the case of `workshop-Products`) or the `context`
 > directive (in the case of `sap.common-Currencies`).
 
+## Take the briefest of first looks at the aspect construct
 
+The feature that we haven't looked at any real level yet is the [CodeList
+aspect](https://cap.cloud.sap/docs/cds/common#aspect-codelist):
+
+```cds
+type Currency : Association to sap.common.Currencies;
+
+context sap.common {
+
+  entity Currencies : CodeList {
+    key code      : String(3);
+        symbol    : String(5);
+        minorUnit : Int16;
+  }
+
+  aspect CodeList {
+    name  : String(255);
+    descr : String(1000);
+  }
+
+}
+```
+
+This appears twice in our `sap.common` context:
+
+- as a definition (`aspect CodeList { ... }`)
+- in use (`entity Currencies : CodeList`)
+
+For now, think of aspects as a sibling of types. Like types, they can be anonymous, or be given a name (as `CodeList` here). Unlike types, they cannot be "scalar", i.e. they must contain elements (i.e. have a `{ ... }` structure).
 
 
 
