@@ -162,13 +162,99 @@ context sap.common {
 > - `localized`
 > - the `:` symbol between `Currencies` and `CodeList`
 >
-> Most are relevant to our fundamental understanding of
-> `Currency` and will be explained briefly in the following section.
+> Some are relevant to our fundamental understanding of
+> `Currency` and will be explained in brief in the following section.
 >
 > Others such as the `:` symbol and the `aspect` keyword will
 > be explained in more detail in the next exercise. Others still, such
 > as the `Association to` construct, will be explained in a subsequent
 > part of this workshop.
+
+## Consider a reduced version of the Currency definition
+
+First, we can and should ignore those sections of the CDL source above that
+start with `@` - they are annotations which we will cover in a later part of
+this workshop.
+
+The same goes for `localized`, which is a construct that allows
+the model to reflect the reality of internationalisation where we can and
+should provide texts in different locales for different audiences (think of the
+tables that are suffixed with `T` in the core ERP system, such as `TCURT` as
+mentioned earlier in this exercise).
+
+This leaves us with a simpler version.
+
+```cds
+type Currency : Association to sap.common.Currencies;
+
+context sap.common {
+
+  entity Currencies : CodeList {
+    key code      : String(3);
+        symbol    : String(5);
+        minorUnit : Int16;
+  }
+
+  aspect CodeList {
+    name  : String(255);
+    descr : String(1000);
+  }
+
+}
+```
+
+👉 Add this simpler version to a new file `db/common.cds` and then take a moment to
+[Stare](https://qmacro.org/blog/posts/2017/02/19/the-beauty-of-recursion-and-list-machinery/#initial-recognition) at it.
+
+👉 Now temporarily modify the existing import in `db/schema.cds` from:
+
+```cds
+using Currency from '@sap/cds/common';
+```
+
+to
+
+```cds
+using Currency from './common';
+```
+
+> This is purely illustrative and deliberately simplified to aid comprehension.
+> In normal modelling we would use the `Currency` as-is from `@sap/cds/common`.
+> A bonus side effect of this simplification is that it shows us the similarity
+> between importing from a CDS model in a module, and from a CDS model in a file.
+
+## Study the component parts of the Currency construct
+
+Let's take the definitions one by one.
+
+The [context](https://cap.cloud.sap/docs/cds/cdl#context) directive is similar
+to the `namespace` directive we already know about. The `context`
+allows us to create definitions in different namespaces (and even nest them)
+in the same `.cds` file. We can guess how this works, because
+following the context's name there's a block construct (`{ ... }`) to enclose
+those definitions that are to be in the scope of that context's name.
+
+The upshot of this `context sap.common { ... }` is that the entity `Currencies`
+and the aspect `CodeList` are both actually in that `sap.common` scope and are
+therefore have these fully qualified names:
+
+- `sap.common.Currencies`
+- `sap.common.CodeList`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
