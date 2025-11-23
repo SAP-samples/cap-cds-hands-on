@@ -94,4 +94,7 @@ answers to these questions.
   types](https://qmacro.org/blog/posts/2024/03/12/iso-content-for-common-cap-types/)
   that describes and demonstrates the use of an NPM package that provides
   default content based on the ISO specifications for CAP common reuse types
-  for countries, languages, currencies and timezones.
+  for countries, languages, currencies and timezones
+- The blog post [Modelling contained-in relationships with compositions in
+  CDS](https://qmacro.org/blog/posts/2025/10/14/modelling-contained-in-relationships-with-compositions-in-cds/)
+  which talks about the use of anonymous aspects
