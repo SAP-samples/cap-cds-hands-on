@@ -104,5 +104,14 @@ answers to these questions.
 
 ### Part 3 - Describing relationships with associations and compositions
 
+At this point in the workshop we have a couple of entities, representing
+products and suppliers. But they're completely separate from one another, with
+no relation between them.
+
+In this part we'll look at the facilities in CDL for describing relationships.
+
+- [07 - Link entities together with associations](exercises/07/)
+- [08 - Define contained-in relationships with compositions](exercises/08/)
+
 ### Part 4 - Exposing models via services - interfaces for the outside world
 
