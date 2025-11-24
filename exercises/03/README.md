@@ -187,6 +187,9 @@ cds watch
 
 > This can be shortened to `cds w`, helpful if you're typing things in manually.
 
-👉 Revisit <http://localhost:4004> and explore the service [like you did in the previous exercise](../02#explore-the-service).
+👉 Revisit <http://localhost:4004> and explore the service [like you did in the
+previous exercise](../02#explore-the-service).
 
-Well done! We can now move on to [the next part](../#part-2---more-on-structure-with-types-aspects-and-reuse) of this workshop.
+Well done! We can now move on to [the next
+part](../../#part-2---more-on-structure-with-types-aspects-and-reuse) of this
+workshop.

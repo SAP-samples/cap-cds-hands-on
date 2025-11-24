@@ -503,5 +503,5 @@ entity Suppliers : cuid, managed {
 ```
 
 Now we're all set to move on to [the next
-part](../#part-3---describing-relationships-with-associations-and-compositions)
+part](../../#part-3---describing-relationships-with-associations-and-compositions)
 of this workshop - good work!
