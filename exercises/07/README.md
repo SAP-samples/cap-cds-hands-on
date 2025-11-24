@@ -147,7 +147,7 @@ What we really need in our model is a similar relationship, one that goes both w
 - `Products` -> `Suppliers`
 - `Suppliers` -> `Products`
 
-## Use an association to link a product to a supplier
+## Use associations to link products to suppliers
 
 In CDS modelling, there is the concept of
 [associations](https://cap.cloud.sap/docs/cds/cdl#associations) whose purpose
@@ -228,8 +228,7 @@ definitions:
       ID: { key: true, type: cds.Integer }
       name: { type: cds.String }
       stock: { type: cds.Integer }
-      price: { type: workshop.Price }
-      supplier:
+      price: { type: workshop.Price } supplier:
         {
           type: cds.Association,
           target: workshop.Suppliers,
@@ -341,5 +340,165 @@ Given that, let's put the association to the test.
 
 👉 Retrieve the products entityset, requesting an expansion on the supplier in
 each case, via this URL:
-<http://localhost:4004/odata/v4/simple/Products?$expand=supplier>
+<http://localhost:4004/odata/v4/simple/Products?$select=name&$expand=supplier>
 
+The resulting entityset should look like this:
+
+```json
+{
+  "@odata.context": "$metadata#Products",
+  "value": [
+    {
+      "name": "Chai",
+      "supplier": {
+        "ID": 1,
+        "company": "Exotic Liquids"
+      },
+      "ID": 1
+    },
+    {
+      "name": "Chang",
+      "supplier": {
+        "ID": 1,
+        "company": "Exotic Liquids"
+      },
+      "ID": 2
+    },
+    {
+      "name": "Aniseed Syrup",
+      "supplier": {
+        "ID": 1,
+        "company": "Exotic Liquids"
+      },
+      "ID": 3
+    },
+    {
+      "name": "Chef Anton's Cajun Seasoning",
+      "supplier": {
+        "ID": 2,
+        "company": "New Orleans Cajun Delights"
+      },
+      "ID": 4
+    },
+    {
+      "name": "Chef Anton's Gumbo Mix",
+      "supplier": {
+        "ID": 2,
+        "company": "New Orleans Cajun Delights"
+      },
+      "ID": 5
+    },
+    {
+      "name": "Grandma's Boysenberry Spread",
+      "supplier": {
+        "ID": 3,
+        "company": "Grandma Kelly's Homestead"
+      },
+      "ID": 6
+    }
+  ]
+}
+```
+
+### Consider the reverse relationship from suppliers to products
+
+What if we wanted to try to follow the relationship the other way round, from
+suppliers to the products they have?
+
+Well, first we should add the `Suppliers` entity to the `Simple` service we
+have, as right now only `Products` is exposed.
+
+👉 Edit `srv/simple.cds` and add another projection so that it looks like this:
+
+```cds
+using workshop from '../db/schema';
+
+service Simple {
+  entity Products  as projection on workshop.Products;
+  entity Suppliers as projection on workshop.Suppliers;
+}
+```
+
+The CAP server, running in [watch
+mode](https://cap.cloud.sap/docs/tools/cds-cli#cds-watch) should detect this
+change and automatically restart.
+
+👉 At this point, start by requesting the suppliers entityset via this URL:
+<http://localhost:4004/odata/v4/simple/Suppliers>
+
+This should return:
+
+```json
+{
+  "@odata.context": "$metadata#Suppliers",
+  "value": [
+    {
+      "ID": 1,
+      "company": "Exotic Liquids"
+    },
+    {
+      "ID": 2,
+      "company": "New Orleans Cajun Delights"
+    },
+    {
+      "ID": 3,
+      "company": "Grandma Kelly's Homestead"
+    }
+  ]
+}
+```
+
+👉 Now try adding a `$expand` for the products navigation property with this
+URL: <http://localhost:4004/odata/v4/simple/Suppliers?$expand=products>
+
+Well, we should already be able to guess what will happen. Where did we get the
+`products` navigation property from? It was a logical guess, but it doesn't
+(yet) exist! Sure enough, this is returned:
+
+```json
+{
+  "error": {
+    "message": "Navigation property \"products\" is not defined in Simple.Suppliers",
+    "code": "400",
+    "@Common.numericSeverity": 4
+  }
+}
+```
+
+Sure enough, looking at the service's [metadata document](http://localhost:4004/odata/v4/simple/$metadata), we can see that the `Products` entity type looks like this:
+
+```xml
+<EntityType Name="Products">
+    <Key>
+        <PropertyRef Name="ID"/>
+    </Key>
+    <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+    <Property Name="name" Type="Edm.String"/>
+    <Property Name="stock" Type="Edm.Int32"/>
+    <Property Name="price_amount" Type="Edm.Decimal" Scale="variable"/>
+    <NavigationProperty Name="price_currency" Type="Simple.Currencies">
+        <ReferentialConstraint Property="price_currency_code" ReferencedProperty="code"/>
+    </NavigationProperty>
+    <Property Name="price_currency_code" Type="Edm.String" MaxLength="3"/>
+    <NavigationProperty Name="supplier" Type="Simple.Suppliers">
+        <ReferentialConstraint Property="supplier_ID" ReferencedProperty="ID"/>
+    </NavigationProperty>
+    <Property Name="supplier_ID" Type="Edm.Int32"/>
+</EntityType>
+```
+
+with a `NavigationProperty` of `supplier`.
+
+However, the `Suppliers` entity type is a little simpler at this point, with no navigation properties expressed in this OData context:
+
+```xml
+<EntityType Name="Suppliers">
+    <Key>
+       <PropertyRef Name="ID"/>
+    </Key>
+    <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+    <Property Name="company" Type="Edm.String"/>
+</EntityType>
+```
+
+Let's address that next.
