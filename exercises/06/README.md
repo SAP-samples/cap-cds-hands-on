@@ -468,7 +468,21 @@ the form of a cut-down version called
 As we want to reuse the Northbreeze data in our simple model, we have to align
 the types as much as we can. This means that while using the standard `cuid`
 aspect is best practice, we'll use our own custom version that defines the
-element as an `Integer` type instead of a `UUID` type.
+element as an `Integer` type instead of a `UUID` type. This reflects the key
+properties in the [corresponding Northbreeze
+service](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/$metadata),
+such as this `Products` entity type definition:
+
+```xml
+<EntityType Name="Products">
+    <Key>
+        <PropertyRef Name="ProductID"/>
+    </Key>
+    <Property Name="ProductID" Type="Edm.Int32" Nullable="false"/>
+    <Property Name="ProductName" Type="Edm.String"/>
+    <Property Name="..." Type="..."/>
+</EntityType>
+```
 
 👉 Remove the import of `cuid` from `@sap/cds/common` and instead add a custom
 `cuid` definition after the `namespace` declaration, so that the
