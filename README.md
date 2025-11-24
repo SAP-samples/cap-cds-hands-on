@@ -96,7 +96,11 @@ answers to these questions.
   default content based on the ISO specifications for CAP common reuse types
   for countries, languages, currencies and timezones
 - The blog post [Modelling contained-in relationships with compositions in
-  CDS](https://qmacro.org/blog/posts/2025/10/14/modelling-contained-in-relationships-with-compositions-in-cds/) which talks about the use of anonymous aspects
+  CDS](https://qmacro.org/blog/posts/2025/10/14/modelling-contained-in-relationships-with-compositions-in-cds/)
+  which talks about the use of anonymous aspects
+- The blog post [Flattening the hierarchy with
+  mixins](https://qmacro.org/blog/posts/2024/11/08/flattening-the-hierarchy-with-mixins/)
+  on the advantages of embracing aspect oriented programming techniques.
 
 ### Part 3 - Describing relationships with associations and compositions
 
