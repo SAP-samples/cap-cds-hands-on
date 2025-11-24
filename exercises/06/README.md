@@ -457,7 +457,14 @@ Even if we don't yet fully understand the `@`-prefixed annotations right now,
 we can see and appreciate the effect that these two aspects have, and how
 useful they are in modelling!
 
-## Restore the key ID field for test data
+## Re-simplify our model for the remaining exercises
+
+In order to cut down on information and data that might otherwise cause "noise"
+and get in the way of our understanding, let's re-simplify our model by going
+back to a simple numeric key field for both entities, and doing away with the
+tracking information.
+
+### Restore the key ID field
 
 The model we're building in this workshop is deliberately simple and also based
 on the classic
@@ -512,6 +519,37 @@ entity Products : cuid, managed {
 }
 
 entity Suppliers : cuid, managed {
+  company : String;
+}
+```
+
+### Remove the managed aspect
+
+Again, to keep things simple for the remainder of this workshop, let's remove the use of the `managed` aspect, so that we're not inundated with `createdAt`, `createdBy`, `modifiedAt` and `modifiedBy` elements and their default values as we continue through the exercises.
+
+👉 Remove all references to `managed`, both from the `using` directive and from the inclusion in each entity, so that the final version of `db/schema.cds` looks like this:
+
+```cds
+using {Currency} from '@sap/cds/common';
+
+namespace workshop;
+
+aspect cuid {
+  key ID : Integer;
+}
+
+type Price {
+  amount   : Decimal;
+  currency : Currency;
+}
+
+entity Products : cuid {
+  name  : String;
+  stock : Integer;
+  price : Price;
+}
+
+entity Suppliers : cuid {
   company : String;
 }
 ```

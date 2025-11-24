@@ -8,13 +8,13 @@ Right now in our `db/schema.cds` file we have a couple of entities, `Products`
 and `Suppliers`:
 
 ```cds
-entity Products : cuid, managed {
+entity Products : cuid {
   name  : String;
   stock : Integer;
   price : Price;
 }
 
-entity Suppliers : cuid, managed {
+entity Suppliers : cuid {
   company : String;
 }
 ```
@@ -154,9 +154,11 @@ In CDS modelling, there is the concept of
 is to describe relationships between entities.
 
 Our first task, to declare a `Products` -> `Suppliers` relationship, can be
-achieved with a so-called "managed to-one association". What does that mean?
+achieved with a so-called "managed to-one association". What does that name mean?
 
-The "to-one" part is half of the classic [one-to-one](https://en.wikipedia.org/wiki/One-to-one_(data_model)) relationship:
+The "to-one" part of the name is half of the classic
+[one-to-one](https://en.wikipedia.org/wiki/One-to-one_(data_model))
+relationship:
 
 ```text
 +-----+  1:1  +-----+
@@ -164,7 +166,180 @@ The "to-one" part is half of the classic [one-to-one](https://en.wikipedia.org/w
 +-----+       +-----+
 ```
 
-Why only half of it? Well, the one-to-one model is "_a type of cardinality that
-refers to the relationship between two entities A and B in which one element of
-A may only be linked to one element of B, **and vice versa**._"
+Why only half of it? Well, a one-to-one relationship is "_a type of cardinality
+that refers to the relationship between two entities A and B in which one
+element of A may only be linked to one element of B, **and vice versa**_". And
+while a product may only have one supplier, a supplier may have more than one
+product.
+
+Hence if `A` is `Products` and `B` is `Suppliers`, then the "managed
+to-one association" is this part:
+
+```text
++-----+   :1  +-----+
+|  A  |   --->|  B  |
++-----+       +-----+
+```
+
+The "managed" part of the name tells us that CAP, specifically the compiler,
+manages the technical details of the relationship's implementation, in that the
+foreign key details and persistence level query operations are automatically
+taken care of, without us having to describe how to make the relationship a
+reality.
+
+### Define the relationship
+
+👉 Add a new `supplier` element to the `Products` entity, and rather than use a
+type to describe it, use the managed to-one association syntax, like this:
+
+```cds
+entity Products : cuid {
+  name     : String;
+  stock    : Integer;
+  price    : Price;
+  supplier : Association to Suppliers;
+}
+
+entity Suppliers : cuid {
+  company : String;
+}
+```
+
+It's as simple as that.
+
+What effect does this actually have? Well, let's take a look.
+
+👉 Compile the `db/schema.cds` contents to CSN again, asking for a YAML
+representation, and pick out the `workshop.Products` definition:
+
+```bash
+cds compile --to yaml db/schema.cds
+```
+
+The important parts of the definition we're looking for are here:
+
+```yaml
+namespace: workshop
+definitions:
+  workshop.Products:
+    kind: entity
+    includes: [workshop.cuid]
+    elements:
+      ID: { key: true, type: cds.Integer }
+      name: { type: cds.String }
+      stock: { type: cds.Integer }
+      price: { type: workshop.Price }
+      supplier:
+        {
+          type: cds.Association,
+          target: workshop.Suppliers,
+          keys: [{ ref: [ID] }],
+        }
+  workshop.Suppliers:
+    kind: entity
+    includes: [workshop.cuid]
+    elements:
+      ID: { key: true, type: cds.Integer }
+      company: { type: cds.String }
+```
+
+Observe that the `supplier` element is defined thus:
+
+```yaml
+{
+  type: cds.Association,
+  target: workshop.Suppliers,
+  keys: [{ ref: [ID] }],
+}
+```
+
+This shows us that:
+
+- `type`: `Association` acts effectively a built-in type too
+- `target`: any sort of relationship needs to declare where it's pointing
+- `keys`: the referenced `ID` here is the name of the key element of the target
+  (the `ID` element in `workshop.Suppliers`)
+
+Moreover, we can see the effect if we ask for CSV headers to be re-generated at
+this point ...
+
+👉 Do that now:
+
+```bash
+cds add data --force
+```
+
+This produces:
+
+```log
+using '--force' ... existing files will be overwritten
+
+adding data
+adding headers only, use --records to create random entries
+  overwriting db/data/sap.common-Currencies.csv
+  overwriting db/data/sap.common-Currencies.texts.csv
+  overwriting db/data/workshop-Products.csv
+  overwriting db/data/workshop-Suppliers.csv
+
+successfully added features to your project
+==> db/data/workshop-Products.csv <==
+ID,name,stock,price_amount,price_currency_code,supplier_ID,createdAt,createdBy,modifiedAt,modifiedBy
+==> db/data/workshop-Suppliers.csv <==
+ID,company,createdAt,createdBy,modifiedAt,modifiedBy
+```
+
+There are two important things to note here:
+
+- the `db/data/workshop-Products.csv` header has a new field `supplier_ID`,
+  constructed by default (in the "managed" mode) from the source element name
+  `supplier` and the target element's key name `ID`, joined with an underscore
+- the `db/data/workshop-Suppliers.csv` has -- and needs -- nothing for this
+  relationship
+
+### Add some supplier and product data
+
+To see the effect of this relationship, let's add some data - just a handful of
+products and suppliers from the Northbreeze service.
+
+👉 Copy the two CSV files `workshop-Products.csv` and `workshop-Suppliers.csv`
+from this exercise's [assets/](assets/) directory into the `db/data/`
+directory:
+
+```bash
+cp ../exercises/07/assets/workshop-*.csv db/data/
+```
+
+👉 Now start up the CAP server again using `cds watch` as you did in part 1 of
+this workshop:
+
+```bash
+cds watch
+```
+
+Looking at our service definition in `srv/simple.cds`, which looks like this:
+
+```cds
+using workshop from '../db/schema';
+
+service Simple {
+  entity Products as projection on workshop.Products;
+}
+```
+
+then we remember that we'll get this service exposed as an OData V4 service by
+default, indeed we can see this from the CAP server log output:
+
+```log
+[cds] - serving Simple {
+  at: [ '/odata/v4/simple' ],
+  decl: 'srv/simple.cds:3',
+  impl: 'node_modules/@sap/cds/srv/app-service.js'
+}
+```
+
+Given that, let's put the association to the test.
+
+👉 Retrieve the products entityset, requesting an expansion on the supplier in
+each case, via this URL:
+<http://localhost:4004/odata/v4/simple/Products?$expand=supplier>
 
