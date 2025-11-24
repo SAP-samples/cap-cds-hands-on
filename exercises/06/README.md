@@ -451,4 +451,8 @@ definitions:
         type: User
         length: 255
       company: { type: cds.String }
-``` 
+```
+
+Even if we don't yet fully understand the `@`-prefixed annotations right now,
+we can see and appreciate the effect that these two aspects have, and how
+useful they are in modelling!
