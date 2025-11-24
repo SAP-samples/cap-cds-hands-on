@@ -456,3 +456,52 @@ definitions:
 Even if we don't yet fully understand the `@`-prefixed annotations right now,
 we can see and appreciate the effect that these two aspects have, and how
 useful they are in modelling!
+
+## Restore the key ID field for test data
+
+The model we're building in this workshop is deliberately simple and also based
+on the classic
+[Northwind](https://services.odata.org/V4/Northwind/Northwind.svc/) dataset, in
+the form of a cut-down version called
+[Northbreeze](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze).
+
+As we want to reuse the Northbreeze data in our simple model, we have to align
+the types as much as we can. This means that while using the standard `cuid`
+aspect is best practice, we'll use our own custom version that defines the
+element as an `Integer` type instead of a `UUID` type.
+
+👉 Remove the import of `cuid` from `@sap/cds/common` and instead add a custom
+`cuid` definition after the `namespace` declaration, so that the
+`db/schema.cds` file looks like this:
+
+```cds
+using {
+  Currency,
+  managed
+} from '@sap/cds/common';
+
+namespace workshop;
+
+aspect cuid {
+  key ID : Integer;
+}
+
+type Price {
+  amount   : Decimal;
+  currency : Currency;
+}
+
+entity Products : cuid, managed {
+  name  : String;
+  stock : Integer;
+  price : Price;
+}
+
+entity Suppliers : cuid, managed {
+  company : String;
+}
+```
+
+Now we're all set to move on to [the next
+part](../#part-3---describing-relationships-with-associations-and-compositions)
+of this workshop - good work!
