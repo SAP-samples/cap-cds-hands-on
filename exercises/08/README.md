@@ -180,3 +180,28 @@ few important parts:
 > with compositions in
 > CDS](https://qmacro.org/blog/posts/2025/10/14/modelling-contained-in-relationships-with-compositions-in-cds/).
 
+👉 To drive home the appearance of this `up_` element, ask for the generation of CSV files with headers, for this new purchase order definition (using the `--filter` option):
+
+```bash
+cds add data --filter Orders \
+  && head db/data/workshop-Orders*.csv
+```
+
+This will produce something like this:
+
+```log
+adding data
+adding headers only, use --records to create random entries
+  creating db/data/workshop-Orders.csv
+  creating db/data/workshop-Orders.items.csv
+
+successfully added features to your project
+==> db/data/workshop-Orders.csv <==
+ID,date
+==> db/data/workshop-Orders.items.csv <==
+up__ID,pos,product_ID,quantity
+```
+
+The managed foreign key for the order item records has been constructed in the
+same way as `supplier_ID` before - the source element name `up_` and the
+target's key element `ID`, joined with an underscore.
