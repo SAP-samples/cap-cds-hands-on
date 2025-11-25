@@ -57,7 +57,7 @@ entity Orders : cuid {
 }
 ```
 
-> [!INFO]
+> [!NOTE]
 > With the `default` keyword we can specify a default value if none is supplied
 > on creation; here, we use the [pseudo
 > variable](https://cap.cloud.sap/docs/guides/domain-modeling#pseudo-variables)
