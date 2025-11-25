@@ -279,7 +279,7 @@ continue.
 
 Let's try out both of these aspects.
 
-### Use cuid for a primary key
+### Use the cuid aspect for a primary key
 
 👉 Modify the contents of `db/schema.cds` to also import `cuid` from
 `@sap/cds/common`, and use it in place of the explicit `ID` elements (which you
@@ -334,7 +334,7 @@ Using the `cuid` aspect helps us to follow [best practices relating to primary k
 > In other words, the aspect contains a single element `ID` marked as `key`,
 > with the built-in type `UUID`.
 
-### Use managed for basic data tracking
+### Use the managed aspect for basic data tracking
 
 With the addition of `cuid` to the `using` line in our `db/schema.cds` we're on
 a roll, and it's straightforward to continue on this
