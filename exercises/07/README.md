@@ -74,7 +74,7 @@ service.
 }
 ```
 
-Also, [some suppliers have more than one product available](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/Suppliers?$top=3&$select=CompanyName&$expand=Products($select=ProductName)):
+Also, [suppliers can have more than one product available](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/Suppliers?$top=3&$select=CompanyName&$expand=Products($select=ProductName)):
 
 ```json
 {
@@ -147,7 +147,7 @@ What we really need in our model is a similar relationship, one that goes both w
 - `Products` -> `Suppliers`
 - `Suppliers` -> `Products`
 
-## Use associations to link products to suppliers
+## Use an association to link products to suppliers
 
 In CDS modelling, there is the concept of
 [associations](https://cap.cloud.sap/docs/cds/cdl#associations) whose purpose
@@ -181,16 +181,17 @@ to-one association" is this part:
 +-----+       +-----+
 ```
 
-The "managed" part of the name tells us that CAP, specifically the compiler,
-manages the technical details of the relationship's implementation, in that the
-foreign key details and persistence level query operations are automatically
-taken care of, without us having to describe how to make the relationship a
-reality.
+The "managed" part of the name tells us that CAP manages the technical details
+of the relationship's implementation, in that the foreign key details and
+persistence level query operations are automatically taken care of, without us
+having to describe how to make the relationship a reality; remember, CDS
+domain modelling is about [capturing intent - what, not
+how](https://cap.cloud.sap/docs/guides/domain-modeling#capture-intent-%E2%80%94-what-not-how).
 
 ### Define the relationship
 
-👉 Add a new `supplier` element to the `Products` entity, and rather than use a
-type to describe it, use the managed to-one association syntax, like this:
+👉 Add a new `supplier` element to the `Products` entity, using the managed
+to-one association syntax to describe it, like this:
 
 ```cds
 entity Products : cuid {
@@ -204,6 +205,10 @@ entity Suppliers : cuid {
   company : String;
 }
 ```
+
+> We may sometimes see `Association to one` out there in the wild, but the
+> `one` is optional, and it reads better without given the plural naming
+> convention for the targets.
 
 It's as simple as that.
 
@@ -254,18 +259,18 @@ Observe that the `supplier` element is defined thus:
 
 This shows us that:
 
-- `type`: `Association` acts effectively a built-in type too
+- `type`: `Association` is effectively a built-in type too
 - `target`: any sort of relationship needs to declare where it's pointing
 - `keys`: the referenced `ID` here is the name of the key element of the target
   (the `ID` element in `workshop.Suppliers`)
 
-Moreover, we can see the effect if we ask for CSV headers to be re-generated at
-this point ...
+Moreover, we can see the effect of this association if we ask for CSV headers
+to be re-generated at this point ...
 
 👉 Do that now:
 
 ```bash
-cds add data --force
+cds add data --force && head db/data/workshop*.csv
 ```
 
 This produces:
@@ -291,7 +296,7 @@ There are two important things to note here:
 
 - the `db/data/workshop-Products.csv` header has a new field `supplier_ID`,
   constructed by default (in the "managed" mode) from the source element name
-  `supplier` and the target element's key name `ID`, joined with an underscore
+  `supplier` and the target key element's name `ID`, joined with an underscore
 - the `db/data/workshop-Suppliers.csv` has -- and needs -- nothing for this
   relationship
 
@@ -400,13 +405,14 @@ The resulting entityset should look like this:
 }
 ```
 
-### Consider the reverse relationship from suppliers to products
+## Define the reverse relationship from suppliers to products
 
 What if we wanted to try to follow the relationship the other way round, from
 suppliers to the products they have?
 
 Well, first we should add the `Suppliers` entity to the `Simple` service we
-have, as right now only `Products` is exposed.
+have, as right now only `Products` is exposed. This is so that we'll be able
+to test out our second relationship definition.
 
 👉 Edit `srv/simple.cds` and add another projection so that it looks like this:
 
@@ -465,7 +471,9 @@ Well, we should already be able to guess what will happen. Where did we get the
 }
 ```
 
-Sure enough, looking at the service's [metadata document](http://localhost:4004/odata/v4/simple/$metadata), we can see that the `Products` entity type looks like this:
+Indeed, looking at the service's [metadata
+document](http://localhost:4004/odata/v4/simple/$metadata), we can see that the
+`Products` entity type looks like this:
 
 ```xml
 <EntityType Name="Products">
@@ -489,7 +497,8 @@ Sure enough, looking at the service's [metadata document](http://localhost:4004/
 
 with a `NavigationProperty` of `supplier`.
 
-However, the `Suppliers` entity type is a little simpler at this point, with no navigation properties expressed in this OData context:
+However, the `Suppliers` entity type is a little simpler at this point, with no
+navigation properties expressed in this OData context:
 
 ```xml
 <EntityType Name="Suppliers">
@@ -501,4 +510,6 @@ However, the `Suppliers` entity type is a little simpler at this point, with no 
 </EntityType>
 ```
 
-Let's address that next.
+There's nothing yet in the CDS model at this point that would cause a
+navigation property to be made present in this entity type! Let's address that
+next.
