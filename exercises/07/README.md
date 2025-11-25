@@ -732,12 +732,12 @@ OData query operation transmitted.
 > As this is quite hard to read, here's that `SELECT` statement nicely formatted:
 >
 > ```sql
-> SELECT Json_insert('{}', '$."ID"', id, '$."company"', company, '$."products"',
+> SELECT json_insert('{}', '$."ID"', id, '$."company"', company, '$."products"',
 >        products
 >               -> '$') AS _json_
 > FROM   (SELECT "$S".id,
 >                "$S".company,
->                (SELECT Jsonb_group_array(Jsonb_insert('{}', '$."name"', name,
+>                (SELECT jsonb_group_array(jsonb_insert('{}', '$."name"', name,
 >                                          '$."ID"',
 >                                          id)) AS
 >                        _json_
