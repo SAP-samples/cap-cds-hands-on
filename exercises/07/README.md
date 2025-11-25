@@ -722,10 +722,12 @@ OData query operation transmitted.
 >
 > If you do, you'll see something like this:
 >
+> ```log
 > [odata] - GET /odata/v4/simple/Suppliers { '$expand': 'products($select=name)' }
 > [sql] - BEGIN
 > [sql] - SELECT json_insert('{}','$."ID"',ID,'$."company"',company,'$."products"',products->'$') as _json_ FROM (SELECT "$S".ID,"$S".company,(SELECT jsonb_group_array(jsonb_insert('{}','$."name"',name,'$."ID"',ID)) as _json_ FROM (SELECT "$p".name,"$p".ID FROM Simple_Products as "$p" WHERE "$S".ID = "$p".supplier_ID)) as products FROM Simple_Suppliers as "$S" ORDER BY "$S".ID ASC LIMIT ?) [ 1000 ]
 > [sql] - COMMIT
+> ```
 >
 > As this is quite hard to read, here's that `SELECT` statement nicely formatted:
 >
