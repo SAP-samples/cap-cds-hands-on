@@ -115,3 +115,17 @@ In this part we'll look at the facilities in CDL for describing relationships.
 
 ### Part 4 - Exposing models via services - interfaces for the outside world
 
+Thus far the vast majority of work, and all of the focus, has been at what we
+understand by now to be the `db/` layer - the core entity definitions and
+relationships between them. While we've dabbled briefly with a service
+definition on occasion, that was just a means to an end, to allow us to look at
+our model constructions through the lens of the OData V4 standard.
+
+In this part we'll turn our focus to the `srv/` layer and look at why it's
+separate and what we can do there.
+
+- [09 - Explore service definitions](exercises/09/)
+
+#### Further reading
+
+- The [Providing Services](https://cap.cloud.sap/docs/guides/providing-services) topic in Capire

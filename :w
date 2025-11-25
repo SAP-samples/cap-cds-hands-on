@@ -6,7 +6,7 @@ relationships that we can think of as having a "parent-child" style. These
 are often referred to more generically as "contained-in" relationships.
 
 In this exercise we'll learn about CAP's great support for such
-relationships, in the form of compositions.
+relationships, in the form of Compositions.
 
 ## Consider a contained-in relationship
 
@@ -15,23 +15,23 @@ document, which has a header and items. Think of the header as the
 container, and the items as the containees. If the container is removed,
 the containees should be too, i.e. they cannot exist independently.
 
-With compositions, CAP supports such "contained-in" relationships, from a
+With Compositions, CAP supports such "contained-in" relationships, from a
 modelling perspective, and also [from a runtime
 perspective](https://cap.cloud.sap/docs/guides/domain-modeling#compositions):
 
 - Deep Insert / Update automatically filling in document structures
-- Cascaded Delete is when deleting composition roots
+- Cascaded Delete is when deleting Composition roots
 - Composition targets are auto-exposed in service interfaces
 
 > While using regular Association constructs would go some way to modelling
 > such relationships, it's the wrong way to go, unless we want a whole load of
 > extra and unnecessary work and complexity to achieve what CAP provides for us
-> out of the box with compositions.
+> out of the box with Compositions.
 
 ## Model a simple purchase order facility
 
 To illustrate the support and the use of
-[compositions](https://cap.cloud.sap/docs/cds/cdl#compositions) in CDL, let's
+[Compositions](https://cap.cloud.sap/docs/cds/cdl#compositions) in CDL, let's
 add a parent-child construct for a purchase order entity.
 
 👉 To the list of entities we have so far in `db/schema.cds`, add the
@@ -90,27 +90,23 @@ So far so good. Let's dig in further:
 
 What does that anonymous inline aspect describe? It describes the structure of
 the child, the containee - in this case, the structure of the order item.
+Clearly, an order item, the existence of which cannot be outside the context of
+a parent order, will usually have two key elements. Let's look at the elements
+of this structure to see where they are:
 
-An order item, the existence of which cannot be outside the context of a parent
-order, will usually have two key elements: one for the parent, and one for the
-item (the child). Let's look at all the elements of this structure to see where
-they are:
-
-- there's a `pos` element representing the item via its unique position (item
-  number)
+- there's a `pos` element representing the item position (item number)
 - there are also a couple of basic order item elements, one being a managed
   to-one association to the `Products` entity, the other being a simple integer
   representing the order quantity for the given product
 
 So where's the other key element - the one for the parent order?
 
-There isn't one defined explicitly ... the primary key for the parent order is
-implicit. This is another form of "managed" relationship, where the intent is
-of primary concern, and the implementation left to the system.
+- there isn't one defined explicitly ... the primary key for the parent order
+  is implicit, part of how this is another sort of "managed" relationship
 
 Let's dig in to see this for ourselves.
 
-### Take a look at the effect of the composition
+### Dig in to the effect of the composition
 
 👉 First, have a look at what gets generated in CSN:
 
@@ -118,7 +114,7 @@ Let's dig in to see this for ourselves.
 cds compile --to yaml db/schema.cds
 ```
 
-👉 Pick out the relevant parts of the structure, to see:
+Picking out the relevant parts of the structure, we see:
 
 ```yaml
 namespace: workshop
@@ -169,11 +165,11 @@ definitions:
       quantity: { type: cds.Integer }
 ```
 
-There's an almost overwhelming amount to dwell on here. Let's focus on just a
+There's an almost overwhelming amount to dwell on here. Let's pick out just a
 few important parts:
 
-- the anonymous inline structure is indeed an `aspect` as we can see from the
-  `targetAspect` of the `items` property for the `workshop.Orders` definition
+- the anonymous inline structure is indeed an `aspect` (see the `targetAspect`
+  of the `items` property for the `workshop.Orders` definition)
 - a new entity `workshop.Orders.items` has been generated automatically
 - the link between the parent (see the `on` condition) and the child (the
   generated entity) is via an element called `up_`. This generated element is
@@ -185,9 +181,7 @@ few important parts:
 > with compositions in
 > CDS](https://qmacro.org/blog/posts/2025/10/14/modelling-contained-in-relationships-with-compositions-in-cds/).
 
-👉 To drive home the appearance of this `up_` element, ask for the generation
-of CSV files with headers, specifically for this new `Orders` definition (using
-the `--filter` option):
+👉 To drive home the appearance of this `up_` element, ask for the generation of CSV files with headers, for this new purchase order definition (using the `--filter` option):
 
 ```bash
 cds add data --filter Orders \
@@ -212,9 +206,3 @@ up__ID,pos,product_ID,quantity
 The managed foreign key for the order item records has been constructed in the
 same way as `supplier_ID` before - the source element name `up_` and the
 target's key element `ID`, joined with an underscore.
-
-It will also help us to take this new parent-child construct for a data test
-drive, but as we'll need to expose the `Orders` entity in our simple service
-(defined in `srv/simple.cds`), we'll wait until the next exercise, [in the next
-part](../../#part-4---exposing-models-via-services---interfaces-for-the-outside-world)
-that looks more closely at service definitions in general.
