@@ -17,7 +17,7 @@ will reveal:
 ├── db/
 │   └── data/
 │       └── Simple.Products.csv
-├── db.sqlite
+├── test.db
 ├── eslint.config.mjs
 ├── package-lock.json
 ├── package.json

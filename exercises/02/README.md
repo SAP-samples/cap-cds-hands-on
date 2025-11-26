@@ -295,14 +295,14 @@ a SQLite database file which you can explore using the SQLite command line inter
 👉 Use this command:
 
 ```bash
-cds deploy --to sqlite
+cds deploy --to sqlite:test.db
 ```
 
 which emits something like this:
 
 ```log
   > init from db/data/Simple.Products.csv
-/> successfully deployed to db.sqlite
+/> successfully deployed to test.db
 
 ```
 
@@ -310,7 +310,7 @@ which emits something like this:
 file created:
 
 ```bash
-sqlite3 db.sqlite
+sqlite3 test.db
 ```
 
 This gives you a prompt:

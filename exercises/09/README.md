@@ -213,8 +213,8 @@ Additionally we see there's an `Orders_items` entity type:
 - the target of the `up_` navigation property is described not as a
   `Collection( ... )` this time, but as a (single) `Orders` entity type
 - for both the navigation properties, each of which involve the use of foreign
-  key values, there are referential contraints that ensure that the "pointer"
-  goes to the appropriate target entity instance
+  key values, there are referential contraints that ensure that the navigation
+  leads to the appropriate target entity instance
   - the value of the `Order_items` element `up__ID` and the value of the target
     `Orders` element `ID` need to match
   - the value of the `Order_items` element product_ID` and the value of the
@@ -233,7 +233,9 @@ The pair of CSV files contain data for a simple initial order with a couple of i
 
 > On a trivia note, do you know the significance of the order date chosen?
 
-👉 Visit <http://localhost:4004/simple/Orders?$expand=items> to perform an OData query operation to retrieve this order and its corresponding items, which should look something like this:
+👉 Visit <http://localhost:4004/simple/Orders?$expand=items> to perform an
+OData query operation to retrieve this order and its corresponding items, which
+should look something like this:
 
 ```json
 {
@@ -261,4 +263,181 @@ The pair of CSV files contain data for a simple initial order with a couple of i
 }
 ```
 
-> For a bonus exploration, add an expansion of the `product` navigation property on each item: <http://localhost:4004/simple/Orders?$expand=items($expand=product)>.
+> For a bonus exploration, add an expansion of the `product` navigation
+> property on each item:
+> <http://localhost:4004/simple/Orders?$expand=items($expand=product)>.
+
+Now it's time to try an OData create operation, supplying a JSON payload representing
+a new order with three items. The data is in a file called `order.json` and
+looks like this:
+
+```json
+{
+  "ID": 100,
+  "items": [
+    {
+      "up__ID": 100,
+      "pos": 10,
+      "product_ID": 1,
+      "quantity": 5
+    },
+    {
+      "up__ID": 100,
+      "pos": 20,
+      "product_ID": 2,
+      "quantity": 5
+    },
+    {
+      "up__ID": 100,
+      "pos": 30,
+      "product_ID": 3,
+      "quantity": 5
+    }
+  ]
+}
+```
+
+👉 Make the request now:
+
+```bash
+curl \
+  --include \
+  --header 'Content-Type: application/json' \
+  --data @../exercises/08/assets/order.json \
+  --url http://localhost:4004/simple/Orders
+```
+
+The output should look something like this:
+
+```log
+HTTP/1.1 201 Created
+X-Powered-By: Express
+OData-Version: 4.0
+location: Orders(100)
+Content-Type: application/json; charset=utf-8
+Content-Length: 240
+
+{"@odata.context":"$metadata#Orders/$entity","ID":100,"date":"2025-11-26","items":[{"up__ID":100,"pos":10,"product_ID":1,"quantity":5},{"up__ID":100,"pos":20,"product_ID":2,"quantity":5},{"up__ID":100,"pos":30,"product_ID":3,"quantity":5}]}
+```
+
+All the signs from this response show that the creation of this order was
+successful, including:
+
+- the appropriate 201 HTTP status code
+- the corresponding `Location` header that accompanies a 201 response, showing
+  the address (`Orders(100)`) of the new resource
+
+👉 Check for yourself, either by revisiting the previous URL
+<http://localhost:4004/simple/Orders?$expand=items> or by following the path to
+this specific new resource as pointed to by the `Location` header, i.e.
+<http://localhost:4004/simple/Orders(100)?$expand=items>
+
+### Check that cascading deletes happen (bonus)
+
+Curious to see the effect of a successful cascading delete? Let's revisit [a
+previous bonus activity](../02#deployments-bonus) and deploy the data model to
+a persistent database file. Then we can delete the single "1992-07-06" order with
+an OData delete operation, and check in the database that the items have been
+deleted too.
+
+👉 Stop the currently running CAP server (with `Ctrl-C`).
+
+👉 Now deploy the model to SQLite, this time without specifying a name for the
+actual database file (previously we specified `test.db`), so that the default
+of `db.sqlite` will be used:
+
+```bash
+cds deploy --to sqlite
+```
+
+This will emit something similar to this:
+
+```log
+  > init from db/data/workshop-Suppliers.csv
+  > init from db/data/workshop-Products.csv
+  > init from db/data/workshop-Orders.items.csv
+  > init from db/data/workshop-Orders.csv
+  > init from db/data/sap.common-Currencies.texts.csv
+  > init from db/data/sap.common-Currencies.csv
+/> successfully deployed to db.sqlite
+```
+
+We need to tell the CAP server to use this persistent file, and can do that
+temporarily with a configuration parameter.
+
+👉 Specify the configuration parameter by adding the following to a new file
+called `.env` in the project root:
+
+```env
+cds.requires.db.kind=sqlite
+```
+
+Let's now "monitor" the item data in this database file. Remember that we have
+[a single order](#request-some-odata-operations) in our initial data CSV files,
+and that is what will be served but also what has been deployed to `db.sqlite`
+(note the corresponding `> init from db/data/workshop-Orders...` lines in the
+log output just above).
+
+👉 Use the SQLite CLI to list the order items:
+
+```bash
+sqlite3 db.sqlite 'select * from workshop_Orders_items;'
+```
+
+This should show the two records representing the items:
+
+```text
+1|1|1|10
+1|2|2|10
+```
+
+👉 Now start up the CAP server:
+
+```bash
+cds watch
+```
+
+and note in the log output that a connection is made to the persistent
+`db.sqlite` file this time rather than an in-memory store:
+
+```log
+[cds] - connect to db > sqlite { url: 'db.sqlite' }
+```
+
+OK, we're ready to delete the single order, the parent of the items that are
+"contained-in" it, the items that should also be deleted due to the cascade
+delete action.
+
+👉 Send an OData delete operation specifying this single order (which has an
+`ID` of `1`):
+
+```bash
+curl \
+  --include \
+  --request DELETE \
+  --url localhost:4004/simple/Orders/1
+```
+
+This should produce something like this:
+
+```log
+HTTP/1.1 204 No Content
+X-Powered-By: Express
+OData-Version: 4.0
+Connection: keep-alive
+Keep-Alive: timeout=5
+```
+
+and you should see a corresponding entry in the CAP server's log output:
+
+```log
+[odata] - DELETE /simple/Orders/1
+```
+
+👉 Check the items again via the SQLite CLI:
+
+```bash
+sqlite3 db.sqlite 'select * from workshop_Orders_items;'
+```
+
+This should show that there are now ... no item records!
