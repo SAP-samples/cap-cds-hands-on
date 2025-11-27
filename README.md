@@ -36,8 +36,7 @@ To get started, clone this repository and open it in your favourite editor or
 IDE.
 
 ```bash
-git clone https://github.com/qmacro/hands-on-with-cap-cds \
-  && cd $_
+git clone https://github.com/qmacro/hands-on-with-cap-cds
 ```
 
 Unless otherwise stated, all command line invocations are based on being in the
@@ -58,7 +57,7 @@ modelling with CDS.
 - [02 - Understand the basic model, service and persistence features](exercises/02/)
 - [03 - Separate out the data model from the service definition](exercises/03/)
 
-#### Further reading
+#### Related resources
 
 - The [What is CAP?](https://cap.cloud.sap/docs/about/#what-is-cap) and
   [Jumpstart & Grow As You
@@ -80,7 +79,7 @@ answers to these questions.
 - [05 - Explore reuse and standard common definitions](exercises/05/)
 - [06 - Understand and use aspects](exercises/06/)
 
-#### Further reading
+#### Related resources
 
 - The [Language
   Preliminaries](https://cap.cloud.sap/docs/cds/cdl#language-preliminaries)
@@ -129,7 +128,7 @@ separate and what we can do there.
 - [10 - Explore projections with a second service](exercises/10/)
 - [11 - Take a look at domain specific custom operations](exercises/11/)
 
-#### Further reading
+#### Related resources
 
 - The [Providing
   Services](https://cap.cloud.sap/docs/guides/providing-services) topic in
@@ -138,3 +137,14 @@ separate and what we can do there.
   Protocol](https://www.youtube.com/watch?v=Ic37FI351G4)
 - A six-part [Back To Basics series on
   OData](https://www.youtube.com/playlist?list=PL6RpkC85SLQDYLiN1BobWXvvnhaGErkwj)
+
+## Support
+
+Support for the content in this repository is available during the actual time
+of the workshop event for which this content has been designed.
+
+## License
+
+Copyright (c) 2025 SAP SE or an SAP affiliate company. All rights reserved.
+This project is licensed under the Apache Software License, version 2.0 except
+as noted otherwise in the [LICENSE](LICENSE) file.
