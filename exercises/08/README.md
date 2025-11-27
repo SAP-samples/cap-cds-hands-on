@@ -213,8 +213,10 @@ The managed foreign key for the order item records has been constructed in the
 same way as `supplier_ID` before - the source element name `up_` and the
 target's key element `ID`, joined with an underscore.
 
-It will also help us to take this new parent-child construct for a data test
-drive, but as we'll need to expose the `Orders` entity in our simple service
-(defined in `srv/simple.cds`), we'll wait until the next exercise, [in the next
-part](../../#part-4---exposing-models-via-services---interfaces-for-the-outside-world)
-that looks more closely at service definitions in general.
+In the next exercise we'll explore this construct with some data.
+
+So far, so good!
+
+---
+
+[Next](../09/)

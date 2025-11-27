@@ -108,10 +108,12 @@ At this point in the workshop we have a couple of entities, representing
 products and suppliers. But they're completely separate from one another, with
 no relation between them.
 
-In this part we'll look at the facilities in CDL for describing relationships.
+In this part we'll look at the facilities in CDL for describing relationships,
+and add a conjoined pair of entities to see how they are are manifested and behave.
 
 - [07 - Link entities together with associations](exercises/07/)
 - [08 - Define contained-in relationships with compositions](exercises/08/)
+- [09 - Try out deep inserts and cascaded deletes](exercise/09/)
 
 ### Part 4 - Exposing models via services - interfaces for the outside world
 
@@ -124,7 +126,7 @@ our model constructions through the lens of the OData V4 standard.
 In this part we'll turn our focus to the `srv/` layer and look at why it's
 separate and what we can do there.
 
-- [09 - Explore service definitions](exercises/09/)
+- [10 - Explore service definitions](exercises/09/)
 
 #### Further reading
 
