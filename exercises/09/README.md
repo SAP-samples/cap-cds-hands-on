@@ -127,16 +127,16 @@ The `Orders` entity type should be defined like this:
 We also see that:
 
 - there's an `OnDelete` element which augments the navigation property
-  definition, stating (via the `Cascade` value) that related entities will be
-  deleted when the containing entity (the order) is deleted; this part of the
-  entity data model definition has been added by the CAP server based on the
-  composition, and serves to inform consumers on what will happen
+  definition, stating (via the `Cascade` value) that related entities (items)
+  will be deleted when the containing entity (the order) is deleted; this part
+  of the entity data model definition has been added by the CAP server based on
+  the composition, and serves to inform consumers about what will happen
 
 > For more information on this `OnDelete` element, see the [relevant section of
 > the OData V4 CSDL
 > specification](https://docs.oasis-open.org/odata/odata/v4.0/os/part3-csdl/odata-v4.0-os-part3-csdl.html#_Toc372793928).
 
-Additionally we see there's an `Orders_items` entity type:
+Additionally we see the `Orders_items` entity type:
 
 ```xml
 <EntityType Name="Orders_items">
@@ -145,13 +145,13 @@ Additionally we see there's an `Orders_items` entity type:
     <PropertyRef Name="pos"/>
   </Key>
   <NavigationProperty Name="up_" Type="Simple.Orders" Nullable="false" Partner="items">
-      <ReferentialConstraint Property="up__ID" ReferencedProperty="ID"/>
+    <ReferentialConstraint Property="up__ID" ReferencedProperty="ID"/>
   </NavigationProperty>
   <Property Name="up__ID" Type="Edm.Int32" Nullable="false"/>
   <Property Name="pos" Type="Edm.Int32" Nullable="false"/>
   <NavigationProperty Name="product" Type="Simple.Products">
     <ReferentialConstraint Property="product_ID" ReferencedProperty="ID"/>
-  NavigationProperty>
+  </NavigationProperty>
   <Property Name="product_ID" Type="Edm.Int32"/>
   <Property Name="quantity" Type="Edm.Int32"/>
 </EntityType>
@@ -168,7 +168,7 @@ Additionally we see there's an `Orders_items` entity type:
   leads to the appropriate target entity instance
   - the value of the `Order_items` element `up__ID` and the value of the target
     `Orders` element `ID` need to match
-  - the value of the `Order_items` element product_ID` and the value of the
+  - the value of the `Order_items` element `product_ID` and the value of the
     target `Products` element `ID` need to match
 
 ### Request some OData operations
@@ -177,12 +177,14 @@ Additionally we see there's an `Orders_items` entity type:
 that the CAP server restarts:
 
 ```bash
-cp ../exercises/08/workshop-Orders*.csv db/data/
+cp ../exercises/09/assets/workshop-Orders*.csv db/data/
 ```
 
 The pair of CSV files contain data for a simple initial order with a couple of items.
 
 > On a trivia note, do you know the significance of the order date chosen?
+
+#### Make an OData query with expanded navigation
 
 👉 Visit <http://localhost:4004/simple/Orders?$expand=items> to perform an
 OData query operation to retrieve this order and its corresponding items, which
@@ -214,13 +216,16 @@ should look something like this:
 }
 ```
 
-> For a bonus exploration, add an expansion of the `product` navigation
-> property on each item:
-> <http://localhost:4004/simple/Orders?$expand=items($expand=product)>.
+> For a bonus exploration, add an nested expansion of the `product` navigation
+> property on each item, and a further nested expansion to get the currency details:
+> <http://localhost:4004/simple/Orders?$expand=items($expand=product($expand=price_currency))>.
+
+#### Make an OData create operation with header and items
 
 Now it's time to try an OData create operation, supplying a JSON payload representing
-a new order with three items. The data is in a file called `order.json` and
-looks like this:
+a new order with three items. A so-called "deep-insert".
+
+The data is in a file called `order.json` and looks like this:
 
 ```json
 {
@@ -276,16 +281,18 @@ successful, including:
 
 - the appropriate 201 HTTP status code
 - the corresponding `Location` header that accompanies a 201 response, showing
-  the address (`Orders(100)`) of the new resource
+  the address `Orders(100)` of the new resource
 
 👉 Check for yourself, either by revisiting the previous URL
 <http://localhost:4004/simple/Orders?$expand=items> or by following the path to
 this specific new resource as pointed to by the `Location` header, i.e.
 <http://localhost:4004/simple/Orders(100)?$expand=items>
 
-### Check that cascading deletes happen
+### Make an OData delete operation and check that cascading deletes happen
 
-Curious to see the effect of a successful cascading delete? Let's revisit [a
+Curious to see the effect of a successful cascading delete?
+
+Let's revisit [a
 previous bonus activity](../02#deployments-bonus) and deploy the data model to
 a persistent database file. Then we can delete the single "1992-07-06" order with
 an OData delete operation, and check in the database that the items have been
@@ -342,10 +349,15 @@ This should show the two records representing the items:
 1|2|2|10
 ```
 
-👉 Now start up the CAP server:
+> Remember, these two item records in the database came directly from the
+> [workshop-Orders.items.csv](assets/workshop-Orders.items.csv) initial data
+> CSV file.
+
+👉 Now start up the CAP server, specifying that you want to see debug level
+output for the SQL activities:
 
 ```bash
-cds watch
+DEBUG=sql cds watch
 ```
 
 and note in the log output that a connection is made to the persistent
@@ -379,10 +391,16 @@ Connection: keep-alive
 Keep-Alive: timeout=5
 ```
 
-and you should see a corresponding entry in the CAP server's log output:
+and you should see a corresponding entry in the CAP server's log output, plus
+some extra SQL debug log records which show the items being deleted in the same
+transaction as the order header itself:
 
 ```log
 [odata] - DELETE /simple/Orders/1
+[sql] - BEGIN
+[sql] - DELETE FROM workshop_Orders_items as "$i" WHERE exists (SELECT 1 as "1" FROM workshop_Orders as "$O" WHERE "$O".ID = "$i".up__ID and ("$O".ID) in (SELECT "$O2".ID FROM Simple_Orders as "$O2" WHERE "$O2".ID = ?)) [ 1 ]
+[sql] - DELETE FROM workshop_Orders as "$O" WHERE ("$O".ID) in (SELECT "$O2".ID FROM Simple_Orders as "$O2" WHERE "$O2".ID = ?) [ 1 ]
+[sql] - COMMIT
 ```
 
 👉 Check the items again via the SQLite CLI:
