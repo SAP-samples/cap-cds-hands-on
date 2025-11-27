@@ -38,11 +38,11 @@ built-in and protocol-specific facilities.
 
 ## Look beyond the pass-through projections
 
-> While what's presented in this section could equally apply to domain
+> While some of what's presented in this section could equally apply to domain
 > modelling (at the `db/` level), it is especially useful to know and to have
 > in mind when considering how cheap services are to define and how flexible
-> they can be to present facades on the business data for different consumption
-> contexts and purposes.
+> they can be to present flexible and focused facades on the business data for
+> different consumption contexts and purposes.
 
 👉 Open the `srv/simple.cds` file in the editor and take a look, to reveal:
 
@@ -56,15 +56,18 @@ service Simple {
 }
 ```
 
-Let's start to explore, or at least to scratch the surface, of what we can do
-beyond just the plain "pass-through" projections we have so far:
+Let's start to explore, or at least to scratch the surface of, what we can do
+beyond just the plain "pass-through" projections we have so far.
 
 ### Define a new service for accounting
 
-Let's imagine we have an internal team looking at cost accounting, and want to
+Imagine we have an internal team looking at cost accounting, and want to
 offer a service for them relating to the products on file. While we could just
 as easily define this new service in a separate file, let's keep it in the same
 file for simplicity and ease of viewing.
+
+> Exploration of separation of concerns, mixins, and general reuse and
+> definition management is the subject of a future exercise.
 
 👉 Rename the `srv/simple.cds` file to `srv/services.cds` to reflect the fact
 that there is more than one service, not just the `Simple` service defined:
@@ -73,7 +76,7 @@ that there is more than one service, not just the `Simple` service defined:
 mv srv/simple.cds srv/services.cds
 ```
 
-👉  Add a second `service` definition as shown:
+👉  Add a second `Accounting` service definition as shown:
 
 ```cds
 using workshop from '../db/schema';
@@ -98,11 +101,12 @@ service Accounting {
 }
 ```
 
-There's a lot to unpack here, but first, let's look at the CAP server's log output.
+There's a lot to unpack here, but first, let's look at the CAP server's log
+output.
 
 👉 Pay attention to the log output from the CAP server when it restarts, where
 you should see that indeed there are two services being served, on two separate
-paths, from the same server base:
+paths, from the same server base (listening on port `4004` on `localhost`):
 
 ```log
 [cds] - serving Simple {
@@ -118,28 +122,35 @@ paths, from the same server base:
 [cds] - server listening on { url: 'http://localhost:4004' }
 ```
 
-Now let's turn our attention back to the definition of our new `Valuations` entity:
+Now let's turn our attention back to the definition of the `Valuations` entity
+in our new `Accounting` service:
 
-- a [projection](https://cap.cloud.sap/docs/cds/cdl#as-projection-on) is still
-  used here
-- however, instead of the [inferred elements
+- we're still employing a
+  [projection](https://cap.cloud.sap/docs/cds/cdl#as-projection-on) here
+- however, we're not using the [inferred elements
   signature](https://cap.cloud.sap/docs/cds/cdl#views-with-inferred-signatures)
-  we have defaulted to for earlier projections (in the `Simple` service) there
-  is an explicit one
-- that signature, within the structure block (`{ ... }`), contains different
-  element expressions
+  (i.e. an implicit "all elements of this projectee") that
+  we've defaulted to for earlier projections (in the `Simple` service)
+- instead, there is an explicit signature within the structure block (`{ ...
+  }`), containing different element expressions
 
-What are the features of those element expressions? Well, there are a few in play:
+What are the features of those element expressions?
 
-- with `as`, the elements are presented with aliased names
-- the `StockValue` element is a [calculated
+Well, there are a few in play:
+
+- with `as`, the elements are presented with aliased names (e.g. `ID` is
+  aliased as `ProductID`)
+- `StockValue` is a [calculated
   element](https://cap.cloud.sap/docs/cds/cdl#calculated-elements); this one in
-  particular is of the on-read variety, not stored in the database
-- as no type is inferred from an expression (`stock * price.amount` in this
-  case), we have to use a cast to set the type for `StockValue` explicitly (to
-  `Decimal`)
-- two elements have values which are defined via [path
-  expressions](https://cap.cloud.sap/docs/cds/cql#path-expressions)
+  particular is of the [on-read](https://cap.cloud.sap/docs/cds/cdl#on-read)
+  variety, not stored in the database
+- as the compiler does not infer a type from an expression (`stock *
+  price.amount` in this case), we use a cast to set the type for `StockValue`
+  explicitly (to `Decimal`)
+- two elements (plus one part of the expression forming `StockValue`) have
+  values which are defined via [path
+  expressions](https://cap.cloud.sap/docs/cds/cql#path-expressions) (the dotted
+  multi-path names)
 
 > Path expressions are part of CAP's query language
 > ([CQL](https://cap.cloud.sap/docs/cds/cql)), as you'll see from the [topic
@@ -255,7 +266,7 @@ valuable.
 👉 Request the CSN, in YAML format as always, for the `srv/services.cds` resource:
 
 ```bash
-cds compile --to yaml srv/services.cds`
+cds compile --to yaml srv/services.cds
 ```
 
 If you pick out the `Accounting.Valuations` definition, you'll uncover a wealth
@@ -296,7 +307,7 @@ Accounting.Valuations:
     Source: { type: cds.String }
 ```
 
-Digging into the detail of this is beyond the scope of this workshop, but it's
+> Digging into the detail of this is beyond the scope of this workshop, but it's
 important to know that it exists, and is the gateway to further understanding,
 especially in the context of expression notation
 ([CXN](https://cap.cloud.sap/docs/cds/cxn)).
