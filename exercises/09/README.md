@@ -99,14 +99,14 @@ The `Orders` entity type should be defined like this:
 
 ```xml
 <EntityType Name="Orders">
-    <Key>
-        <PropertyRef Name="ID"/>
-    </Key>
-    <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
-    <Property Name="date" Type="Edm.Date"/>
-    <NavigationProperty Name="items" Type="Collection(Simple.Orders_items)" Partner="up_">
-        <OnDelete Action="Cascade"/>
-    </NavigationProperty>
+  <Key>
+    <PropertyRef Name="ID"/>
+  </Key>
+  <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+  <Property Name="date" Type="Edm.Date"/>
+  <NavigationProperty Name="items" Type="Collection(Simple.Orders_items)" Partner="up_">
+    <OnDelete Action="Cascade"/>
+  </NavigationProperty>
 </EntityType>
 ```
 
@@ -140,20 +140,20 @@ Additionally we see there's an `Orders_items` entity type:
 
 ```xml
 <EntityType Name="Orders_items">
-    <Key>
-        <PropertyRef Name="up__ID"/>
-        <PropertyRef Name="pos"/>
-    </Key>
-    <NavigationProperty Name="up_" Type="Simple.Orders" Nullable="false" Partner="items">
-        <ReferentialConstraint Property="up__ID" ReferencedProperty="ID"/>
-    </NavigationProperty>
-    <Property Name="up__ID" Type="Edm.Int32" Nullable="false"/>
-    <Property Name="pos" Type="Edm.Int32" Nullable="false"/>
-    <NavigationProperty Name="product" Type="Simple.Products">
-        <ReferentialConstraint Property="product_ID" ReferencedProperty="ID"/>
-    </NavigationProperty>
-    <Property Name="product_ID" Type="Edm.Int32"/>
-    <Property Name="quantity" Type="Edm.Int32"/>
+  <Key>
+    <PropertyRef Name="up__ID"/>
+    <PropertyRef Name="pos"/>
+  </Key>
+  <NavigationProperty Name="up_" Type="Simple.Orders" Nullable="false" Partner="items">
+      <ReferentialConstraint Property="up__ID" ReferencedProperty="ID"/>
+  </NavigationProperty>
+  <Property Name="up__ID" Type="Edm.Int32" Nullable="false"/>
+  <Property Name="pos" Type="Edm.Int32" Nullable="false"/>
+  <NavigationProperty Name="product" Type="Simple.Products">
+    <ReferentialConstraint Property="product_ID" ReferencedProperty="ID"/>
+  NavigationProperty>
+  <Property Name="product_ID" Type="Edm.Int32"/>
+  <Property Name="quantity" Type="Edm.Int32"/>
 </EntityType>
 ```
 

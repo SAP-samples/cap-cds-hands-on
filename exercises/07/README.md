@@ -477,21 +477,21 @@ document](http://localhost:4004/odata/v4/simple/$metadata), we can see that the
 
 ```xml
 <EntityType Name="Products">
-    <Key>
-        <PropertyRef Name="ID"/>
-    </Key>
-    <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
-    <Property Name="name" Type="Edm.String"/>
-    <Property Name="stock" Type="Edm.Int32"/>
-    <Property Name="price_amount" Type="Edm.Decimal" Scale="variable"/>
-    <NavigationProperty Name="price_currency" Type="Simple.Currencies">
-        <ReferentialConstraint Property="price_currency_code" ReferencedProperty="code"/>
-    </NavigationProperty>
-    <Property Name="price_currency_code" Type="Edm.String" MaxLength="3"/>
-    <NavigationProperty Name="supplier" Type="Simple.Suppliers">
-        <ReferentialConstraint Property="supplier_ID" ReferencedProperty="ID"/>
-    </NavigationProperty>
-    <Property Name="supplier_ID" Type="Edm.Int32"/>
+  <Key>
+    <PropertyRef Name="ID"/>
+  </Key>
+  <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+  <Property Name="name" Type="Edm.String"/>
+  <Property Name="stock" Type="Edm.Int32"/>
+  <Property Name="price_amount" Type="Edm.Decimal" Scale="variable"/>
+  <NavigationProperty Name="price_currency" Type="Simple.Currencies">
+    <ReferentialConstraint Property="price_currency_code" ReferencedProperty="code"/>
+  </NavigationProperty>
+  <Property Name="price_currency_code" Type="Edm.String" MaxLength="3"/>
+  <NavigationProperty Name="supplier" Type="Simple.Suppliers">
+    <ReferentialConstraint Property="supplier_ID" ReferencedProperty="ID"/>
+  </NavigationProperty>
+  <Property Name="supplier_ID" Type="Edm.Int32"/>
 </EntityType>
 ```
 
@@ -502,11 +502,11 @@ navigation properties expressed in this OData context:
 
 ```xml
 <EntityType Name="Suppliers">
-    <Key>
-       <PropertyRef Name="ID"/>
-    </Key>
-    <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
-    <Property Name="company" Type="Edm.String"/>
+  <Key>
+    <PropertyRef Name="ID"/>
+  </Key>
+  <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+  <Property Name="company" Type="Edm.String"/>
 </EntityType>
 ```
 
@@ -626,12 +626,12 @@ It should now look like this:
 
 ```xml
 <EntityType Name="Suppliers">
-    <Key>
-        <PropertyRef Name="ID"/>
-    </Key>
-    <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
-    <Property Name="company" Type="Edm.String"/>
-    <NavigationProperty Name="products" Type="Collection(Simple.Products)" Partner="supplier"/>
+  <Key>
+    <PropertyRef Name="ID"/>
+  </Key>
+  <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+  <Property Name="company" Type="Edm.String"/>
+  <NavigationProperty Name="products" Type="Collection(Simple.Products)" Partner="supplier"/>
 </EntityType>
 ```
 

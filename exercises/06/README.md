@@ -482,12 +482,12 @@ such as this `Products` entity type definition:
 
 ```xml
 <EntityType Name="Products">
-    <Key>
-        <PropertyRef Name="ProductID"/>
-    </Key>
-    <Property Name="ProductID" Type="Edm.Int32" Nullable="false"/>
-    <Property Name="ProductName" Type="Edm.String"/>
-    <Property Name="..." Type="..."/>
+  <Key>
+    <PropertyRef Name="ProductID"/>
+  </Key>
+  <Property Name="ProductID" Type="Edm.Int32" Nullable="false"/>
+  <Property Name="ProductName" Type="Edm.String"/>
+  <Property Name="..." Type="..."/>
 </EntityType>
 ```
 

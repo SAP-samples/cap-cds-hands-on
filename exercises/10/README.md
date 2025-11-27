@@ -213,14 +213,14 @@ type definition, which looks like this:
 
 ```xml
 <EntityType Name="Valuations">
-    <Key>
-        <PropertyRef Name="ProductID"/>
-    </Key>
-    <Property Name="ProductID" Type="Edm.Int32" Nullable="false"/>
-    <Property Name="ProductName" Type="Edm.String"/>
-    <Property Name="StockValue" Type="Edm.Decimal" Scale="variable"/>
-    <Property Name="Currency" Type="Edm.String" MaxLength="255"/>
-    <Property Name="Source" Type="Edm.String"/>
+  <Key>
+    <PropertyRef Name="ProductID"/>
+  </Key>
+  <Property Name="ProductID" Type="Edm.Int32" Nullable="false"/>
+  <Property Name="ProductName" Type="Edm.String"/>
+  <Property Name="StockValue" Type="Edm.Decimal" Scale="variable"/>
+  <Property Name="Currency" Type="Edm.String" MaxLength="255"/>
+  <Property Name="Source" Type="Edm.String"/>
 </EntityType>
 ```
 
