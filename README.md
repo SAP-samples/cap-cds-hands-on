@@ -35,13 +35,6 @@ relevant sections of [Capire](https://cap.cloud.sap/docs), particularly the
 To get started, clone this repository and open it in your favourite editor or
 IDE.
 
-```bash
-git clone https://github.com/qmacro/hands-on-with-cap-cds
-```
-
-Unless otherwise stated, all command line invocations are based on being in the
-clone directory, i.e. within `hands-on-with-cap-cds/`.
-
 ### Part 1 - Understanding the context and some basic definitions
 
 When, where and why does one use CDL? To define CDS models that reflect the
