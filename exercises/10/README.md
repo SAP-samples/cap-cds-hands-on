@@ -163,7 +163,7 @@ to see the second service presented:
 
 ![second service](assets/second-service.png)
 
-👉 Check the `Valuations` entity set made available at <http://localhost:4004/odata/v4/accounting/Valuations>, which should look something like this:
+👉 Check the `Valuations` entityset made available at <http://localhost:4004/odata/v4/accounting/Valuations>, which should look something like this:
 
 ```json
 {

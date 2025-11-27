@@ -70,13 +70,15 @@ oriented programming.
 
 ## Define an unbound function in the Simple service
 
-Let's take our first steps in this regard with a simple function that should return just those products that are out of stock.
+Let's take our first steps in this regard with a simple function that should
+return just those products that are out of stock.
 
 Because this is going to be read-only, a function is appropriate. Because we
 want to have products returned to us from the entire set, the function is to be
 unbound rather than bound.
 
-👉 In `srv/services.cds`, add the definition for an `outOfStockProducts` function within the `Simple` service as shown:
+👉 In `srv/services.cds`, add the definition for an `outOfStockProducts`
+function within the `Simple` service as shown:
 
 ```cds
 @protocol: 'odata'
@@ -150,3 +152,129 @@ introduction workshop, there are a few points worth highlighting:
   CDS file
 - The handler for the unbound function is defined in the [on
   phase](https://cap.cloud.sap/docs/node.js/core-services#srv-on-request)
+
+## Test the unbound function
+
+👉 Take a look at our initial data in the CSV files, specifically
+`db/data/workshop-Products.csv`, and you'll see that there's a product, "Chef
+Anton's Gumbo Mix", where the value for `stock` is indeed `0`:
+
+```csv
+ID,name,stock,price_amount,price_currency_code,supplier_ID
+1,Chai,39,18,GBP,1
+2,Chang,17,19,GBP,1
+3,Aniseed Syrup,13,10,GBP,1
+4,"Chef Anton's Cajun Seasoning",53,22,GBP,2
+5,"Chef Anton's Gumbo Mix",0,21.35,GBP,2
+6,"Grandma's Boysenberry Spread",120,25,GBP,3
+```
+
+Let's make it slightly more exciting, so that we have more than one entry in
+the entityset returned.
+
+👉 Edit the CSV file and change the `stock` value `39` for the product with
+`ID` of `1` ("Chai") to `0`.
+
+The CAP server should restart automatically.
+
+👉 Now retry the unbound function, by requesting
+<http://localhost:4004/simple/outOfStockProducts>. It should return an
+entityset with "Chai" and "Chef Anton's Gumbo Mix":
+
+```json
+{
+  "@odata.context": "$metadata#Products",
+  "value": [
+    {
+      "ID": 1,
+      "name": "Chai",
+      "stock": 0,
+      "price_amount": 18,
+      "price_currency_code": "GBP",
+      "supplier_ID": 1
+    },
+    {
+      "ID": 5,
+      "name": "Chef Anton's Gumbo Mix",
+      "stock": 0,
+      "price_amount": 21.35,
+      "price_currency_code": "GBP",
+      "supplier_ID": 2
+    }
+  ]
+}
+```
+
+Great! We've just learned how we can define and provide the business logic for
+a custom function.
+
+## Replace the function with a declarative infix filter
+
+The function we chose to implement was deliberately simple, of course. But did
+you know that we don't even need a function for such a facility?
+
+One of the best features of developing with the CAP framework is that it allows
+us to push out logic to the extremities:
+
+- upwards to the declarative surface area of our domain model (and related
+  service definitions)
+- downwards to the persistence layer where complex queries can be handled
+  directly and natively by the database systems
+
+To round off this exercise, let's make that same feature available (the listing
+of products that are out of stock) without having to write a single line of
+custom code.
+
+👉 Start out by deleting the `db/services.js` file as we don't need it any more.
+
+👉 Next, remove the `outOfStockProducts()` function definition from the
+`Simple` service, replacing it with another entity projection called
+`OutOfStockProducts` as shown. Also, add the annotation
+`@cds.redirection.target` to the `Products` entity projection. Once you're
+done, the `Simple` service definition should look like this:
+
+```cds
+@protocol: 'odata'
+@path    : '/simple'
+service Simple {
+  @cds.redirection.target
+  entity Products           as projection on workshop.Products;
+
+  entity Suppliers          as projection on workshop.Suppliers;
+  entity Orders             as projection on workshop.Orders;
+  entity OutOfStockProducts as projection on workshop.Products[stock <= 0];
+}
+```
+
+What have we done here? Importantly, we have:
+
+- moved from a procedural approach that required custom business logic,
+  to a purely declarative one using the power of CAP's domain modelling
+  language CDL
+- that power specifically here is the `[stock <= 0]` part which is an [infix
+  filter](https://cap.cloud.sap/docs/cds/cdl#publish-associations-with-filter)
+
+Unrelated directly to the use of an infix filter, and more related to the fact
+that we have defined a second projection on the same base entity
+(`workshop.Products`), we have also:
+
+- added the annotation
+  [@cds.redirection.target](https://cap.cloud.sap/docs/cds/cdl#using-cds-redirection-target-annotations)
+  to help the compiler resolve any ambiguity between the two possible
+  destinations for association based relationships
+
+Now that we've made these changes and got rid of the `srv/services.js` file,
+make sure the CAP server has restarted and visit the CAP server home page again
+at <http://localhost:4004/>, where this new resource is exposed, as an entity
+this time of course, and not as a function:
+
+![OutOfStockProducts entity exposed](assets/OutOfStockProducts-entity.png)
+
+👉 Select that entity link to get to the entityset resource, which should
+reflect the same data as the function did: the products "Chai" and "Chef
+Anton's Gumbo Mix".
+
+That pretty much rounds it off for what we can fit into this introduction to
+modelling in CAP.
+
+Congratulations!
