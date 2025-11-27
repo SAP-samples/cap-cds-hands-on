@@ -1,4 +1,4 @@
-# 10 - Explore service definitions
+# 10 - Explore projections with a second service
 
 In this exercise we'll begin to understand what the service layer is and what
 it's for, by extending the rudimentary definitions we already have in there.

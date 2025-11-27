@@ -126,8 +126,15 @@ our model constructions through the lens of the OData V4 standard.
 In this part we'll turn our focus to the `srv/` layer and look at why it's
 separate and what we can do there.
 
-- [10 - Explore service definitions](exercises/10/)
+- [10 - Explore projections with a second service](exercises/10/)
+- [11 - Take a look at domain specific custom operations](exercises/11/)
 
 #### Further reading
 
-- The [Providing Services](https://cap.cloud.sap/docs/guides/providing-services) topic in Capire
+- The [Providing
+  Services](https://cap.cloud.sap/docs/guides/providing-services) topic in
+  Capire
+- A two minute video on [HTTP, the HyperText Transfer
+  Protocol](https://www.youtube.com/watch?v=Ic37FI351G4)
+- A six-part [Back To Basics series on
+  OData](https://www.youtube.com/playlist?list=PL6RpkC85SLQDYLiN1BobWXvvnhaGErkwj)
