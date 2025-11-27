@@ -113,7 +113,7 @@ and add a conjoined pair of entities to see how they are are manifested and beha
 
 - [07 - Link entities together with associations](exercises/07/)
 - [08 - Define contained-in relationships with compositions](exercises/08/)
-- [09 - Try out deep inserts and cascaded deletes](exercise/09/)
+- [09 - Try out deep inserts and cascaded deletes](exercises/09/)
 
 ### Part 4 - Exposing models via services - interfaces for the outside world
 
