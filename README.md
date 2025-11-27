@@ -126,7 +126,7 @@ our model constructions through the lens of the OData V4 standard.
 In this part we'll turn our focus to the `srv/` layer and look at why it's
 separate and what we can do there.
 
-- [10 - Explore service definitions](exercises/09/)
+- [10 - Explore service definitions](exercises/10/)
 
 #### Further reading
 
