@@ -146,7 +146,7 @@ CREATE TABLE Simple_Products (
 );
 ```
 
-Now, with our first foray into separating the concerns, and the layers, things
+Now, with our first steps towards separating the concerns, and the layers, things
 look different.
 
 👉 Request a compilation to SQL again, like this:
