@@ -75,7 +75,7 @@ stock <- Integer
 ```
 
 That said, there are some circumstances where types add value, such as
-when values belong together.
+when elements belong together.
 
 ## Add price information
 
@@ -133,8 +133,8 @@ $version: 2.0
 ```
 
 This anonymous type structure is effectively ad hoc, as it cannot be
-used anywhere else we might want to have an element representing a monetary 
-value.
+reused anywhere else we might want to have an element representing a monetary 
+value (that is, without repeating it each time).
 
 👉 To address this, declare a named custom type and use that, like this:
 
@@ -209,7 +209,7 @@ used in other entity definitions as the model grows.
 > ```
 >
 > In other words, having `currency` flattened into the entity means that it can
-> be shared across multiple currency-based values such as (here) `price` and
+> be shared between multiple currency-based values such as (here) `price` and
 `cost`.
 
 ---

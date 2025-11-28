@@ -36,7 +36,7 @@ family of tables in the core ERP system; here are just a few of them:
 
 Relegating the `currency` component of our `Price` type to a `String` brings
 about guaranteed technical debt from the outset, as there's a lot of work
-needed to support currencies with such a plain definition.
+that would be needed to support currencies with such a plain definition.
 
 ## Explore common reuse types
 
@@ -131,7 +131,7 @@ a look; there's a lot of content, here's what's relevant for us and our use of
 the `Currency` type:
 
 ```cds
-type Country : Association to sap.common.Countries;
+type Currency : Association to sap.common.Currencies;
 
 context sap.common {
 
@@ -177,8 +177,8 @@ start with `@` - they are annotations which we will cover in a later part of
 this workshop.
 
 We can also ignore `localized`, which is a construct that allows
-the model to reflect the reality of internationalisation where we can and
-should provide texts in different locales for different audiences (think of the
+the model to reflect the reality of internationalisation that lets us
+provide texts in different locales for different audiences (think of the
 tables that are suffixed with `T` in the core ERP system, such as `TCURT` as
 mentioned earlier in this exercise).
 
@@ -208,6 +208,14 @@ context sap.common {
 }
 ```
 
+> Assuming the CAP server is still running, you may see some errors at this mid-way point, as the model loading phase has now found duplicate definitions (in `db/common.cds` as well as `@sap/cds/common`):
+>
+> [ERROR] db/common.cds:1:6-14: Duplicate definition of artifact “Currency” (in type:“Currency”)
+> [ERROR] db/common.cds:3:9-19: Duplicate definition of artifact “sap.common” (in context:“sap.common”)
+> ...
+>
+> This is fine and merely fleeting, as we make the transition.
+
 👉 Now temporarily modify the existing import in `db/schema.cds` from:
 
 ```cds
@@ -232,7 +240,7 @@ to use our `Currency` definition in this simpler version.
 Let's take the definitions one by one.
 
 The [context](https://cap.cloud.sap/docs/cds/cdl#context) directive is similar
-to the `namespace` directive we already know about. The `context`
+to the `namespace` directive we already know about. It
 allows us to create definitions in different namespaces (and even nest them)
 in the same `.cds` file. We can guess how this works, because
 following the context's name there's a block construct (`{ ... }`) to enclose
@@ -324,13 +332,17 @@ information, by currency code, in the `db/data/workshop-Products.csv` file,
 like this:
 
 ```text
-db/data/workshop-Products.csv:
++-------------------------------+
+| db/data/workshop-Products.csv |
++-------------------------------+
 ID,name,stock,price_amount,price_currency_code
 ----------------------------------------------
 1,Chai,39,18,GBP
 2,Chang,17,19,EUR
 3,Aniseed Syrup,13,10,GBP
-                       |    db/data/sap.common-Currencies.csv:
+                       |    +-----------------------------------+
+                       |    | db/data/sap.common-Currencies.csv |
+                       |    +-----------------------------------+
                        |    code,symbol,minorUnit,name,descr
                        |    --------------------------------
                        +--> GBP,£,2,Pound,Great British Pound
@@ -338,7 +350,7 @@ ID,name,stock,price_amount,price_currency_code
                             USD,$,2,Dollar,United States Dollar
 ```
 
-> Note also how the names of the CSV files themselves are constructed - from
+> Note also how the names of the CSV files themselves are constructed, from
 > the "scope"-prefixed entity names, whether that scope was defined using the
 > `namespace` directive (in the case of `workshop-Products`) or the `context`
 > directive (in the case of `sap.common-Currencies`).
@@ -348,7 +360,7 @@ ID,name,stock,price_amount,price_currency_code
 The feature that we haven't looked at any real level yet is the [CodeList
 aspect](https://cap.cloud.sap/docs/cds/common#aspect-codelist).
 
-👉 Before finishing this exercise, take a first look, by first revisiting our definitions:
+👉 Before finishing this exercise, take a first look, by first revisiting our definitions in our temporary custom `db/common.cds`:
 
 ```cds
 type Currency : Association to sap.common.Currencies;
@@ -369,7 +381,7 @@ context sap.common {
 }
 ```
 
-This appears twice in our `sap.common` context:
+This aspect appears twice in our `sap.common` context:
 
 - as a definition (`aspect CodeList { ... }`)
 - in use (`entity Currencies : CodeList`)
@@ -377,12 +389,12 @@ This appears twice in our `sap.common` context:
 > The order in which these appearances are actually made also teaches us that
 > in CDS models, definitions don't have to come before their first use.
 
-👉 For now, think of aspects as a sibling of types. Like types, they can be
+👉 For now, think of aspects as siblings of types. Like types, they can be
 anonymous, or be given a name (as `CodeList` here). Unlike types, they cannot
 be "scalar", i.e. they must contain elements (i.e. have a `{ ... }` structure).
 
 Aspects can be used to extend existing structures, most commonly entities. And
-the shortest, most colloquial way to do this is with a `:` symbol, a [shortcut
+the shortest, most idiomatic way to do this is with a `:` symbol, a [shortcut
 syntax construct](https://cap.cloud.sap/docs/cds/cdl#includes) that says "oh,
 and include the elements in this aspect too".
 
@@ -392,7 +404,7 @@ three elements directly defined with it (`code`, which is a key element, and
 aspect (`name` and `descr`).
 
 👉 Consider the five fields in the header for the corresponding initial CSV
-data file, where their origin now should make sense:
+data file, where their origin and number now should make sense:
 
 ```csv
 code,symbol,minorUnit,name,descr

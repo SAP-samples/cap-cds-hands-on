@@ -182,11 +182,7 @@ ID,name,stock
 ```
 
 > Some of you may recognise the product names, they're from the classic
-> [Northwind](https://services.odata.org/V4/Northwind/Northwind.svc/) sample
-> service that now has almost legendary status (technically they're from a cut
-> down version of Northwind, called
-> [Northbreeze](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze)
-> which is sometimes used in other workshops in this context).
+> [Northwind](https://services.odata.org/V4/Northwind/Northwind.svc/) dataset.
 
 In the section of the CAP server log that we saw before announcing the use of
 SQLite, we now see an extra line telling us this CSV file has been found and

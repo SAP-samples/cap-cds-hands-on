@@ -5,7 +5,7 @@ them to good use in our modelling.
 
 ## See how aspects are related to extending definitions more generally
 
-At the end of the previous exercise we were considering a simplified custom and
+At the end of the previous exercise we were using a simplified custom and
 cut down version of some of the content from the `@sap/cds/common` reuse
 module, in `db/common.cds`, which looks like this:
 
@@ -95,10 +95,10 @@ from the structure in the `extend`.
 A key advantage of named aspects is that they can be used and reused in
 different places.
 
-Let's riff on this alternative extension scenario for a bit longer to drive
+Let's explore this alternative extension scenario for a bit longer to drive
 home another feature we have already learned about.
 
-👉 First, restore the definition of the named aspect `CodeList`:
+👉 First, restore the definition of the named aspect `CodeList`, without adding it back as an include to the `Currencies` entity:
 
 ```cds
 context sap.common {
@@ -217,7 +217,7 @@ common source, rather than our own custom one:
 using Currency from '@sap/cds/common';
 ```
 
-👉 To keep things tidy, delete the `db/common.cds` file.
+👉 To keep things tidy and avoid duplicate definition errors, delete the `db/common.cds` file.
 
 ### Add a second entity Suppliers
 
@@ -273,7 +273,7 @@ Both these aspects help with the [what not
 how](https://cap.cloud.sap/docs/guides/domain-modeling#capture-intent-%E2%80%94-what-not-how)
 intent-based modelling approach that CAP exhorts. Rather than include
 implementation details, technical mechanics, to achieve these everyday
-requirements, they can be brought about with beauty and simplicity, but most of
+requirements, definitions can be constructed with beauty and simplicity, but most of
 all with minimum fuss and fanfare, allowing the primary goal of modelling to
 continue.
 
@@ -312,7 +312,7 @@ entity Suppliers : cuid {
 > Note that in order to import more than one artifact we need to enclose the
 > list in a `{ ... }` block.
 
-Outwardly, the entity definitions become smaller. But more importantly the domain model becomes simpler on the surface, moving away from "implementation" and more towards "intent".
+Outwardly, the entity definitions become smaller. But more importantly the domain model becomes simpler on the surface, moving away from "implementation" and further towards "intent".
 
 Using the `cuid` aspect helps us to follow [best practices relating to primary keys](https://cap.cloud.sap/docs/guides/domain-modeling#primary-keys) for performance, simplicity and consistency reasons.
 
@@ -357,12 +357,12 @@ aspect managed {
 }
 ```
 
-> [!INFO]
+> [!NOTE]
 > Here we see some `@` and `$` prefixed constructs for the first time. The
 > former are annotations which we'll cover generally in a later exercise, and
 > the latter are [pseudo
 > variables](https://cap.cloud.sap/docs/guides/domain-modeling#pseudo-variables)
-> which resolve as you'd expect.
+> which resolve as you'd probably expect, given their names.
 
 👉 Import and use the `managed` aspect in `db/schema.cds` like this:
 
@@ -461,7 +461,7 @@ useful they are in modelling!
 
 In order to cut down on information and data that might otherwise cause "noise"
 and get in the way of our understanding, let's re-simplify our model by going
-back to a simple numeric key field for both entities, and doing away with the
+back to a numeric key field for both entities, and doing away with the
 tracking information.
 
 ### Restore the key ID field
@@ -478,7 +478,7 @@ aspect is best practice, we'll use our own custom version that defines the
 element as an `Integer` type instead of a `UUID` type. This reflects the key
 properties in the [corresponding Northbreeze
 service](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/$metadata),
-such as this `Products` entity type definition:
+such as this `Products` entity type definition, where the `ProductID` property has the (OData entity data model) integer type `Edm.Int32`:
 
 ```xml
 <EntityType Name="Products">

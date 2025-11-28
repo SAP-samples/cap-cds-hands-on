@@ -74,7 +74,7 @@ service.
 }
 ```
 
-Also, [suppliers can have more than one product available](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/Suppliers?$top=3&$select=CompanyName&$expand=Products($select=ProductName)):
+Also, [suppliers can offer more than one product](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/Suppliers?$top=3&$select=CompanyName&$expand=Products($select=ProductName)):
 
 ```json
 {
@@ -149,7 +149,7 @@ What we really need in our model is a similar relationship, one that goes both w
 
 ## Use an association to link products to suppliers
 
-In CDS modelling, there is the concept of
+In CDS modelling, there are
 [associations](https://cap.cloud.sap/docs/cds/cdl#associations) whose purpose
 is to describe relationships between entities.
 
@@ -247,7 +247,7 @@ definitions:
       company: { type: cds.String }
 ```
 
-Observe that the `supplier` element is defined thus:
+Observe that the `supplier` element in `workshop.Products` is defined thus:
 
 ```yaml
 {
@@ -313,12 +313,7 @@ directory:
 cp ../exercises/07/assets/workshop-*.csv db/data/
 ```
 
-👉 Now start up the CAP server again using `cds watch` as you did in part 1 of
-this workshop:
-
-```bash
-cds watch
-```
+👉 Ensure the CAP server is still running (restarting it with `cds watch` if it isn't).
 
 Looking at our service definition in `srv/simple.cds`, which looks like this:
 
@@ -341,13 +336,94 @@ default, indeed we can see this from the CAP server log output:
 }
 ```
 
-Given that, let's put the association to the test.
+Given that, let's try to the association to the test.
 
-👉 Retrieve the products entityset, requesting an expansion on the supplier in
+👉 Request the products entityset, specifying an expansion on the supplier in
 each case, via this URL:
 <http://localhost:4004/odata/v4/simple/Products?$select=name&$expand=supplier>
 
-The resulting entityset should look like this:
+Oh. Something's not quite right:
+
+```json
+{
+  "error": {
+    "message": "Navigation property \"supplier\" does not exist in \"Products\"",
+    "code": "400",
+    "@Common.numericSeverity": 4
+  }
+}
+```
+
+This emphasises the different layers and the different purposes they fulfil.
+
+While at the `db/` layer, the data model includes this relationship, most prominently via the new `supplier` element as an association to the `Suppliers` entity, this is not reflected in the OData service that's generated for the service at runtime.
+
+👉 Take a look for yourself in the service's [metadata document](http://localhost:4004/odata/v4/simple/$metadata), and pick out the `Products` entity type, which should look something like this:
+
+```xml
+<EntityType Name="Products">
+  <Key>
+    <PropertyRef Name="ID"/>
+  </Key>
+  <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+  <Property Name="name" Type="Edm.String"/>
+  <Property Name="stock" Type="Edm.Int32"/>
+  <Property Name="price_amount" Type="Edm.Decimal" Scale="variable"/>
+  <NavigationProperty Name="price_currency" Type="Simple.Currencies">
+    <ReferentialConstraint Property="price_currency_code" ReferencedProperty="code"/>
+  </NavigationProperty>
+  <Property Name="price_currency_code" Type="Edm.String" MaxLength="3"/>
+  <Property Name="supplier_ID" Type="Edm.Int32"/>
+</EntityType>
+```
+
+The foreign key property `supplier_ID` is there, but there is no `NavigationProperty` that uses it.
+
+What's going on? Well, in order to provide a complete entity data model (EDM), in the form of a metadata document for the service (at <http://localhost:4004/odata/v4/simple/$metadata>), all relevant parts of the model needs to be made available.
+
+But right now all we're declaring in the service definition is the `Products` entity. That means that to generate a navigation property in the entity type definition for `Products` would not make sense, as it has nowhere to point to ... because there's no entity type definition for `Suppliers`.
+
+👉 Fix this by adding a projection to the `Suppliers` to the `Simple` service in `srv/simple.cds`:
+
+```cds
+using workshop from '../db/schema';
+
+service Simple {
+  entity Products  as projection on workshop.Products;
+  entity Suppliers as projection on workshop.Suppliers;
+}
+```
+
+👉 Look again at the [metadata document](http://localhost:4004/odata/v4/simple/$metadata), and you should now see that there is a `Suppliers` entity type, and also a `NavigationProperty` in the `Products` entity type that points to it:
+
+```xml
+<EntityType Name="Products">
+  <Key>
+    <PropertyRef Name="ID"/>
+  </Key>
+  <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+  <Property Name="name" Type="Edm.String"/>
+  <Property Name="stock" Type="Edm.Int32"/>
+  <Property Name="price_amount" Type="Edm.Decimal" Scale="variable"/>
+  <NavigationProperty Name="price_currency" Type="Simple.Currencies">
+    <ReferentialConstraint Property="price_currency_code" ReferencedProperty="code"/>
+  </NavigationProperty>
+  <Property Name="price_currency_code" Type="Edm.String" MaxLength="3"/>
+  <NavigationProperty Name="supplier" Type="Simple.Suppliers">
+    <ReferentialConstraint Property="supplier_ID" ReferencedProperty="ID"/>
+  </NavigationProperty>
+  <Property Name="supplier_ID" Type="Edm.Int32"/>
+</EntityType>
+<EntityType Name="Suppliers">
+  <Key>
+    <PropertyRef Name="ID"/>
+  </Key>
+  <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+  <Property Name="company" Type="Edm.String"/>
+</EntityType>
+```
+
+👉 Request the products entityset again at <http://localhost:4004/odata/v4/simple/Products?$select=name&$expand=supplier>, which should this time return data, like this:
 
 ```json
 {
@@ -410,26 +486,7 @@ The resulting entityset should look like this:
 What if we wanted to try to follow the relationship the other way round, from
 suppliers to the products they have?
 
-Well, first we should add the `Suppliers` entity to the `Simple` service we
-have, as right now only `Products` is exposed. This is so that we'll be able
-to test out our second relationship definition.
-
-👉 Edit `srv/simple.cds` and add another projection so that it looks like this:
-
-```cds
-using workshop from '../db/schema';
-
-service Simple {
-  entity Products  as projection on workshop.Products;
-  entity Suppliers as projection on workshop.Suppliers;
-}
-```
-
-The CAP server, running in [watch
-mode](https://cap.cloud.sap/docs/tools/cds-cli#cds-watch) should detect this
-change and automatically restart.
-
-👉 At this point, start by requesting the suppliers entityset via this URL:
+👉 Start by requesting the suppliers entityset via this URL:
 <http://localhost:4004/odata/v4/simple/Suppliers>
 
 This should return:
@@ -471,34 +528,7 @@ Well, we should already be able to guess what will happen. Where did we get the
 }
 ```
 
-Indeed, looking at the service's [metadata
-document](http://localhost:4004/odata/v4/simple/$metadata), we can see that the
-`Products` entity type looks like this:
-
-```xml
-<EntityType Name="Products">
-  <Key>
-    <PropertyRef Name="ID"/>
-  </Key>
-  <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
-  <Property Name="name" Type="Edm.String"/>
-  <Property Name="stock" Type="Edm.Int32"/>
-  <Property Name="price_amount" Type="Edm.Decimal" Scale="variable"/>
-  <NavigationProperty Name="price_currency" Type="Simple.Currencies">
-    <ReferentialConstraint Property="price_currency_code" ReferencedProperty="code"/>
-  </NavigationProperty>
-  <Property Name="price_currency_code" Type="Edm.String" MaxLength="3"/>
-  <NavigationProperty Name="supplier" Type="Simple.Suppliers">
-    <ReferentialConstraint Property="supplier_ID" ReferencedProperty="ID"/>
-  </NavigationProperty>
-  <Property Name="supplier_ID" Type="Edm.Int32"/>
-</EntityType>
-```
-
-with a `NavigationProperty` of `supplier`.
-
-However, the `Suppliers` entity type is a little simpler at this point, with no
-navigation properties expressed in this OData context:
+As we perhaps noticed just now, the `Suppliers` entity type is rather simple at this point, with no navigation properties expressed in this OData context:
 
 ```xml
 <EntityType Name="Suppliers">
@@ -510,14 +540,14 @@ navigation properties expressed in this OData context:
 </EntityType>
 ```
 
-There's nothing yet in the CDS model at this point that would cause a
+That's because there's nothing yet even in the CDS model at this point that would cause a
 navigation property to be made present in this entity type! Let's address that
 next.
 
 ### Consider the cardinality and association type needed
 
 Remembering that a supplier can have more than one product, we cannot use the
-same association type as before.
+same to-one association type as before.
 
 Fortunately there is also the [to-many
 association](https://cap.cloud.sap/docs/guides/domain-modeling#to-many-associations).
@@ -536,9 +566,9 @@ relationship, where the to-many part is denoted by the N, which represents
 
 In contrast to the managed to-one association we used from `Products` ->
 `Suppliers`, this to-many association is unmanaged, in the sense that we must
-supply some information that will determine how the relationships should be
+supply some information that will inform how the relationships should be
 determined, how the queries should traverse the objects at the persistence
-layer. That means providing an `on` clause that describes a join condition.
+layer. That means providing an `on` clause that effectively describes a join condition.
 
 ### Add the association
 
@@ -591,7 +621,7 @@ Has this new to-many association caused any changes at the CSV header level?
 
 👉 Use the `cds add data` command again, but this time with the `--out` option
 to supply a different ("throwaway") target directory for the CSV file
-generation:
+generation so we don't clobber the data records we already have:
 
 ```bash
 mkdir /tmp/tempcsv \
@@ -609,7 +639,7 @@ ID,company
 ```
 
 there are no "artificially constructed" (managed) header fields beyond what was
-already there in the form of `supplier_ID`.
+already there in the form of `supplier_ID` in the CSV file for products, and absolutely no extra header fields in the CSV file for suppliers.
 
 From a modelling perspective, this is all we need. From a data loading
 perspective, this is all we need too.
@@ -638,7 +668,7 @@ It should now look like this:
 Great - the CAP server, specifically the support for OData service provision
 and handling, has made a `NavigationProperty` element available for the
 `Suppliers` entity type. Note that our previous "guess" as to what this would
-be named, "products", was correct, i.e. based on the `products` element in the
+be named, "products", was correct, i.e. based on our newly added `products` element in the
 `Suppliers` entity:
 
 ```cds
@@ -651,8 +681,8 @@ entity Suppliers : cuid {
 
 👉 Try that previous suppliers to products navigation again with this URL:
 <http://localhost:4004/odata/v4/simple/Suppliers?$expand=products($select=name)>
-(to keep things brief a `$select` query option has been applied to the expanded
-navigation property).
+
+> To keep things brief a `$select` query option has been applied to the expanded navigation property.
 
 This time we should see something like this:
 
