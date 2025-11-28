@@ -25,7 +25,7 @@ server landing page:
 - [http://localhost:4004/odata/v4/simple/Products](http://localhost:4004/odata/v4/simple/Products)
   (an entityset with the Products data)
 
-👉 Riff on this last resource by trying out some standard OData URL-based query
+👉 Based on this last products entityset resource, try out some standard OData URL-based query
 mechanisms (admittedly these are somewhat limited, given the rather limited
 nature of our dataset), such as:
 
@@ -43,19 +43,27 @@ At the shell prompt, try one or more of these:
 👉 Add a new product:
 
 ```bash
+# Get the latest product ID
 lastid="$(
   curl -s 'localhost:4004/odata/v4/simple/Products?$orderby=ID%20desc&$top=1' | \
     jq '.value|first|.ID'
-)" # get latest ID
-nextid="$((lastid + 1))" # increment it
-curl -d '{"ID":'"$nextid"',"name":"New Product ('"$nextid"')","stock":10}' \
-  --url 'localhost:4004/odata/v4/simple/Products' # use for a new record
+)"
+# Increment the ID
+nextid="$((lastid + 1))"
+
+# Send an OData create operation with the incremented ID
+curl \
+  --header 'Content-Type: application/json' \
+  --data '{"ID":'"$nextid"',"name":"New Product ('"$nextid"')","stock":10}' \
+  --url 'localhost:4004/odata/v4/simple/Products'
 ```
 
 👉 Change the name of product ID 3:
 
 ```bash
-curl --request PATCH \
+curl \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
   --data '{"name": "Aniseed Sauce"}' \
   --url 'localhost:4004/odata/v4/simple/Products/3'
 ```
@@ -69,8 +77,8 @@ curl --request DELETE \
 
 ## Understand how the definition is used
 
-It's hard to imagine now how much work it was to get an OData service like this
-up and running before CAP. But that's not the point of this exercise nor this
+These days it's hard to imagine how much work it used to be, before the advent of CAP, to get an OData service like this
+up and running. But that's not the point of this exercise nor this
 workshop. Instead, let's take a quick look at what "descends" from the
 definition.
 
@@ -176,7 +184,8 @@ $version: 2.0
 
 While we won't need to look much further at CSN in this workshop, it's
 important to understand that it exists and is the "processable" version of the
-definitions we construct in our CDS models.
+definitions we construct in our CDS models. We'll occasionally use CSN in subsequent exercises to bolster
+our understanding, where appropriate.
 
 ### SQL and DDL
 
@@ -209,6 +218,7 @@ saw:
 
 ```log
 [cds] - connect to db > sqlite { url: ':memory:' }
+  > init from db/data/Simple.Products.csv
 /> successfully deployed to in-memory database.
 ```
 
