@@ -16,7 +16,6 @@ requisite modules:
 cds init simple \
   && cd $_ \
   && npm install
-  && cds watch
 ```
 
 > The only reason we're running `npm install` is so that we'll get
