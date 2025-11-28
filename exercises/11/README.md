@@ -9,13 +9,22 @@ supported out of the box by CAP, namely "REST" and OData.
 
 > Technically speaking REST is more of an architectural style than a protocol;
 > so where you see "REST", think
-> [HTTP](https://www.youtube.com/watch?v=Ic37FI351G4)
+> [HTTP](https://www.youtube.com/watch?v=Ic37FI351G4).
 
 In this context, the surface area of an API is made up of a small number of
 standard "verbs" (HTTP methods) and an almost infinite number of "nouns"
 (resources, addressed via URLs). Consequently, standard APIs look similar, in
-that each offer CRUD (create, read, update and delete) operations on resources
+that each offer CRUD (Create, Read, Update and Delete) operations on resources
 that normally represent business data.
+
+> HTTP and CRUD are generally related and the methods and operations (respectively) can be approximated to each other thus:
+>
+> CRUD | HTTP
+> -|-
+> Create | POST
+> Read | GET
+> Update | PUT (or PATCH)
+> Delete | DELETE
 
 The entities in our domain model, exposed via projections in our `Simple`
 service, are a perfect example of that, and through that service we are able to
@@ -30,14 +39,14 @@ more opaque and the semantics of the operation do not align cleanly with the
 HTTP method used; in fact, HTTP is relegated to a transport protocol in this
 case.
 
-> Yes, I care deeply about Representational State Transfer (REST), indeed my
+> Yes, I care deeply about Representational State Transfer (REST) and its constraints; indeed my
 > [narrowboat home](https://qmacro.org/tags/narrowboat/)'s name is "FULLY
 > RESTFUL".
 
 ## Consider OData's actions and functions
 
 If we look at OData (specifically V4), we see that beyond the HTTP oriented
-support for the standard operations (CRUD plus Q for "query", an OData specific
+support for the standard operations (CRUD plus Q for "Query", an OData specific
 form of read), there are provisions for such "out-of-band" mechanisms in the
 form of actions and functions.
 
@@ -63,6 +72,10 @@ topic page where you'll see:
 - Unbound actions/functions are like plain unbound functions in JavaScript.
 - Bound actions/functions always receive the bound entity's primary key as
   implicit first argument, similar to this pointers in Java or JavaScript
+
+Additionally:
+
+- functions are invoked via GET, whereas actions, which have side-effects (i.e. they modify data on the server) must be invoked via POST
 
 If you really must, you can think of the difference between bound and unbound
 as similar to the difference between instance and static methods in object
@@ -214,7 +227,7 @@ The function we chose to implement was deliberately simple, of course. But did
 you know that we don't even need a function for such a facility?
 
 One of the best features of developing with the CAP framework is that it allows
-us to push out logic to the extremities:
+us to push out logic and mechanics to the extremities:
 
 - upwards to the declarative surface area of our domain model (and related
   service definitions)
@@ -225,7 +238,7 @@ To round off this exercise, let's make that same feature available (the listing
 of products that are out of stock) without having to write a single line of
 custom code.
 
-👉 Start out by deleting the `db/services.js` file as we don't need it any more.
+👉 Start out by deleting the `srv/services.js` file as we don't need it any more.
 
 👉 Next, remove the `outOfStockProducts()` function definition from the
 `Simple` service, replacing it with another entity projection called

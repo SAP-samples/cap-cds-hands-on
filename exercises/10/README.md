@@ -49,10 +49,12 @@ built-in and protocol-specific facilities.
 ```cds
 using workshop from '../db/schema';
 
+@protocol: 'odata'
+@path    : '/simple'
 service Simple {
-  entity Products  as projection on workshop.Products;
-  entity Suppliers as projection on workshop.Suppliers;
-  entity Orders    as projection on workshop.Orders;
+    entity Products  as projection on workshop.Products;
+    entity Suppliers as projection on workshop.Suppliers;
+    entity Orders    as projection on workshop.Orders;
 }
 ```
 
@@ -67,10 +69,10 @@ as easily define this new service in a separate file, let's keep it in the same
 file for simplicity and ease of viewing.
 
 > Exploration of separation of concerns, mixins, and general reuse and
-> definition management is the subject of a future exercise.
+> definition management, as well as role based access control, are topics for future exercises.
 
 👉 Rename the `srv/simple.cds` file to `srv/services.cds` to reflect the fact
-that there is more than one service, not just the `Simple` service defined:
+that (shortly) there will be more than one service, not just the `Simple` service, defined:
 
 ```bash
 mv srv/simple.cds srv/services.cds
@@ -129,7 +131,7 @@ in our new `Accounting` service:
   [projection](https://cap.cloud.sap/docs/cds/cdl#as-projection-on) here
 - however, we're not using the [inferred elements
   signature](https://cap.cloud.sap/docs/cds/cdl#views-with-inferred-signatures)
-  (i.e. an implicit "all elements of this projectee") that
+  (i.e. an implicit "all elements of this projectee" pass-through) that
   we've defaulted to for earlier projections (in the `Simple` service)
 - instead, there is an explicit signature within the structure block (`{ ...
   }`), containing different element expressions
@@ -145,11 +147,11 @@ Well, there are a few in play:
   particular is of the [on-read](https://cap.cloud.sap/docs/cds/cdl#on-read)
   variety, not stored in the database
 - as the compiler does not infer a type from an expression (`stock *
-  price.amount` in this case), we use a cast to set the type for `StockValue`
+  price.amount` in this case), we use a [cast](https://cap.cloud.sap/docs/cds/cql#casts-in-cdl) to set the type for `StockValue`
   explicitly (to `Decimal`)
 - two elements (plus one part of the expression forming `StockValue`) have
-  values which are defined via [path
-  expressions](https://cap.cloud.sap/docs/cds/cql#path-expressions) (the dotted
+  values which are defined via dotted multi-path names: these are [path
+  expressions](https://cap.cloud.sap/docs/cds/cql#path-expressions)
   multi-path names)
 
 > Path expressions are part of CAP's query language
@@ -406,3 +408,7 @@ and how that expression traverses it (start at the bottom!):
 ```
 
 Phew!
+
+---
+
+[Next](../11/)

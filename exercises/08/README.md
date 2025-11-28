@@ -24,15 +24,15 @@ perspective](https://cap.cloud.sap/docs/guides/domain-modeling#compositions):
 - Composition targets are auto-exposed in service interfaces
 
 > While using regular Association constructs would go some way to modelling
-> such relationships, it's the wrong way to go, unless we want a whole load of
+> such relationships, it's the wrong approach, unless we want a whole load of
 > extra and unnecessary work and complexity to achieve what CAP provides for us
 > out of the box with compositions.
 
-## Model a simple purchase order facility
+## Model a simple order facility
 
 To illustrate the support and the use of
 [compositions](https://cap.cloud.sap/docs/cds/cdl#compositions) in CDL, let's
-add a parent-child construct for a purchase order entity.
+add a parent-child construct for an order entity.
 
 👉 To the list of entities we have so far in `db/schema.cds`, add the
 (deliberately simple) `Orders` entity, paying close attention to how the order
@@ -92,7 +92,7 @@ What does that anonymous inline aspect describe? It describes the structure of
 the child, the containee - in this case, the structure of the order item.
 
 An order item, the existence of which cannot be outside the context of a parent
-order, will usually have two key elements: one for the parent, and one for the
+order, will usually have a key made up of two elements: one for the parent, and one for the
 item (the child). Let's look at all the elements of this structure to see where
 they are:
 
@@ -174,7 +174,7 @@ few important parts:
 
 - the anonymous inline structure is indeed an `aspect` as we can see from the
   `targetAspect` of the `items` property for the `workshop.Orders` definition
-- a new entity `workshop.Orders.items` has been generated automatically
+- a new entity `workshop.Orders.items` has been generated automatically, with the name being constructed from the namespace and the source entity and element
 - the link between the parent (see the `on` condition) and the child (the
   generated entity) is via an element called `up_`. This generated element is
   part of how this composition-based relationship is "managed" for us, in a

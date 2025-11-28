@@ -30,8 +30,8 @@ but we didn't dwell on it. Let's think about what's
 happening here.
 
 While the declaration in this file is static, the outcome is a dynamic
-artifact, in our case a fully fledged OData service with full support for all
-OData operations (create, read, update, delete and query) out of the box:
+artifact, in our case a full fat OData service with full support for all
+OData operations (Create, Read, Update, Delete and Query) out of the box:
 
 ```log
 [cds] - serving Simple {
@@ -71,8 +71,10 @@ service Simple {
 }
 ```
 
+> There's a short form of the `@protocol: 'odata'` annotation: `@odata` (see the [cds.protocols](https://cap.cloud.sap/docs/node.js/cds-serve#cds-protocols) section in Capire).
+
 As the CAP server should still be running in watch mode, it will notice this
-change and restart, whereupon we should see the custom path:
+change and restart, whereupon we should see the custom path `/simple`:
 
 ```log
 [cds] - serving Simple {
@@ -83,7 +85,7 @@ change and restart, whereupon we should see the custom path:
 ```
 
 Now we can perform a few experiments on our latest additions to the model
-relating to the purchase order construct.
+relating to the order construct.
 
 ## Explore the order construct as it manifests in the service
 
@@ -259,7 +261,7 @@ The data is in a file called `order.json` and looks like this:
 curl \
   --include \
   --header 'Content-Type: application/json' \
-  --data @../exercises/08/assets/order.json \
+  --data @../exercises/09/assets/order.json \
   --url http://localhost:4004/simple/Orders
 ```
 
@@ -279,9 +281,11 @@ Content-Length: 240
 All the signs from this response show that the creation of this order was
 successful, including:
 
-- the appropriate 201 HTTP status code
+- the appropriate [201 HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/201)
 - the corresponding `Location` header that accompanies a 201 response, showing
   the address `Orders(100)` of the new resource
+
+> The address `Orders(100)` doesn't begin with a forward slash, meaning it's relative, becoming `/simple/Orders(100)` as the complete URL path.
 
 👉 Check for yourself, either by revisiting the previous URL
 <http://localhost:4004/simple/Orders?$expand=items> or by following the path to
@@ -302,7 +306,7 @@ deleted too.
 
 👉 Now deploy the model to SQLite, this time without specifying a name for the
 actual database file (previously we specified `test.db`), so that the default
-of `db.sqlite` will be used:
+of `db.sqlite` will be used (so that we can benefit from convention over configuration again):
 
 ```bash
 cds deploy --to sqlite
@@ -320,7 +324,7 @@ This will emit something similar to this:
 /> successfully deployed to db.sqlite
 ```
 
-We need to tell the CAP server to use this persistent file, and can do that
+We need to tell the CAP server to use a persistent file (rather than in-memory), and can do that
 temporarily with a configuration parameter.
 
 👉 Specify the configuration parameter by adding the following to a new file
