@@ -13,6 +13,8 @@ server landing page:
 
 ![Default CAP server landing page](assets/default-cap-server-landing-page.png)
 
+### Make some read requests
+
 👉 Examine some of the resources available via the various hyperlinks:
 
 - [http://localhost:4004/odata/v4/simple](http://localhost:4004/odata/v4/simple)
@@ -37,6 +39,8 @@ rather limited nature of our dataset), such as:
   (all the products, just with the name property for each entity)
 
 > By default the key property (`ID` here) is returned as well.
+
+### Try some write requests too
 
 At the shell prompt, try one or more of these:
 
@@ -88,7 +92,7 @@ The definition is written using the Conceptual Definition Language
 declarative language designed to be used by domain experts and developers to
 build a solution based on the foundation of the domain model that underpins it.
 
-### Core Schema Notation
+### Get an introduction to Core Schema Notation
 
 The CAP server uses the CDS model definition to provide an appropriate OData
 service here, out of the box. But it uses it in a more readily machine-readable
@@ -107,6 +111,8 @@ service Simple {
   }
 }
 ```
+
+#### CSN in JSON
 
 👉 Generate the CSN equivalent of this model, in a JSON representation:
 
@@ -155,6 +161,8 @@ This emits:
 While JSON is arguably "the default", YAML is easier on the eye so we'll use
 that as our go-to representation throughout this workshop whenever we want to
 look at CSN.
+
+#### CSN in YAML
 
 👉 Re-generate the CSN equivalent of this model, this time in a YAML representation:
 
@@ -262,12 +270,14 @@ CREATE TABLE Simple_Products (
 > )
 > ```
 
-### Deployments (bonus)
+## Deployments (bonus)
 
 If you're curious about how this ends up in production, say, with an SAP HANA
 Cloud backend, you can prepare a deployment to see what's generated, and inspect
 the individual assets such as HDI container artifacts and table data (`.hdbtable`)
 files.
+
+### Build for production
 
 👉 To do this, use:
 
@@ -300,6 +310,8 @@ done > wrote output to:
 
 build completed in 780 ms
 ```
+
+### Deploy to a SQLite database file
 
 And to finish off, back to design (non-production) time, you can even deploy to
 a SQLite database file which you can explore using the SQLite command line interface.
