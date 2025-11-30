@@ -25,9 +25,9 @@ server landing page:
 - [http://localhost:4004/odata/v4/simple/Products](http://localhost:4004/odata/v4/simple/Products)
   (an entityset with the Products data)
 
-👉 Based on this last products entityset resource, try out some standard OData URL-based query
-mechanisms (admittedly these are somewhat limited, given the rather limited
-nature of our dataset), such as:
+👉 Based on this last products entityset resource, try out some standard OData
+URL-based query mechanisms (admittedly these are somewhat limited, given the
+rather limited nature of our dataset), such as:
 
 - [http://localhost:4004/odata/v4/simple/Products/3](http://localhost:4004/odata/v4/simple/Products/3)
   (retrieve the Product with ID 3)
@@ -48,6 +48,7 @@ lastid="$(
   curl -s 'localhost:4004/odata/v4/simple/Products?$orderby=ID%20desc&$top=1' | \
     jq '.value|first|.ID'
 )"
+
 # Increment the ID
 nextid="$((lastid + 1))"
 
@@ -77,10 +78,10 @@ curl --request DELETE \
 
 ## Understand how the definition is used
 
-These days it's hard to imagine how much work it used to be, before the advent of CAP, to get an OData service like this
-up and running. But that's not the point of this exercise nor this
-workshop. Instead, let's take a quick look at what "descends" from the
-definition.
+These days it's hard to imagine how much work it used to be, before the advent
+of CAP, to get an OData service like this up and running. But that's not the
+point of this exercise nor this workshop. Instead, let's take a quick look at
+what "descends" from the definition.
 
 The definition is written using the Conceptual Definition Language
 ([CDL](https://cap.cloud.sap/docs/cds/cdl)), the human-readable form of the
@@ -184,8 +185,8 @@ $version: 2.0
 
 While we won't need to look much further at CSN in this workshop, it's
 important to understand that it exists and is the "processable" version of the
-definitions we construct in our CDS models. We'll occasionally use CSN in subsequent exercises to bolster
-our understanding, where appropriate.
+definitions we construct in our CDS models. We'll occasionally use CSN in
+subsequent exercises to bolster our understanding, where appropriate.
 
 ### SQL and DDL
 
@@ -204,7 +205,8 @@ a persistence layer.
 In development mode, by default, this persistence layer is provided by the
 quietly powerful and ubiquitous [SQLite](https://sqlite.org/) database engine.
 Also by default in this context, it will be started in "in-memory" mode, i.e.
-ephemeral persistence (if that is not an oxymoron) for the duration of the CAP server's lifetime. This is incredibly useful for rapid turnaround and
+ephemeral persistence (if that is not an oxymoron) for the duration of the CAP
+server's lifetime. This is incredibly useful for rapid turnaround and
 local-first development.
 
 > If you want to learn more about what CAP has to offer for local-first
@@ -331,9 +333,11 @@ Enter ".help" for usage hints.
 sqlite>
 ```
 
-where you can explore with commands such as `.tables`, request data with
-`select * from Simple_Products;` and query the schema with `select * from
-sqlite_schema;` for example:
+where you can, for example:
+
+- explore with commands such as `.tables`
+- request data with `select * from Simple_Products;`
+- query the schema with `select * from sqlite_schema;`
 
 ```log
 sqlite> .tables
