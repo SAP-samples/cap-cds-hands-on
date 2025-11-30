@@ -69,7 +69,7 @@ entity Orders : cuid {
 > `$now` (we saw this [in a previous exercise
 > too](../06#use-the-managed-aspect-for-basic-data-tracking)).
 
-### Take a moment to think about what's been defined
+### Consider what's been defined
 
 It's worth
 [staring](https://qmacro.org/blog/posts/2017/02/19/the-beauty-of-recursion-and-list-machinery/#initial-recognition)
@@ -184,6 +184,8 @@ few important parts:
 > For more on how this fits together, see [Modelling contained-in relationships
 > with compositions in
 > CDS](https://qmacro.org/blog/posts/2025/10/14/modelling-contained-in-relationships-with-compositions-in-cds/).
+
+### Take a look from a CSV headers point of view
 
 👉 To drive home the appearance of this `up_` element, ask for the generation
 of CSV files with headers, specifically for this new `Orders` definition (using

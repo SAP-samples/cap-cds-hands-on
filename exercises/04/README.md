@@ -3,7 +3,7 @@
 In this exercise we'll learn about custom types in CDL, and how
 and when to employ them (and when not to).
 
-## Consider the existing Products entity
+## Consider the existing product element definitions
 
 Right now we have an extremely simple `Products` entity, the
 definition for which is in `db/schema.cds`, which contains:
@@ -22,6 +22,8 @@ Note how the elements are defined using simple built-in types `Integer` and `Str
 
 > "Element" is the term in CDS modelling for what we might call a "property" or
 > "field" in other contexts.
+
+### Explore definition abstraction
 
 There are some schools of thought that would promote the use of
 custom types for even these scalar elements, like this:
@@ -56,6 +58,8 @@ at different layers, bringing about this kind of relationship:
 Field <- Data Element <- Domain <- Type
 ```
 
+### Keep it simple
+
 But on the whole this is considered bad practice in CAP, where there is a fresh
 approach to design and no (need for a) Data Dictionary. In domain
 modelling terms, CAP [encourages the KISS
@@ -85,6 +89,8 @@ as a decimal, it is meaningless without a currency.
 What does good look like here? Well, it depends. But for the sake of
 learning about types, let's explore a custom [structured
 type](https://cap.cloud.sap/docs/cds/cdl#structured-types).
+
+### Use an ad hoc structure
 
 👉 Add a new element `price` described by a structure like this:
 
@@ -135,6 +141,8 @@ $version: 2.0
 This anonymous type structure is effectively ad hoc, as it cannot be
 reused anywhere else we might want to have an element representing a monetary 
 value (that is, without repeating it each time).
+
+### Use a named type
 
 👉 To address this, declare a named custom type and use that, like this:
 

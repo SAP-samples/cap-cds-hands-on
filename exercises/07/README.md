@@ -24,6 +24,8 @@ in the original
 [Northbreeze](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze)
 service.
 
+### Explore the link between entities in Northbreeze
+
 [Each product comes from a certain supplier](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/Products?$top=5&$select=ProductName&$expand=Supplier($select=CompanyName)):
 
 ```json
@@ -156,6 +158,8 @@ is to describe relationships between entities.
 Our first task, to declare a `Products` -> `Suppliers` relationship, can be
 achieved with a so-called "managed to-one association". What does that name mean?
 
+### Understand the to-one relationship
+
 The "to-one" part of the name is half of the classic
 [one-to-one](https://en.wikipedia.org/wiki/One-to-one_(data_model))
 relationship:
@@ -188,7 +192,7 @@ having to describe how to make the relationship a reality; remember, CDS
 domain modelling is about [capturing intent - what, not
 how](https://cap.cloud.sap/docs/guides/domain-modeling#capture-intent-%E2%80%94-what-not-how).
 
-### Define the relationship
+### Define the products to supplier relationship
 
 👉 Add a new `supplier` element to the `Products` entity, using the managed
 to-one association syntax to describe it, like this:
@@ -213,6 +217,8 @@ entity Suppliers : cuid {
 It's as simple as that.
 
 What effect does this actually have? Well, let's take a look.
+
+### Understand the effect via the CSN
 
 👉 Compile the `db/schema.cds` contents to CSN again, asking for a YAML
 representation, and pick out the `workshop.Products` definition:
@@ -263,6 +269,8 @@ This shows us that:
 - `target`: any sort of relationship needs to declare where it's pointing
 - `keys`: the referenced `ID` here is the name of the key element of the target
   (the `ID` element in `workshop.Suppliers`)
+
+### Understand the effect from the CSV header point of view
 
 Moreover, we can see the effect of this association if we ask for CSV headers
 to be re-generated at this point ...
@@ -336,7 +344,7 @@ default, indeed we can see this from the CAP server log output:
 }
 ```
 
-Given that, let's try to the association to the test.
+Given that, let's put the association to the test.
 
 👉 Request the products entityset, specifying an expansion on the supplier in
 each case, via this URL:
@@ -355,6 +363,8 @@ Oh. Something's not quite right:
 ```
 
 This emphasises the different layers and the different purposes they fulfil.
+
+### Take a look at the OData metadata
 
 While at the `db/` layer, the data model includes this relationship, most prominently via the new `supplier` element as an association to the `Suppliers` entity, this is not reflected in the OData service that's generated for the service at runtime.
 
@@ -511,6 +521,8 @@ This should return:
 }
 ```
 
+### Attempt to navigate from suppliers to products
+
 👉 Now try adding a `$expand` for the products navigation property with this
 URL: <http://localhost:4004/odata/v4/simple/Suppliers?$expand=products>
 
@@ -589,6 +601,8 @@ entity Suppliers : cuid {
                on products.supplier = $self;
 }
 ```
+
+### Understand how to read the on condition
 
 Here's how to think about this `on` condition `products.supplier = $self`:
 

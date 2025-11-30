@@ -11,6 +11,8 @@ supported out of the box by CAP, namely "REST" and OData.
 > so where you see "REST", think
 > [HTTP](https://www.youtube.com/watch?v=Ic37FI351G4).
 
+## Think about HTTP's approach with verbs and nouns
+
 In this context, the surface area of an API is made up of a small number of
 standard "verbs" (HTTP methods) and an almost infinite number of "nouns"
 (resources, addressed via URLs). Consequently, standard APIs look similar, in
@@ -59,7 +61,7 @@ for such mechanisms.
 > slightly more generic
 > [HTTP](https://cap.cloud.sap/docs/advanced/publishing-apis/).
 
-## Understand the scope of actions and functions
+### Understand the scope of actions and functions
 
 Actions and functions are for different purposes, and each can be bound or unbound.
 
@@ -90,6 +92,8 @@ Because this is going to be read-only, a function is appropriate. Because we
 want to have products returned to us from the entire set, the function is to be
 unbound rather than bound.
 
+### Add the declaration
+
 👉 In `srv/services.cds`, add the definition for an `outOfStockProducts`
 function within the `Simple` service as shown:
 
@@ -107,6 +111,8 @@ service Simple {
 Note that this unbound function is as simple as it can be for the purposes of
 this introduction, and expects no arguments (there is nothing defined within
 the `()` signature).
+
+### Try to invoke the function
 
 👉 Ensure that the CAP server has restarted after this change, and visit
 <http://localhost:4004> to see the service endpoints; pay particular attention
@@ -136,7 +142,7 @@ an implementation for ourselves, as we can see from the error message returned:
 }
 ```
 
-## Provide an implementation for the function
+### Provide an implementation
 
 👉 Create a new file `srv/services.js`, with the following content:
 
@@ -166,7 +172,7 @@ introduction workshop, there are a few points worth highlighting:
 - The handler for the unbound function is defined in the [on
   phase](https://cap.cloud.sap/docs/node.js/core-services#srv-on-request)
 
-## Test the unbound function
+### Try the function invocation again
 
 👉 Take a look at our initial data in the CSV files, specifically
 `db/data/workshop-Products.csv`, and you'll see that there's a product, "Chef
@@ -182,6 +188,8 @@ ID,name,stock,price_amount,price_currency_code,supplier_ID
 6,"Grandma's Boysenberry Spread",120,25,GBP,3
 ```
 
+#### Modify the initial data
+
 Let's make it slightly more exciting, so that we have more than one entry in
 the entityset returned.
 
@@ -189,6 +197,8 @@ the entityset returned.
 `ID` of `1` ("Chai") to `0`.
 
 The CAP server should restart automatically.
+
+#### Make the call
 
 👉 Now retry the unbound function, by requesting
 <http://localhost:4004/simple/outOfStockProducts>. It should return an
@@ -238,7 +248,11 @@ To round off this exercise, let's make that same feature available (the listing
 of products that are out of stock) without having to write a single line of
 custom code.
 
+### Remove the custom implementation
+
 👉 Start out by deleting the `srv/services.js` file as we don't need it any more.
+
+#### Redefine the facility as a projection
 
 👉 Next, remove the `outOfStockProducts()` function definition from the
 `Simple` service, replacing it with another entity projection called
@@ -258,6 +272,8 @@ service Simple {
   entity OutOfStockProducts as projection on workshop.Products[stock <= 0];
 }
 ```
+
+#### Examine what we've done
 
 What have we done here? Importantly, we have:
 

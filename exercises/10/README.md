@@ -71,12 +71,16 @@ file for simplicity and ease of viewing.
 > Exploration of separation of concerns, mixins, and general reuse and
 > definition management, as well as role based access control, are topics for future exercises.
 
+### Change the name of the service CDS file
+
 👉 Rename the `srv/simple.cds` file to `srv/services.cds` to reflect the fact
 that (shortly) there will be more than one service, not just the `Simple` service, defined:
 
 ```bash
 mv srv/simple.cds srv/services.cds
 ```
+
+### Add a second service definition
 
 👉  Add a second `Accounting` service definition as shown:
 
@@ -124,6 +128,8 @@ paths, from the same server base (listening on port `4004` on `localhost`):
 [cds] - server listening on { url: 'http://localhost:4004' }
 ```
 
+### Examine the details in the valuations entity definition
+
 Now let's turn our attention back to the definition of the `Valuations` entity
 in our new `Accounting` service:
 
@@ -164,6 +170,8 @@ service definition, and then visit the CAP server at <http://localhost:4004>,
 to see the second service presented:
 
 ![second service](assets/second-service.png)
+
+### See the valuations definition as it occurs in the OData context
 
 👉 Check the `Valuations` entityset made available at <http://localhost:4004/odata/v4/accounting/Valuations>, which should look something like this:
 
@@ -265,6 +273,8 @@ occasional look at the CSN. Now that we've got used to that, let's do it again,
 as the insights it can give us in understanding what's going on here are
 valuable.
 
+#### Look at the CSN for detail
+
 👉 Request the CSN, in YAML format as always, for the `srv/services.cds` resource:
 
 ```bash
@@ -340,6 +350,8 @@ is a two level mapping, as can be seen from the equivalent section in the CSN:
 ```yaml
 { ref: [supplier, company], as: Source }
 ```
+
+#### Visualise the expression traversal through the CDL
 
 If we consider how this is resolved, we can think of our domain model in CDL,
 and how that expression traverses it (start at the bottom!):

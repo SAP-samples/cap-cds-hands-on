@@ -41,6 +41,8 @@ service Simple {
 }
 ```
 
+## Get to know the standard layers
+
 Going back to the directories in our project, we have `app/`, `srv/` and `db/`.
 These were created when the project was initialised (with `cds init`) and are
 the standard locations that CAP Node.js uses to find:
@@ -73,6 +75,8 @@ will take place as we create files and edit their content.
 Examining the content of `services.cds` we see the keywords `service` and
 `entity`; these logically belong at separate levels, so let's adjust that now.
 
+### Define the schema
+
 👉 Create a file `schema.cds` in the `db/` directory, with the following
 contents, i.e. extracting the `entity` definition into this new file:
 
@@ -92,6 +96,8 @@ entity Products {
 > directive which is used to define a prefix for all subsequent definition
 > names in the file; thus the fully qualified name of the entity will be
 > `workshop.Products`.
+
+### Define the service
 
 👉 Now create another file `simple.cds` in the `srv/` directory to define the
 `Simple` service, bringing in the `workshop` name (through which we can

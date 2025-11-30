@@ -84,6 +84,8 @@ this facility is always and implicitly available.
 `Currency` is a type that's available in this facility. Let's explore it by
 using it.
 
+### Declare the import and use it
+
 👉 In `db/schema.cds`, import the `Currency` type from this facility, and use
 it to define the `currency` element of our custom `Price` type, like this:
 
@@ -112,6 +114,8 @@ entity Products {
 
 Right now this new definition is all a bit opaque; what have we really got here now?
 
+### Examine the CSN
+
 👉 Take a look at the resulting CSN:
 
 ```bash
@@ -125,6 +129,8 @@ the contents of our `db/schema.cds`, the compiler will load the entirety of
 Instead, let's take a look at the sources of `@sap/cds/common`, as it will help
 us understand what is going on and what we will be getting with this `Currency`
 type. It will also introduce us to some other CDL features.
+
+### Look at the reuse library source
 
 👉 Open up the file `node_modules/@sap/cds/common.cds` in your editor and take
 a look; there's a lot of content, here's what's relevant for us and our use of
@@ -170,7 +176,7 @@ context sap.common {
 > as the `Association to` construct, will be explained in a subsequent
 > part of this workshop.
 
-## Consider a reduced version of the Currency definition
+## Create a reduced version of the Currency definition
 
 First, we can and should ignore those sections of the CDL source above that
 start with `@` - they are annotations which we will cover in a later part of
@@ -183,6 +189,8 @@ tables that are suffixed with `T` in the core ERP system, such as `TCURT` as
 mentioned earlier in this exercise).
 
 This leaves us with a simpler version.
+
+### Create a temporary custom common library
 
 👉 Add this simpler version to a new file `db/common.cds` and then take a
 moment to
@@ -215,6 +223,8 @@ context sap.common {
 > ...
 >
 > This is fine and merely fleeting, as we make the transition.
+
+### Adjust the import to point to this library
 
 👉 Now temporarily modify the existing import in `db/schema.cds` from:
 
@@ -269,7 +279,7 @@ stored in an element that is described with this `Currency` type.
 
 We'll look at associations and other relationships in a later exercise.
 
-### Generate initial data CSV headers
+### Look at the constructs from the CSV header point of view
 
 Earlier in this workshop we [added some initial
 data](../01#add-some-initial-data) for our fledgling `Products` entity. We
@@ -355,7 +365,7 @@ ID,name,stock,price_amount,price_currency_code
 > `namespace` directive (in the case of `workshop-Products`) or the `context`
 > directive (in the case of `sap.common-Currencies`).
 
-## Take the briefest of looks at the aspect construct
+### Take the briefest of looks at the aspect construct
 
 The feature that we haven't looked at any real level yet is the [CodeList
 aspect](https://cap.cloud.sap/docs/cds/common#aspect-codelist).

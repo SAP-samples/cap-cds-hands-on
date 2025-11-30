@@ -292,7 +292,7 @@ successful, including:
 this specific new resource as pointed to by the `Location` header, i.e.
 <http://localhost:4004/simple/Orders(100)?$expand=items>
 
-### Make an OData delete operation and check that cascading deletes happen
+#### Make an OData delete operation and check that cascading deletes happen
 
 Curious to see the effect of a successful cascading delete?
 
