@@ -1,3 +1,5 @@
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/cap-cds-hands-on)](https://api.reuse.software/info/github.com/SAP-samples/cap-cds-hands-on)
+
 # Hands-on with CAP CDS
 
 A hands-on introduction to the key features of the Conceptual Definition
