@@ -1,4 +1,4 @@
-# 11 - Take a look at domain specific custom operations
+# 11 - Take a first look at domain specific custom operations
 
 In this exercise we'll take a look at how we can define and implement custom
 functions in your services.
@@ -19,7 +19,8 @@ standard "verbs" (HTTP methods) and an almost infinite number of "nouns"
 that each offer CRUD (Create, Read, Update and Delete) operations on resources
 that normally represent business data.
 
-> HTTP and CRUD are generally related and the methods and operations (respectively) can be approximated to each other thus:
+> HTTP and CRUD are generally related and the methods and operations
+> (respectively) can be approximated to each other thus:
 >
 > CRUD | HTTP
 > -|-
@@ -38,12 +39,12 @@ application protocol (HTTP), there are some circumstances where a more "remote
 procedure call" ([RPC](https://en.wikipedia.org/wiki/Remote_procedure_call))
 style of API facility is desirable, where the endpoint (target resource) is
 more opaque and the semantics of the operation do not align cleanly with the
-HTTP method used; in fact, HTTP is relegated to a transport protocol in this
-case.
+HTTP method used; in fact, HTTP is relegated to a transport protocol in such
+cases.
 
-> Yes, I care deeply about Representational State Transfer (REST) and its constraints; indeed my
-> [narrowboat home](https://qmacro.org/tags/narrowboat/)'s name is "FULLY
-> RESTFUL".
+> Yes, I care deeply about Representational State Transfer (REST) and its
+> constraints; indeed my [narrowboat
+> home](https://qmacro.org/tags/narrowboat/)'s name is "FULLY RESTFUL".
 
 ## Consider OData's actions and functions
 
@@ -58,8 +59,7 @@ for such mechanisms.
 
 > Not only can actions and functions be defined and employed in the context of
 > services that are explicitly or implicitly served via OData, but also via the
-> slightly more generic
-> [HTTP](https://cap.cloud.sap/docs/advanced/publishing-apis/).
+> more generic HTTP-grounded "REST" protocol.
 
 ### Understand the scope of actions and functions
 
@@ -77,7 +77,8 @@ topic page where you'll see:
 
 Additionally:
 
-- functions are invoked via GET, whereas actions, which have side-effects (i.e. they modify data on the server) must be invoked via POST
+- functions are invoked via GET, whereas actions, which have side-effects (i.e.
+  they modify data on the server) must be invoked via POST
 
 If you really must, you can think of the difference between bound and unbound
 as similar to the difference between instance and static methods in object
@@ -303,7 +304,4 @@ this time of course, and not as a function:
 reflect the same data as the function did: the products "Chai" and "Chef
 Anton's Gumbo Mix".
 
-That pretty much rounds it off for what we can fit into this introduction to
-modelling in CAP.
-
-Congratulations!
+Nice!
