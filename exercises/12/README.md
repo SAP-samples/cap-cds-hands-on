@@ -174,6 +174,10 @@ This should result in something like this:
 }
 ```
 
+Additionally, another GET request to the entity (at
+<http://localhost:4004/simple/Products/1>) should reveal that the price has
+indeed been changed.
+
 ### Try an invalid percent value
 
 Do we need to provide an implementation to ensure the percent range restriction
