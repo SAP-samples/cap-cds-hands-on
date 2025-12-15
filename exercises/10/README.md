@@ -69,12 +69,14 @@ as easily define this new service in a separate file, let's keep it in the same
 file for simplicity and ease of viewing.
 
 > Exploration of separation of concerns, mixins, and general reuse and
-> definition management, as well as role based access control, are topics for future exercises.
+> definition management, as well as role based access control, are topics for
+> future exercises.
 
 ### Change the name of the service CDS file
 
 👉 Rename the `srv/simple.cds` file to `srv/services.cds` to reflect the fact
-that (shortly) there will be more than one service, not just the `Simple` service, defined:
+that (shortly) there will be more than one service, not just the `Simple`
+service, defined:
 
 ```bash
 mv srv/simple.cds srv/services.cds
@@ -153,12 +155,13 @@ Well, there are a few in play:
   particular is of the [on-read](https://cap.cloud.sap/docs/cds/cdl#on-read)
   variety, not stored in the database
 - as the compiler does not infer a type from an expression (`stock *
-  price.amount` in this case), we use a [cast](https://cap.cloud.sap/docs/cds/cql#casts-in-cdl) to set the type for `StockValue`
-  explicitly (to `Decimal`)
+  price.amount` in this case), we use a
+  [cast](https://cap.cloud.sap/docs/cds/cql#casts-in-cdl) to set the type for
+  `StockValue` explicitly (to `Decimal`)
 - two elements (plus one part of the expression forming `StockValue`) have
   values which are defined via dotted multi-path names: these are [path
-  expressions](https://cap.cloud.sap/docs/cds/cql#path-expressions)
-  multi-path names)
+  expressions](https://cap.cloud.sap/docs/cds/cql#path-expressions) multi-path
+  names)
 
 > Path expressions are part of CAP's query language
 > ([CQL](https://cap.cloud.sap/docs/cds/cql)), as you'll see from the [topic
@@ -173,7 +176,9 @@ to see the second service presented:
 
 ### See the valuations definition as it occurs in the OData context
 
-👉 Check the `Valuations` entityset made available at <http://localhost:4004/odata/v4/accounting/Valuations>, which should look something like this:
+👉 Check the `Valuations` entityset made available at
+<http://localhost:4004/odata/v4/accounting/Valuations>, which should look
+something like this:
 
 ```json
 {
