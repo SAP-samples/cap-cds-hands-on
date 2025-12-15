@@ -122,6 +122,7 @@ separate and what we can do there.
 
 - [10 - Explore projections with a second service](exercises/10/)
 - [11 - Take a first look at domain specific custom operations](exercises/11/)
+- [12 - Add a further operation in the form of a bound action](exercises/12/)
 
 #### Related resources
 
