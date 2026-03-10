@@ -2,23 +2,27 @@
 
 # Hands-on with CAP CDS
 
-A hands-on introduction to the key concepts in CAP CDS modelling, focusing
-on the Conceptual Definition Language (CDL) with additional explorations of
-the CDS Query Language (CQL) and CDS Expression Language (CXL).
+A hands-on introduction to the key concepts in CAP CDS modelling, focusing on
+the Conceptual Definition Language (CDL) with additional explorations of the
+CDS Query Language (CQL) and CDS Expression Language (CXL).
 
 ## Introduction
 
-In this hands-on workshop you'll become familiar and comfortable with
-the key features of CDS modelling, primarily focusing on the Conceptual
-Definition Language ([CDL](https://cap.cloud.sap/docs/cds/cdl)), the
-predominantly declarative domain-specific language (DSL) [in the CDS
-family](https://cap.cloud.sap/docs/cds/). You'll explore the different
-concepts that make CAP such a compelling framework for today's world of
-AI, where concision, correctness and the imperative to write less code
-is at the forefront of everyone's mind.
+In this hands-on workshop you'll become familiar and comfortable with the key
+features of CDS modelling, primarily focusing on the Conceptual Definition
+Language ([CDL](https://cap.cloud.sap/docs/cds/cdl)), the predominantly
+declarative domain-specific language (DSL) [in the CDS
+family](https://cap.cloud.sap/docs/cds/). You'll explore the different concepts
+that make CAP such a compelling framework for today's world of AI, where
+concision, correctness and the imperative to write less code is at the
+forefront of everyone's mind.
 
-This workshop was originally written for a hands-on session at UKISUG
-Connect 2025 (see [Hands-on domain modelling with CAP's CDS at UKISUG
+No prior experience is required, and this workshop is suitable for
+non-developers as well developers. All you need is curiosity and a willingness
+to learn.
+
+This workshop was originally written for a hands-on session at UKISUG Connect
+2025 (see [Hands-on domain modelling with CAP's CDS at UKISUG
 Connect](https://qmacro.org/blog/posts/2025/11/11/hands-on-domain-modelling-with-caps-cds-at-ukisug-connect/)).
 
 ## Prerequisites
