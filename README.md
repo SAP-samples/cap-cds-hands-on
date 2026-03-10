@@ -18,8 +18,8 @@ concision, correctness and the imperative to write less code is at the
 forefront of everyone's mind.
 
 No prior experience is required, and this workshop is suitable for
-non-developers as well developers. All you need is curiosity and a willingness
-to learn.
+non-developers as well as developers. All you need is curiosity and
+a desire to learn!
 
 This workshop was originally written for a hands-on session at UKISUG Connect
 2025 (see [Hands-on domain modelling with CAP's CDS at UKISUG
