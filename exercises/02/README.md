@@ -225,12 +225,6 @@ ephemeral persistence (if that is not an oxymoron) for the duration of the CAP
 server's lifetime. This is incredibly useful for rapid turnaround and
 local-first development.
 
-> If you want to learn more about what CAP has to offer for local-first
-> development, come to the technical talk [Local-first: A more efficient
-> development strategy for extending with the SAP Cloud Application Programming
-> Model](https://virtual.oxfordabstracts.com/event/75555/submission/127)
-> tomorrow (Mon 01 Dec).
-
 When looking at the log output from the CAP server in the previous exercise, we
 saw:
 
