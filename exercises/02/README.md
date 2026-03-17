@@ -38,7 +38,7 @@ rather limited nature of our dataset), such as:
 - [http://localhost:4004/odata/v4/simple/Products?\$select=name](http://localhost:4004/odata/v4/simple/Products?$select=name)
   (all the products, just with the name property for each entity)
 
-> By default the key property (`ID` here) is returned as well.
+  > By default the key property (`ID` here) is returned as well.
 
 ### Try some write requests too
 
