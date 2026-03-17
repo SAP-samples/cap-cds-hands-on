@@ -58,27 +58,35 @@ nextid="$((lastid + 1))"
 
 # Send an OData create operation with the incremented ID
 curl \
+  --silent \
   --header 'Content-Type: application/json' \
   --data '{"ID":'"$nextid"',"name":"New Product ('"$nextid"')","stock":10}' \
-  --url 'localhost:4004/odata/v4/simple/Products'
+  --url 'localhost:4004/odata/v4/simple/Products' \
+  | jq .
 ```
 
 👉 Change the name of product ID 3:
 
 ```bash
 curl \
+  --silent \
   --request PATCH \
   --header 'Content-Type: application/json' \
   --data '{"name": "Aniseed Sauce"}' \
-  --url 'localhost:4004/odata/v4/simple/Products/3'
+  --url 'localhost:4004/odata/v4/simple/Products/3' \
+  | jq .
 ```
 
 👉 Remove the "Chai" product:
 
 ```bash
-curl --request DELETE \
+curl \
+  --include \
+  --request DELETE \
   --url 'localhost:4004/odata/v4/simple/Products/1'
 ```
+
+> The `--include` option tells `curl` to show the response headers.
 
 ## Understand how the definition is used
 
