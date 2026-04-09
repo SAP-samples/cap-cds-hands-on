@@ -134,38 +134,42 @@ This emits:
 
 ```json
 {
-  definitions: {
-    Simple: {
-      kind: 'service'
+  "definitions": {
+    "Simple": {
+      "@source": "services.cds",
+      "kind": "service"
     },
-    'Simple.Products': {
-      kind: 'entity',
-      elements: {
-        ID: {
-          key: true,
-          type: 'cds.Integer'
+    "Simple.Products": {
+      "kind": "entity",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer"
         },
-        name: {
-          type: 'cds.String'
+        "name": {
+          "type": "cds.String"
         },
-        stock: {
-          type: 'cds.Integer'
+        "stock": {
+          "type": "cds.Integer"
         }
       }
     }
   },
-  meta: {
-    creator: 'CDS Compiler v6.8.0',
-    compilerCsnFlavor: 'inferred',
-    flavor: 'inferred'
+  "meta": {
+    "creator": "CDS Compiler v6.8.0",
+    "compilerCsnFlavor": "inferred",
+    "flavor": "inferred"
   },
-  '$version': '2.0'
+  "$version": "2.0"
 }
 ```
 
 > This is a very common request and so can also be produced with the shorter
 > `cds c .`, where `.` is a reference to the current directory, which only
-> contains a single `services.cds` source file at this point anyway.
+> contains a single `services.cds` source file at this point anyway. The output
+> emitted to the terminal is not strictly JSON, it's actually a syntactically
+> valid JavaScript object, but that's by the by - the point is that it's easier
+> on the eye.
 
 While JSON is arguably the default, YAML is arguably easier on the eye so we'll
 use that as our go-to representation throughout this workshop whenever we want
