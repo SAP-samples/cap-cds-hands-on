@@ -23,7 +23,7 @@ server landing page:
   (the OData metadata document)
 - [Fiori
   preview](http://localhost:4004/$fiori-preview/Simple/Products#preview-app) (a
-  basic Fiori elements List Report app where the Products data can be viewed)
+  basic Fiori elements List Report app)
 - [http://localhost:4004/odata/v4/simple/Products](http://localhost:4004/odata/v4/simple/Products)
   (an entityset with the Products data)
 
@@ -91,9 +91,11 @@ curl \
 ## Understand how the definition is used
 
 These days it's hard to imagine how much work it used to be, before the advent
-of CAP, to get an OData service like this up and running. But that's not the
-point of this exercise nor this workshop. Instead, let's take a quick look at
-what "descends" from the definition.
+of CAP, to get an OData service like this up and running and providing a full
+set of service functions.
+
+But that's not the point of this exercise nor this workshop. Instead, let's
+take a quick look at what "descends" from the definition.
 
 The definition is written using the Conceptual Definition Language
 ([CDL](https://cap.cloud.sap/docs/cds/cdl)), the human-readable form of the
@@ -132,43 +134,42 @@ This emits:
 
 ```json
 {
-  "definitions": {
-    "Simple": {
-      "@source": "services.cds",
-      "kind": "service"
+  definitions: {
+    Simple: {
+      kind: 'service'
     },
-    "Simple.Products": {
-      "kind": "entity",
-      "elements": {
-        "ID": {
-          "key": true,
-          "type": "cds.Integer"
+    'Simple.Products': {
+      kind: 'entity',
+      elements: {
+        ID: {
+          key: true,
+          type: 'cds.Integer'
         },
-        "name": {
-          "type": "cds.String"
+        name: {
+          type: 'cds.String'
         },
-        "stock": {
-          "type": "cds.Integer"
+        stock: {
+          type: 'cds.Integer'
         }
       }
     }
   },
-  "meta": {
-    "creator": "CDS Compiler v6.4.6",
-    "flavor": "inferred"
+  meta: {
+    creator: 'CDS Compiler v6.8.0',
+    compilerCsnFlavor: 'inferred',
+    flavor: 'inferred'
   },
-  "$version": "2.0"
+  '$version': '2.0'
 }
-
 ```
 
 > This is a very common request and so can also be produced with the shorter
 > `cds c .`, where `.` is a reference to the current directory, which only
 > contains a single `services.cds` source file at this point anyway.
 
-While JSON is arguably "the default", YAML is easier on the eye so we'll use
-that as our go-to representation throughout this workshop whenever we want to
-look at CSN.
+While JSON is arguably the default, YAML is arguably easier on the eye so we'll
+use that as our go-to representation throughout this workshop whenever we want
+to look at CSN.
 
 #### CSN in YAML
 
@@ -197,12 +198,12 @@ $version: 2.0
 
 > Here, for purposes of display and readability in these workshop exercises,
 > the YAML has been passed through [Prettier](https://prettier.io/), "an
-> opinionated code formatter".
+> opinionated code formatter", largely to split long lines up.
 
 While we won't need to look much further at CSN in this workshop, it's
 important to understand that it exists and is the "processable" version of the
 definitions we construct in our CDS models. We'll occasionally use CSN in
-subsequent exercises to bolster our understanding, where appropriate.
+subsequent exercises to support our understanding, where appropriate.
 
 ### SQL and DDL
 
@@ -274,6 +275,10 @@ CREATE TABLE Simple_Products (
 
 ## Deployments (bonus)
 
+_TODO - this needs the `nodejs` facet and an `npm install` to work now. Decide
+whether to remove this section or leave it in and add the `cds add nodejs &&
+npm install` invocations._
+
 If you're curious about how this ends up in production, say, with an SAP HANA
 Cloud backend, you can prepare a deployment to see what's generated, and inspect
 the individual assets such as HDI container artifacts and table data (`.hdbtable`)
@@ -281,7 +286,7 @@ files.
 
 ### Build for production
 
-👉 To do this, use:
+👉 To do this, first you'll need to ensure certain use:
 
 ```bash
 cds build --profile production
@@ -342,51 +347,62 @@ sqlite3 test.db
 This gives you a prompt:
 
 ```log
-SQLite version 3.40.1 2022-12-28 14:03:47
+SQLite version 3.46.1 2024-08-13 09:16:08
 Enter ".help" for usage hints.
 sqlite>
 ```
 
 where you can, for example:
 
-- explore with commands such as `.tables`
+- explore with commands such as `.tables`:
+
+    ```log
+    sqlite> .tables
+    Simple_Products      cds_outbox_Messages
+    ```
+
 - request data with `select * from Simple_Products;`
+
+    ```log
+    sqlite> select * from Simple_Products;
+    1|Chai|39
+    2|Chang|17
+    3|Aniseed Syrup|13
+    ```
+
 - query the schema with `select * from sqlite_schema;`
 
-```log
-sqlite> .tables
-Simple_Products      cds_outbox_Messages
-sqlite> select * from Simple_Products;
-1|Chai|39
-2|Chang|17
-3|Aniseed Syrup|13
-sqlite> select * from sqlite_schema;
-table|Simple_Products|Simple_Products|2|CREATE TABLE Simple_Products (
-  ID INTEGER NOT NULL,
-  name NVARCHAR(255),
-  stock INTEGER,
-  PRIMARY KEY(ID)
-)
-table|cds_outbox_Messages|cds_outbox_Messages|3|CREATE TABLE cds_outbox_Messages (
-  ID NVARCHAR(36) NOT NULL,
-  timestamp TIMESTAMP_TEXT,
-  target NVARCHAR(255),
-  msg NCLOB,
-  attempts INTEGER DEFAULT 0,
-  "partition" INTEGER DEFAULT 0,
-  lastError NCLOB,
-  lastAttemptTimestamp TIMESTAMP_TEXT,
-  status NVARCHAR(23),
-  PRIMARY KEY(ID)
-)
-index|sqlite_autoindex_cds_outbox_Messages_1|cds_outbox_Messages|4|
-sqlite>
-```
+    ```log
+    sqlite> select * from sqlite_schema;
+    table|Simple_Products|Simple_Products|2|CREATE TABLE Simple_Products (
+      ID INTEGER NOT NULL,
+      name NVARCHAR(255),
+      stock INTEGER,
+      PRIMARY KEY(ID)
+    )
+    table|cds_outbox_Messages|cds_outbox_Messages|3|CREATE TABLE cds_outbox_Messages (
+      ID NVARCHAR(36) NOT NULL,
+      timestamp TIMESTAMP_TEXT,
+      target NVARCHAR(255),
+      msg NCLOB,
+      attempts INTEGER DEFAULT 0,
+      "partition" INTEGER DEFAULT 0,
+      lastError NCLOB,
+      lastAttemptTimestamp TIMESTAMP_TEXT,
+      status NVARCHAR(23),
+      PRIMARY KEY(ID)
+    )
+    index|sqlite_autoindex_cds_outbox_Messages_1|cds_outbox_Messages|4|
+    sqlite>
+    ```
 
 > `cds_outbox_Messages` is a built-in table related to the
-> [Queuing](https://cap.cloud.sap/docs/node.js/queue) facilities.
+> [Queuing](https://cap.cloud.sap/docs/node.js/queue) facilities; we can ignore
+> it here.
 
 You can exit the `sqlite3` prompt with `Ctrl-D`.
+
+_TODO remove this if the previous bonus section has been removed._
 
 👉 If you've run the `cds build` command, clean up before moving on to the next
 exercise, by removing the `gen/` directory, as we won't need it:
