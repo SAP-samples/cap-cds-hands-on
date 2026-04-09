@@ -6,7 +6,7 @@ work](https://creators.spotify.com/pod/profile/tech-aloud/episodes/The-Simplest-
 pretty much). After all, every good technical solution to a business problem
 has a well thought out model at its core.
 
-## Start a new CAP Node.js project
+## Start a new CAP project
 
 👉 Within the `hands-on-with-cap-cds/` directory, initialise a new CAP project,
 and change into that newly created project directory:
