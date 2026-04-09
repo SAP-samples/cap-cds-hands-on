@@ -62,6 +62,11 @@ modelling with CDS.
   [Jumpstart & Grow As You
   Go](https://cap.cloud.sap/docs/about/#jumpstart-grow-as-you-go) sections of
   the Getting Started topic in Capire.
+- [Exercise 01 - cds watch, SQLite, initial data and sample
+  data](https://github.com/SAP-samples/cap-local-development-workshop/tree/main/exercises/01)
+  of the [CAP local development
+  workshop](https://github.com/SAP-samples/cap-local-development-workshop)
+  material, for more on initial vs sample data.
 
 ### Part 2 - More on structure with types, aspects and reuse
 

@@ -9,34 +9,32 @@ has a well thought out model at its core.
 ## Start a new CAP Node.js project
 
 👉 Within the `hands-on-with-cap-cds/` directory, initialise a new CAP project,
-change to the directory that is created, and invoke a package install for the
-requisite modules:
+and change into that newly created project directory:
 
 ```bash
 cds init simple \
-  && cd $_ \
-  && npm install
+  && cd $_
 ```
 
-> The only reason we're running `npm install` is so that we'll get
-> project-local instances of the CAP runtime meaning that the log output will
-> be a little less verbose as the paths to the implementations and default
-> files should be shorter and relative to the current directory.
-
-This should emit something like this:
+This should emit something that includes this line:
 
 ```log
-creating new CAP project in ./simple
-
-adding nodejs
-
-successfully created project – continue with cd simple
-
-find samples on https://github.com/capire/samples
-learn about next steps at https://cap.cloud.sap
+Successfully initialized CAP project
 ```
 
-👉 Now start the CAP server up:
+If you take a look at the contents of this project directory, you won't see
+much, there's no need of any scaffolding or complex configuration, it's all
+just ready to go.
+
+> CAP supports JavaScript and Java runtimes for custom logic, but we won't be
+> needing any right now, and you'll also see that there's a lot we can do
+> without turning to procedural code. So at this point note that we haven't
+> even specified a runtime, and haven't even installed any libraries or
+> dependencies. Everything gets taken care of at this stage by the [CAP
+> development kit](https://cap.cloud.sap/docs/get-started/#node-js-and-cds-dk)
+> which is already globally installed in your working environment.
+
+👉 Now start a CAP server running locally:
 
 ```bash
 cds watch
@@ -47,12 +45,10 @@ This should emit something like this:
 ```log
 cds serve all --with-mocks --in-memory?
 ( live reload enabled for browsers )
-
         ___________________________
 
-    No models found in db/,srv/,app/,schema,services.
+    No models found in db/,srv/,app/,app/*.
     Waiting for some to arrive...
-
 ```
 
 The CAP server is started but is telling us (correctly) that there are no
@@ -66,9 +62,9 @@ incoming requests as there is nothing to wrap a service around and serve.
 
 For the rest of this exercise (and the other exercises in this part of the
 workshop) you can remain in the `simple/` directory - the "project root" for
-the CAP project we'll be building out as we work through the exercises. Any
+the CAP project we'll be building as we work through the exercises. Any
 relative reference to directories or files will be relative to this `simple/`
-location.
+location, unless otherwise explicitly stated.
 
 👉 Add the following content to a new file called `services.cds`:
 
@@ -87,7 +83,7 @@ service Simple {
 
 > Technically we're combining a model definition inside a simple service
 > definition here, but again, that distinction is for later.
-
+>
 > [!NOTE]
 > There are three new CDL keywords here:
 >
@@ -105,27 +101,24 @@ these changes and restart, and this time, the log output includes, amongst
 other info (which has been removed to keep things simple), these extra lines:
 
 ```log
-[cds] - loaded model from 2 file(s):
-
+[cds] - loaded model from 1 file(s):
+ 
   services.cds
-  node_modules/@sap/cds/srv/outbox.cds
 
-[cds] - connect to db > sqlite { url: ':memory:' }
-/> successfully deployed to in-memory database.
+[cds] - connect to db > sqlite { database: ':memory:' }
+/> successfully deployed to in-memory database. 
 
 [cds] - serving Simple {
   at: [ '/odata/v4/simple' ],
-  decl: 'services.cds:1',
-  impl: 'node_modules/@sap/cds/srv/app-service.js'
+  decl: 'services.cds:1'
 }
-
 [cds] - server listening on { url: 'http://localhost:4004' }
 ```
 
 It has:
 
 - found our definitions in `services.cds`
-- established an in-memory SQLite mechanism
+- established an in-memory SQLite persistence mechanism
 - started serving the service we've defined
 
 > From the `odata` component of the relative URL path (`/odata/v4/simple`) we
@@ -154,17 +147,15 @@ added for the entities (just `Products` in this simple setup):
 cds add data
 ```
 
-The log output from this:
+The log output from this tells us where the CSV file is:
 
 ```log
-adding data
+Adding facet: data
 adding headers only, use --records to create random entries
   creating db/data/Simple.Products.csv
 
-successfully added features to your project
+Successfully added features to your project
 ```
-
-tells us where file is.
 
 👉 Open the file and observe the CSV header line in there, which should look
 like this:
@@ -193,6 +184,12 @@ initial data is being loaded from it:
   > init from db/data/Simple.Products.csv
 /> successfully deployed to in-memory database.
 ```
+
+> This data is "initial", starter data, as opposed to "sample" or "test" data
+> which can also be supplied, in CSV files in a `test/` directory. See the link
+> in the [Related
+> resources](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#related-resources)
+> section of this part of the workshop for more info.
 
 Great! Time to explore our fledgling design.
 
