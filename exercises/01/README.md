@@ -28,11 +28,13 @@ just ready to go.
 
 > CAP supports JavaScript and Java runtimes for custom logic, but we won't be
 > needing any right now, and you'll also see that there's a lot we can do
-> without turning to procedural code. So at this point note that we haven't
-> even specified a runtime, and haven't even installed any libraries or
-> dependencies. Everything gets taken care of at this stage by the [CAP
-> development kit](https://cap.cloud.sap/docs/get-started/#node-js-and-cds-dk)
-> which is already globally installed in your working environment.
+> without turning to procedural code.
+>
+> So at this point note that we haven't installed any libraries or
+> dependencies, let alone even specified a runtime. Everything gets taken care
+> of at this stage by `cds-dk` - the [CAP development
+> kit](https://cap.cloud.sap/docs/get-started/#node-js-and-cds-dk) which is
+> already globally installed in your working environment.
 
 👉 Now start a CAP server running locally:
 
@@ -62,7 +64,7 @@ incoming requests as there is nothing to wrap a service around and serve.
 
 For the rest of this exercise (and the other exercises in this part of the
 workshop) you can remain in the `simple/` directory - the "project root" for
-the CAP project we'll be building as we work through the exercises. Any
+the CAP project we'll be building as we go through the workshop. Any
 relative reference to directories or files will be relative to this `simple/`
 location, unless otherwise explicitly stated.
 
@@ -83,7 +85,7 @@ service Simple {
 
 > Technically we're combining a model definition inside a simple service
 > definition here, but again, that distinction is for later.
->
+
 > [!NOTE]
 > There are three new CDL keywords here:
 >
@@ -186,7 +188,7 @@ initial data is being loaded from it:
 ```
 
 > This data is "initial", starter data, as opposed to "sample" or "test" data
-> which can also be supplied, in CSV files in a `test/` directory. See the link
+> which can also be supplied in CSV files in a `test/` directory. See the link
 > in the [Related
 > resources](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#related-resources)
 > section of this part of the workshop for more info.
