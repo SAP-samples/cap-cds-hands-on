@@ -279,32 +279,29 @@ CREATE TABLE Simple_Products (
 
 ## Deployments (bonus)
 
-_TODO - this needs the `nodejs` facet and an `npm install` to work now. Decide
-whether to remove this section or leave it in and add the `cds add nodejs &&
-npm install` invocations._
-
-If you're curious about how this ends up in production, say, with an SAP HANA
-Cloud backend, you can prepare a deployment to see what's generated, and inspect
+If you're curious about how this ends up in an SAP HANA context,
+you can prepare a deployment to see what's generated, and inspect
 the individual assets such as HDI container artifacts and table data (`.hdbtable`)
 files.
 
-### Build for production
+### Run a build task for HANA
 
-👉 To do this, first you'll need to ensure certain use:
+The builder is capable and can run tasks for different targets ([types](https://cap.cloud.sap/docs/guides/deploy/build#build-task-types)).
+
+👉 Specify a build for the `hana` target:
 
 ```bash
-cds build --profile production
+cds build --for hana
 ```
 
 which will produce output something like this:
 
 ```log
 building project with {
-  versions: { cds: '9.4.4', compiler: '6.4.6', dk: '9.4.3' },
+  versions: { cds: '9.8.4', compiler: '6.8.0', dk: '9.8.3' },
   target: 'gen',
   tasks: [
-    { src: 'db', for: 'hana', options: { model: [ 'db', 'srv', 'app', 'services', '@sap/cds/srv/outbox' ] } },
-    { src: 'srv', for: 'nodejs', options: { model: [ 'db', 'srv', 'app', 'services', '@sap/cds/srv/outbox' ] } }
+    { src: 'db', for: 'hana', options: { model: [ 'db', 'srv', 'app', 'app/*', 'services', '@sap/cds/srv/outbox' ] } }
   ]
 }
 done > wrote output to:
@@ -313,13 +310,19 @@ done > wrote output to:
    gen/db/src/gen/.hdinamespace
    gen/db/src/gen/Simple.Products.hdbtable
    gen/db/src/gen/cds.outbox.Messages.hdbtable
-   gen/srv/package-lock.json
-   gen/srv/package.json
-   gen/srv/srv/_i18n/i18n.json
-   gen/srv/srv/csn.json
-   gen/srv/srv/odata/v4/Simple.xml
 
-build completed in 780 ms
+build completed in 87 ms
+```
+
+You can now take a peek inside the `hdbtable` file that contains the DDL for the single entity we have so far:
+
+```sql
+COLUMN TABLE Simple_Products (
+  ID INTEGER NOT NULL,
+  name NVARCHAR(5000),
+  stock INTEGER,
+  PRIMARY KEY(ID)
+)
 ```
 
 ### Deploy to a SQLite database file
@@ -405,8 +408,6 @@ where you can, for example:
 > it here.
 
 You can exit the `sqlite3` prompt with `Ctrl-D`.
-
-_TODO remove this if the previous bonus section has been removed._
 
 👉 If you've run the `cds build` command, clean up before moving on to the next
 exercise, by removing the `gen/` directory, as we won't need it:
