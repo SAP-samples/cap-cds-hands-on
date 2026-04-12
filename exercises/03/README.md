@@ -195,8 +195,10 @@ cds watch
 previous exercise](../02#explore-the-service).
 
 Well done! We can now move on to [the next
-part](../../#part-2---more-on-structure-with-types-aspects-and-reuse) of this
-workshop.
+part](../../?tab=readme-ov-file#part-2---more-on-structure-with-types-aspects-and-reuse)
+of this workshop.
+
+---
 
 ## Footnotes
 
