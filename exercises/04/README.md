@@ -5,8 +5,8 @@ and when to employ them (and when not to).
 
 ## Consider the existing product element definitions
 
-Right now we have an extremely simple `Products` entity, the
-definition for which is in `db/schema.cds`, which contains:
+Right now our extremely simple `Products` entity is defined in `db/schema.cds`
+like this:
 
 ```cds
 namespace workshop;
@@ -18,15 +18,16 @@ entity Products {
 }
 ```
 
-Note how the elements are defined using simple built-in types `Integer` and `String`.
+Note how the elements are defined using simple built-in types `Integer` and
+`String`.
 
 > "Element" is the term in CDS modelling for what we might call a "property" or
 > "field" in other contexts.
 
 ### Explore definition abstraction
 
-There are some schools of thought that would promote the use of
-custom types for even these scalar elements, like this:
+There are some schools of thought that would promote the use of custom types
+for even these scalar elements, like this:
 
 ```cds
 namespace workshop;
@@ -46,13 +47,13 @@ entity Products {
 > define type Stock : Integer;
 > ```
 >
-> but it's optional and usually left off. The same goes for `define
-> entity` too, for that matter.
+> but it's optional and usually left off. The same goes for `define entity`
+> too, for that matter.
 
 This looks neat and has an academic and abstract appeal, especially perhaps to
 those schooled in ABAP development in the context of the all important Data
-Dictionary, where there are Domains, Data Elements and Data Types supplying metadata
-at different layers, bringing about this kind of relationship:
+Dictionary, where there are Domains, Data Elements and Data Types supplying
+metadata at different layers, bringing about this kind of relationship:
 
 ```text
 Field <- Data Element <- Domain <- Type
@@ -61,12 +62,12 @@ Field <- Data Element <- Domain <- Type
 ### Keep it simple
 
 But on the whole this is considered bad practice in CAP, where there is a fresh
-approach to design and no (need for a) Data Dictionary. In domain
-modelling terms, CAP [encourages the KISS
+approach to design and no (need for a) Data Dictionary. In domain modelling
+terms, CAP [encourages the KISS
 approach](https://cap.cloud.sap/docs/guides/domain-modeling#keep-it-simple-stupid).
 
-This custom type `Stock` merely causes us to have to think harder to understand what
-we're looking at:
+This custom type `Stock` merely causes us to have to think harder to understand
+what we're looking at:
 
 ```text
 stock <- Stock <- Integer
@@ -83,11 +84,11 @@ when elements belong together.
 
 ## Add price information
 
-Let's add price information. While a price is typically represented
-as a decimal, it is meaningless without a currency.
+Let's add price information. While a price is typically represented as a
+decimal, it is meaningless without a currency.
 
-What does good look like here? Well, it depends. But for the sake of
-learning about types, let's explore a custom [structured
+What does good look like here? Well, it depends. But for the sake of learning
+about types, let's explore a custom [structured
 type](https://cap.cloud.sap/docs/cds/cdl#structured-types).
 
 ### Use an ad hoc structure
@@ -112,8 +113,12 @@ entity Products {
 👉 Look at what this turns into from a CSN point of view:
 
 ```bash
-cds compile --to yaml srv/ # specifying the entire srv/ dir
+cds compile --to yaml srv/
 ```
+
+> Sometimes it's easier to specify an entire directory as the target for
+> compilation; in this case we'll get the same results as if we'd specified
+> `srv/simple.cds`.
 
 This shows us:
 
@@ -138,8 +143,8 @@ meta: { creator: CDS Compiler v6.4.6, flavor: inferred }
 $version: 2.0
 ```
 
-This anonymous type structure is effectively ad hoc, as it cannot be
-reused anywhere else we might want to have an element representing a monetary 
+This type structure is anonymous and thus effectively ad hoc, as it cannot be
+reused anywhere else we might want to have an element representing a monetary
 value (that is, without repeating it each time).
 
 ### Use a named type
@@ -197,7 +202,7 @@ used in other entity definitions as the model grows.
 > [!TIP]
 > Try to remain aware of CDS modelling best practices, one of which is
 > to [prefer flat
-> models](https://cap.cloud.sap/docs/guides/domain-modeling#prefer-flat-models).
+> models](https://cap.cloud.sap/docs/guides/domain/#prefer-flat-models).
 > Avoid complexity when something simpler will do. There's always a balance
 > to be found between "too simple" and "over engineered". If we were to
 > consider this for our `Products` entity, it might even look something like
