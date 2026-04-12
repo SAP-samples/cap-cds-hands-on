@@ -7,24 +7,20 @@ far into different layers, and understand why.
 
 In our working environment we can see the files and directories that we
 have in our project so far, either in an Explorer style column or via a
-traditional command in the shell such as `tree -F -I node_modules`, which
-will reveal:
+traditional command in the shell such as `tree -F`, which will reveal:
 
 ```log
 ./
-├── README.md
 ├── app/
 ├── db/
 │   └── data/
 │       └── Simple.Products.csv
-├── test.db
-├── eslint.config.mjs
-├── package-lock.json
-├── package.json
+├── readme.md
 ├── services.cds
-└── srv/
+├── srv/
+└── test.db
 
-5 directories, 7 files
+5 directories, 4 files
 ```
 
 The simple OData service we have so far is the result of definitions in a
@@ -49,8 +45,8 @@ the standard locations that CAP Node.js uses to find:
 
 Location|Contains
 -|-
-`app/`|Frontend (UI) assets such as HTML, CSS and JavaScript assets, often UI5 / Fiori based
-`srv/`|Service definitions (plural, as defining [single-purposed services](https://cap.cloud.sap/docs/guides/providing-services#single-purposed-services) is a best practice)
+`app/`|Frontend (UI) assets such as HTML, CSS and JavaScript files, often UI5 / Fiori based
+`srv/`|Service definitions (plural, as defining [single-purposed services](https://cap.cloud.sap/docs/guides/providing-services#single-purposed-services) is a best practice - see the corresponding link in the [Related resources](../../#related-resources) to this part of the workshop)
 `db/`|The data model, predominantly in the form of entity definitions and relations between them
 
 This is the first glimpse into, and a 30,000 feet level example of, one of
@@ -63,7 +59,7 @@ concerns](https://cap.cloud.sap/docs/cds/aspects#separation-of-concerns).
 
 This workshop is focusing on what CAP and in particular CDS modelling can
 bring, so we can safely ignore the `app/` directory for the rest of the
-exercises.
+workshop.
 
 ## Rework the content of services.cds into the service and persistence layers
 
@@ -93,9 +89,9 @@ entity Products {
 > [!NOTE]
 > Here we come across the
 > [namespace](https://cap.cloud.sap/docs/cds/cdl#the-namespace-directive)
-> directive which is used to define a prefix for all subsequent definition
-> names in the file; thus the fully qualified name of the entity will be
-> `workshop.Products`.
+> directive which is used to define a prefix, or scope, for all subsequent
+> definition names in the file; thus the fully qualified name of the entity
+> will be `workshop.Products`.
 
 ### Define the service
 
@@ -112,11 +108,11 @@ service Simple {
 }
 ```
 
-> [!NOTE]
-> The [using](https://cap.cloud.sap/docs/cds/cdl#using) directive is a key
-> enabler of componentisation, separation of concerns and model reuse. The CDL
-> in this `simple.cds` file starts by importing the definitions from the
-> `schema.cds` file at the `db/` layer, by their top-level name (namespace).
+> [!NOTE] The [using](https://cap.cloud.sap/docs/cds/cdl#using) directive is a
+> key enabler of componentisation, separation of concerns and model reuse. The
+> CDL in this `simple.cds` file starts by importing the definitions from the
+> `schema.cds` file at the `db/` layer, by their top-level name
+> (namespace)[<sup>1</sup>](#footnotes).
 >
 > Moreover, we have `as projection on` which is [one of
 > two](https://cap.cloud.sap/docs/cds/cdl#views-projections) variants that
@@ -141,7 +137,7 @@ Before we leave the depths of the persistence layer and the corresponding Data
 Definition Language
 ([DDL](https://en.wikipedia.org/wiki/Data_definition_language)) statements,
 let's remind ourselves of what the initial incarnation of our service
-definition [translated to in DDL](../02#sql-and-ddl):
+definition [translated to in DDL](../02#sql-and-ddl) translated to:
 
 ```sql
 CREATE TABLE Simple_Products (
@@ -152,8 +148,8 @@ CREATE TABLE Simple_Products (
 );
 ```
 
-Now, with our first steps towards separating the concerns, and the layers, things
-look different.
+Now, with our first steps towards separating the concerns, and the layers,
+things look different.
 
 👉 Request a compilation to SQL again, like this:
 
@@ -183,7 +179,9 @@ expected, given the explanation of `as projection on` earlier.
 
 ## Check the service works as before
 
-Before finishing this exercise and this first part, let's make sure the modifications we've made still result in what we intend, i.e. the simple OData service exposing product information.
+Before finishing this exercise and this first part, let's make sure the
+modifications we've made still result in what we intend, i.e. the simple OData
+service exposing product information.
 
 👉 Start the CAP server up again:
 
@@ -199,3 +197,33 @@ previous exercise](../02#explore-the-service).
 Well done! We can now move on to [the next
 part](../../#part-2---more-on-structure-with-types-aspects-and-reuse) of this
 workshop.
+
+## Footnotes
+
+1. Technically we don't have to use a namespace, we could have written the
+   definitions like this in `db/schema.cds`:
+
+    ```cds
+    entity Products {
+      ...
+    }
+    ```
+
+    and then used the definition in `srv/simple.cds` like this:
+
+    ```cds
+    using Products from '../db/schema';
+
+    service Simple {
+        entity MyProducts as projection on Products;
+    }
+    ```
+
+    However, there are many advantages to using namespacing, for example:
+
+    - multiple entities can be imported at once with a single "handle" instead
+      of in a comma separated list within braces (`{ Products, Suppliers,
+      Customers, ... }`)
+    - a clean separation can be made between projection and projectee names
+    - ownership can be aligned along namespace lines
+    - naming clashes can be avoided

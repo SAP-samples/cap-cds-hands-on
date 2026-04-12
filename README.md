@@ -67,6 +67,9 @@ modelling with CDS.
   of the [CAP local development
   workshop](https://github.com/SAP-samples/cap-local-development-workshop)
   material, for more on initial vs sample data.
+- The [Keep services
+  simple](https://qmacro.org/blog/posts/2026/04/07/cds-expressions-in-cap-notes-on-part-5/#keep-services-simple)
+  section of the - notes on Part 5 of the CDS expressions in CAP series
 
 ### Part 2 - More on structure with types, aspects and reuse
 
