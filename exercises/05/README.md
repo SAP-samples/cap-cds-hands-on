@@ -26,17 +26,17 @@ entity Products {
 
 In the context of this deliberately simple model, that might be fine. But in
 the real world there is more to the concept of currencies. Just look at the
-family of tables in the core ERP system; here are just a few of them:
+family of tables in the core ERP system - here are just a few of them:
 
-- TCURX Decimal places in currencies
-- TCURR Exchange rates
-- TCURF Conversion factors
-- TCURC Currency codes
-- TCURT Currency text
+- `TCURX` Decimal places in currencies
+- `TCURR` Exchange rates
+- `TCURF` Conversion factors
+- `TCURC` Currency codes
+- `TCURT` Currency text
 
 Relegating the `currency` component of our `Price` type to a `String` brings
-about guaranteed technical debt from the outset, as there's a lot of work
-that would be needed to support currencies with such a plain definition.
+about guaranteed technical debt from the outset, as there's a lot of work that
+would be needed to support currencies properly, with such a plain definition.
 
 ## Explore common reuse types
 
@@ -47,8 +47,8 @@ Aspects](https://cap.cloud.sap/docs/cds/common) topic:
 Capire](assets/common-reuse-types-and-aspects-in-capire.png)
 
 This is a great resource that is worth reading through after this workshop.
-We'll look at reuse aspects in the next exercise; in this exercise we'll look
-at reuse types, which are introduced in the [Common Reuse
+We'll look at reuse _aspects_ in the next exercise; in this exercise we'll look
+at reuse _types_, which are introduced in the [Common Reuse
 Types](https://cap.cloud.sap/docs/cds/common#code-types) section.
 
 Before we do, though, it's worth understanding why this concept and
@@ -78,11 +78,11 @@ namespace (@sap) / module (cds) / location (common)
 > (such as handler logic) is sometimes to be avoided, but here at the CDS
 > modelling level we are OK.
 
-Being a location within `@sap/cds` which is the core runtime for CAP Node.js,
-this facility is always and implicitly available.
+Being a location within `@sap/cds` which is the core runtime for CAP Node.js
+(and thus also available in the globally installed CAP development kit
+`cds-dk`). this facility is implicitly available.
 
-`Currency` is a type that's available in this facility. Let's explore it by
-using it.
+`Currency` is one of the types in this facility. Let's explore it by using it.
 
 ### Declare the import and use it
 
@@ -112,11 +112,12 @@ entity Products {
 > [using](https://cap.cloud.sap/docs/cds/cdl#using) directive, which we're
 > employing to import a definition from another CDS model (`@sap/cds/common`).
 
-Right now this new definition is all a bit opaque; what have we really got here now?
+Right now this new definition is all a bit opaque; what have we really got here
+now?
 
 ### Examine the CSN
 
-👉 Take a look at the resulting CSN:
+👉 Take a look at the CSN resulting from just this schema definition:
 
 ```bash
 cds compile --to yaml db/schema.cds
@@ -126,15 +127,59 @@ The resulting YAML is rather overwhelming! That's because as well as loading
 the contents of our `db/schema.cds`, the compiler will load the entirety of
 `@sap/cds/common`, which includes a lot more than just the `Currency` type.
 
+> Why does it import all of `@sap/cds/common`? Well, one reason is that there's
+> no guarantee that the single definition (`Currency` here) being imported is
+> self-contained, i.e. does not rely on any further definitions in
+> `@sap/cds/common` ... which it does, actually, as we'll see.
+
 Instead, let's take a look at the sources of `@sap/cds/common`, as it will help
 us understand what is going on and what we will be getting with this `Currency`
 type. It will also introduce us to some other CDL features.
 
 ### Look at the reuse library source
 
-👉 Open up the file `node_modules/@sap/cds/common.cds` in your editor and take
-a look; there's a lot of content, here's what's relevant for us and our use of
-the `Currency` type:
+Let's take a look into this resource, it's a file called `common.cds`, and it's
+contained in the `@sap/cds/`, which is a relative path representing the
+so-called "CDS home", the directory "[from which the current instance of the
+cds facade module was
+loaded](https://cap.cloud.sap/docs/node.js/cds-facade#cds-home)". We can see
+what the absolute path of the current "CDS home" is with the command `cds
+version` (`cds v` for short).
+
+👉 Run `cds v` to see various version details, which should include the path to
+the current "CDS home"; the output should look something like this:
+
+```text
+@sap/cds-dk (global)  9.8.3    /usr/local/share/npm-global/lib/node_modules/@sap/cds-dk
+cds.home                       /usr/local/share/npm-global/lib/node_modules/@sap/cds-dk/node_modules/@sap/cds
+cds.root                       /workspaces/cap-cds-hands-on/simple
+npm root -l                    ./node_modules
+npm root -g                    /usr/local/share/npm-global/lib/node_modules
+Node.js               24.14.0  /usr/local/bin/node
+```
+
+👉 Copy the value for `cds.home` and append `/common.cds` and use this value as
+the argument to `code` on the command line - this should open up a new editor
+window containing `@sap/cds/common.cds`. Something like this:
+
+```bash
+code /usr/local/share/npm-global/lib/node_modules/@sap/cds-dk/node_modules/@sap/cds/common.cds
+```
+
+> We have deliberately still not installed CAP libraries locally in our
+> project, to keep things as simple as possible, and thereby show that
+> everything that we're doing so far is runtime (JavaScript or Java)
+> independent. In other words, we're still relying on the globally installed
+> CDS development kit (`cds-dk`) which is perfectly fine for this work.
+>
+> If you start a project and also add the `nodejs` facet and install the
+> dependencies, the "CDS home" for that project will be within the `@sap/cds`
+> location in the project-local `node_modules/` directory.
+
+👉 Take a look around - there's a lot of content.
+
+From within `common.cds`, here's what's relevant for us and our use of the
+`Currency` type:
 
 ```cds
 type Currency : Association to sap.common.Currencies;
@@ -159,7 +204,7 @@ context sap.common {
 ```
 
 > [!NOTE]
-> There are quite a few more CDL features here:
+> There are quite a few more CDL features introduced here:
 >
 > - `Association to`
 > - `context { ... }`
@@ -216,11 +261,13 @@ context sap.common {
 }
 ```
 
-> Assuming the CAP server is still running, you may see some errors at this mid-way point, as the model loading phase has now found duplicate definitions (in `db/common.cds` as well as `@sap/cds/common`):
+> Assuming the CAP server is still running, you may see some errors at this
+> mid-way point, as the model loading phase has now found duplicate definitions
+> (in `db/common.cds` as well as `@sap/cds/common`):
 >
-> [ERROR] db/common.cds:1:6-14: Duplicate definition of artifact “Currency” (in type:“Currency”)
-> [ERROR] db/common.cds:3:9-19: Duplicate definition of artifact “sap.common” (in context:“sap.common”)
-> ...
+> [ERROR] db/common.cds:1:6-14: Duplicate definition of artifact “Currency” (in
+> type:“Currency”) [ERROR] db/common.cds:3:9-19: Duplicate definition of
+> artifact “sap.common” (in context:“sap.common”) ...
 >
 > This is fine and merely fleeting, as we make the transition.
 
