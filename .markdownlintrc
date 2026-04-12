@@ -1,3 +1,4 @@
 {
-  "no-blanks-blockquote": false
+  "no-blanks-blockquote": false,
+  "no-inline-html": false
 }
