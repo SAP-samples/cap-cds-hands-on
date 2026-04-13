@@ -598,8 +598,8 @@ In contrast to the managed to-one association we used from `Products` ->
 `Suppliers`, this to-many association is unmanaged, in the sense that we must
 supply some information that will inform how the relationships should be
 determined, how the queries should traverse the objects at the persistence
-layer. That means providing an `on` clause that effectively describes a join
-condition[<sup>1</sup>](#footnotes).
+layer. That means providing an `on` clause that effectively describes the
+condition.
 
 ### Add the association
 
@@ -827,11 +827,3 @@ Success!
 ---
 
 [Next](../08/)
-
----
-
-## Footnotes
-
-1. You may be interested in learning about the concept of [forward-declared
-   joins](https://qmacro.org/tags/forward-declared-joins/) that is the
-   foundation here.
