@@ -17,13 +17,13 @@ the containees should be too, i.e. they cannot exist independently.
 
 With compositions, CAP supports such "contained-in" relationships, from a
 modelling perspective, and also [from a runtime
-perspective](https://cap.cloud.sap/docs/guides/domain-modeling#compositions):
+perspective](https://cap.cloud.sap/docs/guides/domain/#compositions):
 
 - Deep Insert / Update automatically filling in document structures
-- Cascaded Delete is when deleting composition roots
-- Composition targets are auto-exposed in service interfaces
+- Cascaded Delete when deleting composition roots
+- Composition targets auto-exposed in service interfaces
 
-> While using regular Association constructs would go some way to modelling
+> While using regular association constructs would go some way to modelling
 > such relationships, it's the wrong approach, unless we want a whole load of
 > extra and unnecessary work and complexity to achieve what CAP provides for us
 > out of the box with compositions.
@@ -32,7 +32,7 @@ perspective](https://cap.cloud.sap/docs/guides/domain-modeling#compositions):
 
 To illustrate the support and the use of
 [compositions](https://cap.cloud.sap/docs/cds/cdl#compositions) in CDL, let's
-add a parent-child construct for an order entity.
+add a parent-child construct for an order business object.
 
 👉 To the list of entities we have so far in `db/schema.cds`, add the
 (deliberately simple) `Orders` entity, paying close attention to how the order
@@ -63,9 +63,9 @@ entity Orders : cuid {
 ```
 
 > [!NOTE]
-> With the `default` keyword for `date` we can specify a default value if
-> none is supplied on creation; here, we use the [pseudo
-> variable](https://cap.cloud.sap/docs/guides/domain-modeling#pseudo-variables)
+> With the `default` keyword for `date` we can specify a default value if none
+> is supplied; here, we use the [pseudo
+> variable](https://cap.cloud.sap/docs/guides/domain/#pseudo-variables)
 > `$now` (we saw this [in a previous exercise
 > too](../06#use-the-managed-aspect-for-basic-data-tracking)).
 
@@ -86,15 +86,16 @@ So far so good. Let's dig in further:
 
 - unlike the Association describing `Suppliers:products` earlier, the target
   composition is not another entity ... it's a structure (`{ ... }`)
-- that structure is an [anonymous inline aspect](https://cap.cloud.sap/docs/guides/domain-modeling#composition-of-aspects)
+- that structure is an [anonymous inline
+  aspect](https://cap.cloud.sap/docs/guides/domain/#composition-of-aspects)
 
 What does that anonymous inline aspect describe? It describes the structure of
 the child, the containee - in this case, the structure of the order item.
 
 An order item, the existence of which cannot be outside the context of a parent
-order, will usually have a key made up of two elements: one for the parent, and one for the
-item (the child). Let's look at all the elements of this structure to see where
-they are:
+order, will usually have a key made up of two elements: one for the parent, and
+one for the item (the child). Let's look at all the elements of this structure
+to see where they are:
 
 - there's a `pos` element representing the item via its unique position (item
   number)
@@ -174,7 +175,9 @@ few important parts:
 
 - the anonymous inline structure is indeed an `aspect` as we can see from the
   `targetAspect` of the `items` property for the `workshop.Orders` definition
-- a new entity `workshop.Orders.items` has been generated automatically, with the name being constructed from the namespace and the source entity and element
+- a new entity `workshop.Orders.items` has been generated automatically, with
+  the name being constructed from the namespace and the source entity and
+  element
 - the link between the parent (see the `on` condition) and the child (the
   generated entity) is via an element called `up_`. This generated element is
   part of how this composition-based relationship is "managed" for us, in a
