@@ -56,7 +56,7 @@ modelling with CDS.
 - [02 - Understand the basic model, service and persistence features](exercises/02/)
 - [03 - Separate out the data model from the service definition](exercises/03/)
 
-#### Related resources
+#### Related resources for part 1
 
 - The [What is CAP?](https://cap.cloud.sap/docs/about/#what-is-cap) and
   [Jumpstart & Grow As You
@@ -86,7 +86,7 @@ answers to these questions.
 - [05 - Explore reuse and standard common definitions](exercises/05/)
 - [06 - Understand and use aspects](exercises/06/)
 
-#### Related resources
+#### Related resources for part 2
 
 - The [Language
   Preliminaries](https://cap.cloud.sap/docs/cds/cdl#language-preliminaries)
@@ -96,6 +96,8 @@ answers to these questions.
   section of the CDL topic in Capire
 - The section on [Aspects](https://cap.cloud.sap/docs/cds/cdl#aspects) in the
   CDL topic in Capire
+- CAP related [blog posts that talk about
+  aspects](https://qmacro.org/tags/aspects/)
 - The blog post [ISO content for common CAP
   types](https://qmacro.org/blog/posts/2024/03/12/iso-content-for-common-cap-types/)
   that describes and demonstrates the use of an NPM package that provides
@@ -136,7 +138,7 @@ separate and what we can do there.
 - [11 - Take a first look at domain specific custom operations](exercises/11/)
 - [12 - Add a further operation in the form of a bound action](exercises/12/)
 
-#### Related resources
+#### Related resources for part 3
 
 - The [Providing
   Services](https://cap.cloud.sap/docs/guides/providing-services) topic in

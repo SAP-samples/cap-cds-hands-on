@@ -263,7 +263,7 @@ context sap.common {
 
 > Assuming the CAP server is still running, you may see some errors at this
 > mid-way point, as the model loading phase has now found duplicate definitions
-> (in `db/common.cds` as well as `@sap/cds/common`):
+> (in `db/common.cds` as well as `@sap/cds/common.cds`):
 >
 > [ERROR] db/common.cds:1:6-14: Duplicate definition of artifact “Currency” (in
 > type:“Currency”) [ERROR] db/common.cds:3:9-19: Duplicate definition of
@@ -285,26 +285,27 @@ to
 using Currency from './common';
 ```
 
-to use our `Currency` definition in this simpler version.
+to use our own `Currency` definition in this simpler version.
 
 > This is purely illustrative and deliberately simplified to aid comprehension.
 > In normal modelling we would use the `Currency` as-is from `@sap/cds/common`.
-> A bonus side effect of this simplified illustration is that it shows us the similarity
-> between importing from a CDS model in a module, and from a CDS model in a file.
+> A bonus side effect of this simplified illustration is that it shows us the
+> similarity between importing from a CDS model in a module, and from a CDS
+> model in a file.
 
 ## Study the component parts of the Currency construct
 
 Let's take the definitions one by one.
 
 The [context](https://cap.cloud.sap/docs/cds/cdl#context) directive is similar
-to the `namespace` directive we already know about. It
-allows us to create definitions in different namespaces (and even nest them)
-in the same `.cds` file. We can guess how this works, because
-following the context's name there's a block construct (`{ ... }`) to enclose
-those definitions that are to be in the scope of that context's name.
+to the `namespace` directive we already know about. It allows us to create
+definitions in different namespaces (and even nest them) in the same `.cds`
+file. We can guess how this works, because following the context's name there's
+a block construct (`{ ... }`) to enclose those definitions that are to be in
+the scope of that context's name.
 
 The upshot of this `context sap.common { ... }` is that the entity `Currencies`
-and the aspect `CodeList` are both actually in that `sap.common` scope and are
+and the aspect `CodeList` are both actually in that `sap.common` scope and
 therefore have these fully qualified names:
 
 - `sap.common.Currencies`
@@ -318,7 +319,7 @@ type Currency : Association to sap.common.Currencies;
 
 The word "target" is relevant here, as the `Association to` part is a so-called
 [managed to-one
-association](https://cap.cloud.sap/docs/guides/domain-modeling#managed-1-associations),
+association](https://cap.cloud.sap/docs/guides/domain/#managed-1-associations),
 a type of relationship. Here, it means that the possible currencies themselves
 are maintained elsewhere, and a "currency key" pointing to a specific, single
 ("to-one") currency with the rest of that currency's details is what is to be
@@ -329,15 +330,16 @@ We'll look at associations and other relationships in a later exercise.
 ### Look at the constructs from the CSV header point of view
 
 Earlier in this workshop we [added some initial
-data](../01#add-some-initial-data) for our fledgling `Products` entity. We
-used `cds add data` to generate the file, pre-populated for us
-with appropriate header line:
+data](../01#add-some-initial-data) for our fledgling `Products` entity. We used
+`cds add data` to generate the file, pre-populated for us with appropriate
+header line:
 
 ```csv
 ID,name,stock
 ```
 
-Asking for this to be done for us again, based on our new definitions, can be illustrative.
+Asking for this to be done for us again, based on our new definitions, can be
+illustrative.
 
 👉 Do that now, using the `--force` option to overwrite the existing
 `db/data/workshop-Products.csv` file:
@@ -351,12 +353,12 @@ This should emit something like this:
 ```log
 using '--force' ... existing files will be overwritten
 
-adding data
+Adding facet: data
 adding headers only, use --records to create random entries
   creating db/data/sap.common-Currencies.csv
   overwriting db/data/workshop-Products.csv
 
-successfully added features to your project
+Successfully added features to your project
 ```
 
 What is the result of this?
@@ -407,17 +409,18 @@ ID,name,stock,price_amount,price_currency_code
                             USD,$,2,Dollar,United States Dollar
 ```
 
-> Note also how the names of the CSV files themselves are constructed, from
-> the "scope"-prefixed entity names, whether that scope was defined using the
-> `namespace` directive (in the case of `workshop-Products`) or the `context`
-> directive (in the case of `sap.common-Currencies`).
+> Note also how the names of the CSV files themselves are constructed, from the
+> "scope"-prefixed entity names, regardless of whether that scope was defined
+> using the `namespace` directive (in the case of `workshop-Products`) or the
+> `context` directive (in the case of `sap.common-Currencies`).
 
 ### Take the briefest of looks at the aspect construct
 
 The feature that we haven't looked at any real level yet is the [CodeList
 aspect](https://cap.cloud.sap/docs/cds/common#aspect-codelist).
 
-👉 Before finishing this exercise, take a first look, by first revisiting our definitions in our temporary custom `db/common.cds`:
+👉 Before finishing this exercise, take a first look, by first revisiting the
+definitions in our temporary custom `db/common.cds`:
 
 ```cds
 type Currency : Association to sap.common.Currencies;
@@ -456,12 +459,12 @@ syntax construct](https://cap.cloud.sap/docs/cds/cdl#includes) that says "oh,
 and include the elements in this aspect too".
 
 The upshot of this is that the `Currencies` entity, when fully defined, has the
-three elements directly defined with it (`code`, which is a key element, and
-`symbol` & `minorUnit`) and, in addition, the two elements from the `CodeList`
-aspect (`name` and `descr`).
+three elements directly defined with it (`code`, which is a key element, plus
+`symbol` & `minorUnit`) and, in addition, it has the two elements from the
+`CodeList` aspect (`name` and `descr`).
 
 👉 Consider the five fields in the header for the corresponding initial CSV
-data file, where their origin and number now should make sense:
+data file, where their number and origin should now make sense:
 
 ```csv
 code,symbol,minorUnit,name,descr

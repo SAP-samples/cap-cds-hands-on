@@ -46,7 +46,7 @@ the standard locations that CAP Node.js uses to find:
 Location|Contains
 -|-
 `app/`|Frontend (UI) assets such as HTML, CSS and JavaScript files, often UI5 / Fiori based
-`srv/`|Service definitions (plural, as defining [single-purposed services](https://cap.cloud.sap/docs/guides/providing-services#single-purposed-services) is a best practice - see the corresponding link in the [Related resources](../../#related-resources) to this part of the workshop)
+`srv/`|Service definitions (plural, as defining [single-purposed services](https://cap.cloud.sap/docs/guides/providing-services#single-purposed-services) is a best practice - see the corresponding link in the [Related resources for part 1](../../#related-resources-for-part-1) to this part of the workshop)
 `db/`|The data model, predominantly in the form of entity definitions and relations between them
 
 This is the first glimpse into, and a 30,000 feet level example of, one of
