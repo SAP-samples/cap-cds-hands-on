@@ -5,9 +5,9 @@ them to good use in our modelling.
 
 ## See how aspects are related to extending definitions more generally
 
-At the end of the previous exercise we were using a simplified custom and
-cut down version of some of the content from the `@sap/cds/common` reuse
-module, in `db/common.cds`, which looks like this:
+At the end of the previous exercise we were using a custom and simplified
+version of some of the content from the `@sap/cds/common` reuse module, in
+`db/common.cds`, which looks like this:
 
 ```cds
 type Currency : Association to sap.common.Currencies;
@@ -28,7 +28,7 @@ context sap.common {
 }
 ```
 
-At this point we already are starting to understand how
+At this point we are already starting to understand how
 [aspects](https://cap.cloud.sap/docs/cds/cdl#aspects) are collections of
 elements that are to be used to extend existing entities. Let's drive this home
 a little by modifying how our custom `Currencies` entity inherits the `name`
@@ -37,7 +37,7 @@ and `descr` elements that are defined in the `CodeList` aspect.
 ### Try using extend with an anonymous aspect
 
 👉 Modify the definitions inside the `sap.common` context in `db/common.cds` so
-it looks like this:
+it looks like this (leave the `type` definition as it is):
 
 ```cds
 context sap.common {
@@ -61,15 +61,18 @@ This modification:
 - removes the inclusion of the `CodeList` aspect in the `Currencies` definition
 - removes the definition of `CodeList` as an aspect
 - replaces it with the use of the `extend` directive
+- defines the extension structure (with `name` and `descr`) anonymously
 
 > [!NOTE]
-> This is the first time we're seeing the somewhat imperative
+> This is the first time we're seeing the somewhat
+> imperative[<sup>1</sup>](#footnotes)
 > [extend](https://cap.cloud.sap/docs/cds/cdl#the-extend-directive) directive
-> but it's really what's happening behind the [syntactic
-> sugar](https://en.wikipedia.org/wiki/Syntactic_sugar) scenes when we employ
-> the shorter and more declarative `:`. Note that to use the `:` construct we
-> need a named aspect to which we can refer, rather than the anonymous
-> structure we have with
+> but it's really what's happening behind the scenes, facilitated by some
+> [syntactic sugar](https://en.wikipedia.org/wiki/Syntactic_sugar), when we
+> employ the shorter and more declarative `:`.
+>
+> Note that to use the `:` construct we need a named aspect to which we can
+> refer, rather than the anonymous structure we have with
 >
 > ```cds
 > extend Currencies with {
@@ -104,7 +107,8 @@ home another feature we have already learned about.
 
 ### Understand the importance of context and scoped names
 
-👉 First, restore the definition of the named aspect `CodeList`, without adding it back as an include to the `Currencies` entity:
+👉 First, restore the definition of the named aspect `CodeList`, but don't yet
+add it back as an include to the `Currencies` entity:
 
 ```cds
 context sap.common {
@@ -125,6 +129,15 @@ context sap.common {
 
 In this state, `Currencies` will only have the three elements `code`, `symbol`
 and `minorUnit` (and `CodeList` will remain unused and unloved).
+
+👉 Check this with:
+
+```bash
+cds add data --force \
+  && cat db/data/sap.common-Currencies.csv
+```
+
+This should show just `code`, `symbol` and `minorUnit`.
 
 👉 Now, after the `sap.common` context block finishes, try to add an `extend`
 directive thus:
@@ -182,7 +195,7 @@ extend sap.common.Currencies with sap.common.CodeList;
 ```
 
 > Of course, placing the `extend` within the `context` scope would allow us to
-> omit the scope name:
+> omit the scope name and define this part of the model more cleanly:
 >
 > ```cds
 > context sap.common {
@@ -223,11 +236,12 @@ common source, rather than our own custom one:
 using Currency from '@sap/cds/common';
 ```
 
-👉 To keep things tidy and avoid duplicate definition errors, delete the `db/common.cds` file.
+👉 To keep things tidy and avoid duplicate definition errors, delete the
+`db/common.cds` file.
 
 ### Add a second entity Suppliers
 
-To drive the reuse theme home, let's add a second entity.
+To explore reuse a little more, let's add a second entity.
 
 👉 Add `Suppliers` as an entity to the `db/schema.cds` file so that it looks
 like this:
@@ -267,9 +281,13 @@ entity Suppliers {
 Notice that both entities have a single primary key `ID`, defined as an
 `Integer`. This is fine for such simple examples, but numeric (integer) IDs
 have their challenges (to which as anyone who has worked with number range
-management and value generation can attest). A primary key like this is common,
-and there is an aspect that can be applied to both entities here that can
-replace the explicit and manual definition of such. That aspect is `cuid`.
+management and value generation can attest).
+
+A primary key like this is common, and there is an aspect that can be applied
+to both entities here that can replace the explicit and manual definition of
+such.
+
+That aspect is `cuid`.
 
 Also, often, in modelling a business domain, there will be a requirement for
 basic data tracking to record creation and modification. There's a simple
@@ -279,9 +297,9 @@ Both these aspects help with the [what not
 how](https://cap.cloud.sap/docs/guides/domain-modeling#capture-intent-%E2%80%94-what-not-how)
 intent-based modelling approach that CAP exhorts. Rather than include
 implementation details, technical mechanics, to achieve these everyday
-requirements, definitions can be constructed with beauty and simplicity, but most of
-all with minimum fuss and fanfare, allowing the primary goal of modelling to
-continue.
+requirements, definitions can be constructed with beauty and simplicity, but
+most of all with minimum fuss and fanfare, allowing the primary goals of
+modelling and shared understanding to continue.
 
 Let's try out both of these aspects.
 
@@ -318,13 +336,18 @@ entity Suppliers : cuid {
 > Note that in order to import more than one artifact we need to enclose the
 > list in a `{ ... }` block.
 
-Outwardly, the entity definitions become smaller. But more importantly the domain model becomes simpler on the surface, moving away from "implementation" and further towards "intent".
+Outwardly, the entity definitions become smaller. But more importantly the
+domain model becomes simpler on the surface, moving away from "implementation"
+and further towards "intent".
 
-Using the `cuid` aspect helps us to follow [best practices relating to primary keys](https://cap.cloud.sap/docs/guides/domain-modeling#primary-keys) for performance, simplicity and consistency reasons.
+Using the `cuid` aspect helps us to follow [best practices relating to primary
+keys](https://cap.cloud.sap/docs/guides/domain/#prefer-simple-technical-keys)
+for performance, simplicity and consistency reasons.
 
 > If you're curious as to what this `cuid` definition brings, good! Curiosity
-> is the key. If you were to look in the file `@sap/cds/common.cds` (inside
-> `node_modules/` in your project directory) you'd find this:
+> is an important catalyst for learning and understanding. If you were to
+> [reopen](https://github.com/SAP-samples/cap-cds-hands-on/tree/main/exercises/05#look-at-the-reuse-library-source)
+> the `.../@sap/cds/common.cds` file, you'd find this:
 >
 > ```cds
 > /**
@@ -338,7 +361,8 @@ Using the `cuid` aspect helps us to follow [best practices relating to primary k
 > ```
 >
 > In other words, the aspect contains a single element `ID` marked as `key`,
-> with the built-in type `UUID`.
+> with the built-in type `UUID`, which has a nice feature where values are
+> generated if not supplied.
 
 #### Use the managed aspect for basic data tracking
 
@@ -367,8 +391,8 @@ aspect managed {
 > Here we see some `@` and `$` prefixed constructs for the first time. The
 > former are annotations which we'll cover generally in a later exercise, and
 > the latter are [pseudo
-> variables](https://cap.cloud.sap/docs/guides/domain-modeling#pseudo-variables)
-> which resolve as you'd probably expect, given their names.
+> variables](https://cap.cloud.sap/docs/guides/domain/#pseudo-variables) which
+> resolve as you'd probably expect, given their names.
 
 👉 Import and use the `managed` aspect in `db/schema.cds` like this:
 
@@ -397,11 +421,11 @@ entity Suppliers : cuid, managed {
 }
 ```
 
-Note there's no outward increase in complexity, no sign of "implementation
-details" - just a single descriptive word "managed" that suffices at this CDS
-modelling level.
+Note there's no outward increase in complexity, no sign of technical
+implementation details - just a single descriptive word "managed" that suffices
+at this CDS modelling level.
 
-👉 Take a look at what this produces at the CSN level, what the actual
+👉 Take a look at what this produces at the CSN level, to see what the actual
 underlying implementation (for the CAP server and the persistence layer) is:
 
 ```bash
@@ -484,7 +508,8 @@ aspect is best practice, we'll use our own custom version that defines the
 element as an `Integer` type instead of a `UUID` type. This reflects the key
 properties in the [corresponding Northbreeze
 service](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/$metadata),
-such as this `Products` entity type definition, where the `ProductID` property has the (OData entity data model) integer type `Edm.Int32`:
+such as this `Products` entity type definition, where the `ProductID` property
+has the (OData entity data model) integer type `Edm.Int32`:
 
 ```xml
 <EntityType Name="Products">
@@ -531,9 +556,14 @@ entity Suppliers : cuid, managed {
 
 ### Remove the managed aspect
 
-Again, to keep things simple for the remainder of this workshop, let's remove the use of the `managed` aspect, so that we're not inundated with `createdAt`, `createdBy`, `modifiedAt` and `modifiedBy` elements and their default values as we continue through the exercises.
+Again, to keep things simple for the remainder of this workshop, let's remove
+the use of the `managed` aspect, so that we're not inundated with `createdAt`,
+`createdBy`, `modifiedAt` and `modifiedBy` elements and their default values as
+we continue through the exercises.
 
-👉 Remove all references to `managed`, both from the `using` directive and from the inclusion in each entity, so that the final version of `db/schema.cds` looks like this:
+👉 Remove all references to `managed`, both from the `using` directive and from
+the inclusion in each entity, so that the final version of `db/schema.cds`
+looks like this:
 
 ```cds
 using {Currency} from '@sap/cds/common';
@@ -563,3 +593,12 @@ entity Suppliers : cuid {
 Now we're all set to move on to [the next
 part](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#part-3---describing-relationships-with-associations-and-compositions)
 of this workshop - good work!
+
+---
+
+## Footnotes
+
+1. The imperative `extend` is not alone in CDS modeling, we also have `define`
+   (which we've [seen
+   before](https://github.com/SAP-samples/cap-cds-hands-on/tree/main/exercises/04#explore-definition-abstraction))
+   which is optional and usually omitted.
