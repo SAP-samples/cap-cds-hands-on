@@ -119,13 +119,11 @@ paths, from the same server base (listening on port `4004` on `localhost`):
 ```log
 [cds] - serving Simple {
   at: [ '/simple' ],
-  decl: 'srv/services.cds:5',
-  impl: 'node_modules/@sap/cds/srv/app-service.js'
+  decl: 'srv/services.cds:5'
 }
 [cds] - serving Accounting {
   at: [ '/odata/v4/accounting' ],
-  decl: 'srv/services.cds:13',
-  impl: 'node_modules/@sap/cds/srv/app-service.js'
+  decl: 'srv/services.cds:13'
 }
 [cds] - server listening on { url: 'http://localhost:4004' }
 ```

@@ -35,8 +35,7 @@ OData operations (Create, Read, Update, Delete and Query) out of the box:
 ```log
 [cds] - serving Simple {
   at: [ '/odata/v4/simple' ],
-  decl: 'srv/simple.cds:3',
-  impl: 'node_modules/@sap/cds/srv/app-service.js'
+  decl: 'srv/simple.cds:3'
 }
 ```
 
@@ -78,8 +77,7 @@ change and restart, whereupon we should see the custom path `/simple`:
 ```log
 [cds] - serving Simple {
   at: [ '/simple' ],
-  decl: 'srv/simple.cds:5',
-  impl: 'node_modules/@sap/cds/srv/app-service.js'
+  decl: 'srv/simple.cds:5'
 }
 ```
 

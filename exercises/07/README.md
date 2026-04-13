@@ -343,8 +343,7 @@ default, indeed we can see this from the CAP server log output:
 ```log
 [cds] - serving Simple {
   at: [ '/odata/v4/simple' ],
-  decl: 'srv/simple.cds:3',
-  impl: 'node_modules/@sap/cds/srv/app-service.js'
+  decl: 'srv/simple.cds:3'
 }
 ```
 
