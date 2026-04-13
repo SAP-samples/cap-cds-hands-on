@@ -23,14 +23,13 @@ service Simple {
 }
 ```
 
-We touched on this pattern in a previous exercise when
-we [first created the contents of this
+We touched on this pattern in a previous exercise when we [first created the
+contents of this
 file](../03#rework-the-content-of-servicescds-into-the-service-and-persistence-layers),
-but we didn't dwell on it. Let's think about what's
-happening here.
+but we didn't dwell on it. Let's think about what's happening here.
 
 While the declaration in this file is static, the outcome is a dynamic
-artifact, in our case a full fat OData service with full support for all
+artifact, in our case a full fat OData service with complete support for all
 OData operations (Create, Read, Update, Delete and Query) out of the box:
 
 ```log
