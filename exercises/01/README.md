@@ -190,7 +190,7 @@ initial data is being loaded from it:
 > This data is "initial", starter data, as opposed to "sample" or "test" data
 > which can also be supplied in CSV files in a `test/` directory. See the link
 > in the [Related
-> resources](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#related-resources)
+> resources](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#related-resources-for-part-1)
 > section of this part of the workshop for more info.
 
 Great! Time to explore our fledgling design.
