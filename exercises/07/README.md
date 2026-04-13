@@ -1,6 +1,7 @@
 # 07 - Link entities together with associations
 
-In this exercise we'll learn how to use associations in CDL to relate entities together.
+In this exercise we'll learn how to use associations in CDL to relate entities
+together.
 
 ## Review what we have and what's missing
 
@@ -174,7 +175,7 @@ Why only half of it? Well, a one-to-one relationship is "_a type of cardinality
 that refers to the relationship between two entities A and B in which one
 element of A may only be linked to one element of B, **and vice versa**_". And
 while a product may only have one supplier, a supplier may have more than one
-product.
+product in our scenario.
 
 Hence if `A` is `Products` and `B` is `Suppliers`, then the "managed
 to-one association" is this part:
@@ -183,14 +184,16 @@ to-one association" is this part:
 +-----+   :1  +-----+
 |  A  |   --->|  B  |
 +-----+       +-----+
+
+Products      Suppliers
 ```
 
 The "managed" part of the name tells us that CAP manages the technical details
 of the relationship's implementation, in that the foreign key details and
 persistence level query operations are automatically taken care of, without us
-having to describe how to make the relationship a reality; remember, CDS
-domain modelling is about [capturing intent - what, not
-how](https://cap.cloud.sap/docs/guides/domain-modeling#capture-intent-%E2%80%94-what-not-how).
+having to describe how to make the relationship a reality; remember, CDS domain
+modelling is about [capturing intent - what, not
+how](https://cap.cloud.sap/docs/guides/domain/#capture-intent-%E2%80%94-what-not-how).
 
 ### Define the products to supplier relationship
 
@@ -211,7 +214,7 @@ entity Suppliers : cuid {
 ```
 
 > We may sometimes see `Association to one` out there in the wild, but the
-> `one` is optional, and it reads better without given the plural naming
+> `one` is optional, and it reads better without, given the plural naming
 > convention for the targets.
 
 It's as simple as that.
@@ -239,12 +242,12 @@ definitions:
       ID: { key: true, type: cds.Integer }
       name: { type: cds.String }
       stock: { type: cds.Integer }
-      price: { type: workshop.Price } supplier:
-        {
+      price: { type: workshop.Price }
+      supplier: {
           type: cds.Association,
           target: workshop.Suppliers,
           keys: [{ ref: [ID] }],
-        }
+      }
   workshop.Suppliers:
     kind: entity
     includes: [workshop.cuid]
@@ -295,9 +298,9 @@ adding headers only, use --records to create random entries
 
 successfully added features to your project
 ==> db/data/workshop-Products.csv <==
-ID,name,stock,price_amount,price_currency_code,supplier_ID,createdAt,createdBy,modifiedAt,modifiedBy
+ID,name,stock,price_amount,price_currency_code,supplier_ID
 ==> db/data/workshop-Suppliers.csv <==
-ID,company,createdAt,createdBy,modifiedAt,modifiedBy
+ID,company
 ```
 
 There are two important things to note here:
@@ -311,7 +314,7 @@ There are two important things to note here:
 ### Add some supplier and product data
 
 To see the effect of this relationship, let's add some data - just a handful of
-products and suppliers from the Northbreeze service.
+products and suppliers taken from the Northbreeze service.
 
 👉 Copy the two CSV files `workshop-Products.csv` and `workshop-Suppliers.csv`
 from this exercise's [assets/](assets/) directory into the `db/data/`
@@ -321,7 +324,8 @@ directory:
 cp ../exercises/07/assets/workshop-*.csv db/data/
 ```
 
-👉 Ensure the CAP server is still running (restarting it with `cds watch` if it isn't).
+👉 Ensure the CAP server is still running (restart it with `cds watch` if it
+isn't).
 
 Looking at our service definition in `srv/simple.cds`, which looks like this:
 
@@ -346,8 +350,8 @@ default, indeed we can see this from the CAP server log output:
 
 Given that, let's put the association to the test.
 
-👉 Request the products entityset, specifying an expansion on the supplier in
-each case, via this URL:
+👉 Request the products entityset, specifying an expansion (along the
+association) to the supplier in each case, via this URL:
 <http://localhost:4004/odata/v4/simple/Products?$select=name&$expand=supplier>
 
 Oh. Something's not quite right:
@@ -366,9 +370,14 @@ This emphasises the different layers and the different purposes they fulfil.
 
 ### Take a look at the OData metadata
 
-While at the `db/` layer, the data model includes this relationship, most prominently via the new `supplier` element as an association to the `Suppliers` entity, this is not reflected in the OData service that's generated for the service at runtime.
+At the `db/` layer the data model includes this relationship, most prominently
+via the new `supplier` element as an association to the `Suppliers` entity.
+However, this is not reflected in the OData service that's generated for the
+service at runtime.
 
-👉 Take a look for yourself in the service's [metadata document](http://localhost:4004/odata/v4/simple/$metadata), and pick out the `Products` entity type, which should look something like this:
+👉 Take a look for yourself in the service's [metadata
+document](http://localhost:4004/odata/v4/simple/$metadata), and pick out the
+`Products` entity type, which should look something like this:
 
 ```xml
 <EntityType Name="Products">
@@ -387,13 +396,21 @@ While at the `db/` layer, the data model includes this relationship, most promin
 </EntityType>
 ```
 
-The foreign key property `supplier_ID` is there, but there is no `NavigationProperty` that uses it.
+The foreign key property `supplier_ID` is there, but there is no
+`NavigationProperty` that uses it.
 
-What's going on? Well, in order to provide a complete entity data model (EDM), in the form of a metadata document for the service (at <http://localhost:4004/odata/v4/simple/$metadata>), all relevant parts of the model needs to be made available.
+What's going on? Well, in order to provide a complete entity data model (EDM),
+in the form of a metadata document for the service (at
+<http://localhost:4004/odata/v4/simple/$metadata>), all relevant parts of the
+model needs to be made available.
 
-But right now all we're declaring in the service definition is the `Products` entity. That means that to generate a navigation property in the entity type definition for `Products` would not make sense, as it has nowhere to point to ... because there's no entity type definition for `Suppliers`.
+But right now all we're declaring in the service definition is the `Products`
+entity. That means that to generate a navigation property in the entity type
+definition for `Products` would not make sense, as it has nowhere to point to
+... because there's no projection on `Suppliers` in the service.
 
-👉 Fix this by adding a projection to the `Suppliers` to the `Simple` service in `srv/simple.cds`:
+👉 Fix this by adding a projection to the `Suppliers` to the `Simple` service
+in `srv/simple.cds`:
 
 ```cds
 using workshop from '../db/schema';
@@ -424,6 +441,7 @@ service Simple {
   </NavigationProperty>
   <Property Name="supplier_ID" Type="Edm.Int32"/>
 </EntityType>
+
 <EntityType Name="Suppliers">
   <Key>
     <PropertyRef Name="ID"/>
@@ -566,21 +584,22 @@ association](https://cap.cloud.sap/docs/guides/domain-modeling#to-many-associati
 This is based on the
 [one-to-many](https://en.wikipedia.org/wiki/One-to-many_(data_model))
 relationship, where the to-many part is denoted by the N, which represents
-"zero or more":
+"zero or more" (where `A` is `Products` and `B` is `Suppliers`):
 
 ```text
 +-----+  N:1  +-----+
 |  A  |<----->|  B  |
 +-----+       +-----+
-```
 
-(where `A` is `Products` and `B` is `Suppliers`).
+Products      Suppliers
+```
 
 In contrast to the managed to-one association we used from `Products` ->
 `Suppliers`, this to-many association is unmanaged, in the sense that we must
 supply some information that will inform how the relationships should be
 determined, how the queries should traverse the objects at the persistence
-layer. That means providing an `on` clause that effectively describes a join condition.
+layer. That means providing an `on` clause that effectively describes a join
+condition[<sup>1</sup>](#footnotes).
 
 ### Add the association
 
@@ -601,6 +620,13 @@ entity Suppliers : cuid {
                on products.supplier = $self;
 }
 ```
+
+> Notice also how the element names reflect the association cardinality:
+>
+> Managed association type|Element name|Singular / Plural
+> -|-|-
+> To-one|`supplier`|singular
+> To-many|`products`|plural
 
 ### Understand how to read the on condition
 
@@ -653,7 +679,8 @@ ID,company
 ```
 
 there are no "artificially constructed" (managed) header fields beyond what was
-already there in the form of `supplier_ID` in the CSV file for products, and absolutely no extra header fields in the CSV file for suppliers.
+already there in the form of `supplier_ID` in the CSV file for products, and
+absolutely no extra header fields in the CSV file for suppliers.
 
 From a modelling perspective, this is all we need. From a data loading
 perspective, this is all we need too.
@@ -682,8 +709,8 @@ It should now look like this:
 Great - the CAP server, specifically the support for OData service provision
 and handling, has made a `NavigationProperty` element available for the
 `Suppliers` entity type. Note that our previous "guess" as to what this would
-be named, "products", was correct, i.e. based on our newly added `products` element in the
-`Suppliers` entity:
+be named, "products", was correct, i.e. based on our newly added `products`
+element in the `Suppliers` entity:
 
 ```cds
 entity Suppliers : cuid {
@@ -696,7 +723,8 @@ entity Suppliers : cuid {
 👉 Try that previous suppliers to products navigation again with this URL:
 <http://localhost:4004/odata/v4/simple/Suppliers?$expand=products($select=name)>
 
-> To keep things brief a `$select` query option has been applied to the expanded navigation property.
+> To keep things brief a `$select` query option has been applied to the
+> expanded navigation property.
 
 This time we should see something like this:
 
@@ -750,7 +778,7 @@ This time we should see something like this:
 }
 ```
 
-So not only does this to-many association bring about the requisite navigation
+So not only does this to-many association provide the basis for the navigation
 property in the exposed OData service, but also the appropriate query is being
 made at the persistence layer to resolve the data request represented by the
 OData query operation transmitted.
@@ -799,3 +827,11 @@ Success!
 ---
 
 [Next](../08/)
+
+---
+
+## Footnotes
+
+1. You may be interested in learning about the concept of [forward-declared
+   joins](https://qmacro.org/tags/forward-declared-joins/) that is the
+   foundation here.

@@ -147,6 +147,10 @@ separate and what we can do there.
   Protocol](https://www.youtube.com/watch?v=Ic37FI351G4)
 - A six-part [Back To Basics series on
   OData](https://www.youtube.com/playlist?list=PL6RpkC85SLQDYLiN1BobWXvvnhaGErkwj)
+- [An in-depth look at OData
+  metadata](https://github.com/qmacro/odata-dd-tutorials/blob/main/tutorials/odata-dd-4-metadata/odata-dd-4-metadata.md),
+  part of the sources for the tutorials in the [OData Deep Dive
+  mission](https://developers.sap.com/mission.odata-deep-dive.html)
 
 ## Support
 
