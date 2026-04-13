@@ -436,7 +436,11 @@ This should bring us back to in-memory persistence:
 /> successfully deployed to in-memory database.
 ```
 
-Great stuff. In the [final
+Great stuff.
+
+---
+
+In the [final
 part](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#part-4---exposing-models-via-services---interfaces-for-the-outside-world)
 of this workshop, we'll turn our attention to the service layer and start to
 explore what else we can do there.

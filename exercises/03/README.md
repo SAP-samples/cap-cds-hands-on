@@ -194,7 +194,11 @@ cds watch
 👉 Revisit <http://localhost:4004> and explore the service [like you did in the
 previous exercise](../02#explore-the-service).
 
-Well done! We can now move on to [the next
+Well done!
+
+---
+
+We can now move on to [the next
 part](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#part-2---more-on-structure-with-types-aspects-and-reuse)
 of this workshop.
 

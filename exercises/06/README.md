@@ -590,9 +590,13 @@ entity Suppliers : cuid {
 }
 ```
 
+Good work!
+
+---
+
 Now we're all set to move on to [the next
 part](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#part-3---describing-relationships-with-associations-and-compositions)
-of this workshop - good work!
+of this workshop.
 
 ---
 
