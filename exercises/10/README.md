@@ -444,7 +444,7 @@ Phew!
 ## Footnotes
 
 1. See the link to the CXL series in the [Related resources for part
-   4](https://qmacro.org/blog/posts/2025/12/09/a-new-hands-on-sap-dev-mini-series-on-the-core-expression-language-in-cds/)
+   4](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#related-resources-for-part-4)
    section.
 
 1. If you want to understand path expressions like this further, look into the
