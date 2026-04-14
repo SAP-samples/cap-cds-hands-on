@@ -409,11 +409,11 @@ where you can, for example:
 
 You can exit the `sqlite3` prompt with `Ctrl-D`.
 
-👉 If you've run the `cds build` command, clean up before moving on to the next
-exercise, by removing the `gen/` directory, as we won't need it:
+👉 If you've run the `cds build` command and / or deployed to `test.db`, clean
+up before moving on to the next exercise:
 
 ```bash
-rm -rf gen/
+rm -rf gen/ test.db
 ```
 
 Good work!

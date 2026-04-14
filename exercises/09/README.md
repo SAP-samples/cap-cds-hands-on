@@ -42,16 +42,13 @@ OData operations (Create, Read, Update, Delete and Query) out of the box:
 This is why we were able to quickly try out such operations on our fledgling
 data model.
 
-The service definition itself by default will be
-presented as an OData service, but for the sake of
-illustration we can be explicit and use [the appropriate
-annotation](https://cap.cloud.sap/docs/node.js/cds-serve#protocol).
-While we're at it, we can also use an annotation to tell
-the CAP server to make the OData service available on a
-different
-[path](https://cap.cloud.sap/docs/node.js/cds-serve#path)
-to the default (shown in the `at:` property in the log
-output above). Let's do that.
+The service definition itself by default will be presented as an OData service,
+but for the sake of illustration we can be explicit and use [the appropriate
+annotation](https://cap.cloud.sap/docs/node.js/cds-serve#protocol). While we're
+at it, we can also use an annotation to tell the CAP server to make the OData
+service available on a different
+[path](https://cap.cloud.sap/docs/node.js/cds-serve#path) to the default (shown
+in the `at:` property in the log output above). Let's do that.
 
 > Annotations in general will be covered in a future exercise.
 
@@ -170,6 +167,12 @@ Additionally we see the `Orders_items` entity type:
   - the value of the `Order_items` element `product_ID` and the value of the
     target `Products` element `ID` need to match
 
+What's also worth noting is that:
+
+- this entity type appears even though we haven't explicitly defined a
+  projection in the service for the items - it's been automatically exposed for
+  us
+
 ### Request some OData operations
 
 👉 Copy the two order related CSV files to the `db/data/` directory and check
@@ -215,14 +218,21 @@ should look something like this:
 }
 ```
 
-> For a bonus exploration, add an nested expansion of the `product` navigation
-> property on each item, and a further nested expansion to get the currency details:
+> For a bonus exploration, add some initial currency
+> data[<sup>1</sup>](#footnotes):
+>
+> ```bash
+> cp ../exercises/09/assets/sap-common.Currencies.csv db/data/
+> ```
+>
+> Now make another OData query operation with a further nested expansion to get
+> the currency details:
 > <http://localhost:4004/simple/Orders?$expand=items($expand=product($expand=price_currency))>.
 
-#### Make an OData create operation with header and items
+#### Send an OData create operation with header and items
 
-Now it's time to try an OData create operation, supplying a JSON payload representing
-a new order with three items. A so-called "deep-insert".
+Now it's time to try an OData create operation, supplying a JSON payload
+representing a new order with three items. A so-called "deep-insert".
 
 The data is in a file called `order.json` and looks like this:
 
@@ -272,24 +282,30 @@ location: Orders(100)
 Content-Type: application/json; charset=utf-8
 Content-Length: 240
 
-{"@odata.context":"$metadata#Orders/$entity","ID":100,"date":"2025-11-26","items":[{"up__ID":100,"pos":10,"product_ID":1,"quantity":5},{"up__ID":100,"pos":20,"product_ID":2,"quantity":5},{"up__ID":100,"pos":30,"product_ID":3,"quantity":5}]}
+{"@odata.context":"$metadata#Orders/$entity","ID":100,"date":"2025-11-26",
+"items":[{"up__ID":100,"pos":10,"product_ID":1,"quantity":5},{"up__ID":100,
+"pos":20,"product_ID":2,"quantity":5},{"up__ID":100,"pos":30,"product_ID":3,
+"quantity":5}]}
 ```
 
 All the signs from this response show that the creation of this order was
 successful, including:
 
-- the appropriate [201 HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/201)
+- the appropriate [201 HTTP status
+  code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/201)
 - the corresponding `Location` header that accompanies a 201 response, showing
   the address `Orders(100)` of the new resource
 
-> The address `Orders(100)` doesn't begin with a forward slash, meaning it's relative, becoming `/simple/Orders(100)` as the complete URL path.
+> The address `Orders(100)` doesn't begin with a forward slash, meaning it's
+> relative, becoming `/simple/Orders(100)` as the complete URL path.
 
-👉 Check for yourself, either by revisiting the previous URL
-<http://localhost:4004/simple/Orders?$expand=items> or by following the path to
-this specific new resource as pointed to by the `Location` header, i.e.
+👉 Check for yourself, either by revisiting the previous OData query operation
+URL <http://localhost:4004/simple/Orders?$expand=items> or by following the
+path to this specific new resource as pointed to by the `Location` header, i.e.
+an OData read operation
 <http://localhost:4004/simple/Orders(100)?$expand=items>
 
-#### Make an OData delete operation and check that cascading deletes happen
+#### Send an OData delete operation and check that cascading deletes happen
 
 Curious to see the effect of a successful cascading delete?
 
@@ -303,7 +319,8 @@ deleted too.
 
 👉 Now deploy the model to SQLite, this time without specifying a name for the
 actual database file (previously we specified `test.db`), so that the default
-of `db.sqlite` will be used (so that we can benefit from convention over configuration again):
+of `db.sqlite` will be used (so that we can benefit from [convention over
+configuration](https://github.com/qmacro/capref/blob/main/axioms/AXI003.md)):
 
 ```bash
 cds deploy --to sqlite
@@ -321,8 +338,8 @@ This will emit something similar to this:
 /> successfully deployed to db.sqlite
 ```
 
-We need to tell the CAP server to use a persistent file (rather than in-memory), and can do that
-temporarily with a configuration parameter.
+We need to tell the CAP server to use a persistent file (rather than
+in-memory), and can do that temporarily with a configuration parameter.
 
 👉 Specify the configuration parameter by adding the following to a new file
 called `.env` in the project root:
@@ -333,9 +350,9 @@ cds.requires.db.kind=sqlite
 
 Let's now "monitor" the item data in this database file. Remember that we have
 [a single order](#request-some-odata-operations) in our initial data CSV files,
-and that is what will be served but also what has been deployed to `db.sqlite`
-(note the corresponding `> init from db/data/workshop-Orders...` lines in the
-log output just above).
+and that is what has been deployed to `db.sqlite` (note the corresponding `>
+init from db/data/workshop-Orders...` lines in the log output just above) and
+what will be served.
 
 👉 Use the SQLite CLI to list the order items:
 
@@ -369,8 +386,8 @@ and note in the log output that a connection is made to the persistent
 ```
 
 OK, we're ready to delete the single order, the parent of the items that are
-"contained-in" it, the items that should also be deleted due to the cascade
-delete action.
+"contained-in" it. The items themselves should also be deleted due to the
+cascade delete action.
 
 👉 Send an OData delete operation specifying this single order (which has an
 `ID` of `1`):
@@ -394,7 +411,7 @@ Keep-Alive: timeout=5
 
 and you should see a corresponding entry in the CAP server's log output, plus
 some extra SQL debug log records which show the items being deleted in the same
-transaction as the order header itself:
+transaction (`BEGIN ... COMMIT`) as the order header itself:
 
 ```log
 [odata] - DELETE /simple/Orders/1
@@ -404,7 +421,7 @@ transaction as the order header itself:
 [sql] - COMMIT
 ```
 
-👉 Check the items again via the SQLite CLI:
+👉 Stop the CAP server, and check the items again via the SQLite CLI:
 
 ```bash
 sqlite3 db.sqlite 'select * from workshop_Orders_items;'
@@ -412,9 +429,8 @@ sqlite3 db.sqlite 'select * from workshop_Orders_items;'
 
 This should show that there are now ... no item records!
 
-👉 One last thing: after stopping
-the currently running CAP server (with `Ctrl-C`), remove the `.env`-based
-configuration file and restart the server:
+👉 One last thing: remove the `.env`-based configuration file and restart the
+server:
 
 ```bash
 rm .env; cds watch
@@ -441,3 +457,11 @@ In the [final
 part](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#part-4---exposing-models-via-services---interfaces-for-the-outside-world)
 of this workshop, we'll turn our attention to the service layer and start to
 explore what else we can do there.
+
+---
+
+## Footnotes
+
+1. See the blog post [ISO content for common CAP
+   types](https://qmacro.org/blog/posts/2024/03/12/iso-content-for-common-cap-types/)
+   for more on standard initial data like this.
