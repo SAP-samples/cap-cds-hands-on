@@ -22,12 +22,12 @@ that normally represent business data.
 > HTTP and CRUD are generally related and the methods and operations
 > (respectively) can be approximated to each other thus:
 >
-> CRUD | HTTP
-> -|-
-> Create | POST
-> Read | GET
-> Update | PUT (or PATCH)
-> Delete | DELETE
+> |CRUD|HTTP|
+> |-|-|
+> |Create|POST|
+> |Read|GET|
+> |Update|PUT (or PATCH)|
+> |Delete|DELETE|
 
 The entities in our domain model, exposed via projections in our `Simple`
 service, are a perfect example of that, and through that service we are able to
