@@ -320,7 +320,8 @@ Nice!
 1. In today's world where the command line is even more important than ever,
    you might wish to embrace an approach to making this modification from the
    command line; if so, here's a couple of ways of doing it, using powerful and
-   venerable (both first appeared in the 1970's) tools:
+   venerable tools (both first appeared in the 1970s), each of which offer domain
+   specific languages for the tasks for which they've been designed:
 
     - using [Sed](https://en.wikipedia.org/wiki/Sed), matching on the product ID:
 
@@ -332,10 +333,13 @@ Nice!
 
         ```bash
         mv db/data/workshop-Products.csv /tmp/x \
-          && awk 'BEGIN { FS = OFS = "," } /Chai/ { $3 = 0 }; { print }' x \
+          && awk 'BEGIN { FS = OFS = "," } /Chai/ { $3 = 0 } { print }' /tmp/x \
           > db/data/workshop-Products.csv
         ```
 
-   (The standard version of `awk` has no inplace editing, although the [GNU
-   version
-   does](https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Inplace.html)
+     The standard version of AWK has no inplace editing, although the [GNU
+     version
+     does](https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Inplace.html).
+     For more on AWK, you may find [these blog
+     posts](https://qmacro.org/tags/awk/) interesting. 
+
