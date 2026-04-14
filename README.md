@@ -154,6 +154,14 @@ separate and what we can do there.
 - An [in-depth series looking at the CDS Expression Language
   (CXL)](https://qmacro.org/blog/posts/2025/12/09/a-new-hands-on-sap-dev-mini-series-on-the-core-expression-language-in-cds/)
 
+### Part 5 - Annotations and more solid state programming
+
+...
+
+- [13 - An introduction to annotations](exercises/13/)
+- [14 - Declarative constraints and assertions](exercises/14/)
+- [15 - Shift left, avoid procedural code](exercises/15/)
+
 ## Support
 
 Support for the content in this repository is available during the actual time
