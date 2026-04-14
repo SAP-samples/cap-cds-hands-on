@@ -233,7 +233,7 @@ entityset with "Chai" and "Chef Anton's Gumbo Mix":
 Great! We've just learned how we can define and provide the business logic for
 a custom function.
 
-## Replace the function with a declarative infix filter
+## Consider the implementation effort made for this custom business logic
 
 The function we chose to implement was deliberately simple, of course. But did
 you know that we don't even need a function for such a facility?
@@ -246,7 +246,10 @@ us to push out logic and mechanics to the extremities:
 - downwards to the persistence layer where complex queries can be handled
   directly and natively by the database systems
 
-We'll look at more of this in a later exercise. For now, good work!
+We'll look at more of this in a later exercise. For now, let's leave this custom
+business logic code where it is.
+
+Good work!
 
 ---
 
