@@ -337,9 +337,9 @@ Nice!
           > db/data/workshop-Products.csv
         ```
 
-     The standard version of AWK has no inplace editing, although the [GNU
-     version
-     does](https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Inplace.html).
-     For more on AWK, you may find [these blog
-     posts](https://qmacro.org/tags/awk/) interesting. 
+       The standard version of AWK has no inplace editing, although the [GNU
+       version
+       does](https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Inplace.html).
+       For more on AWK, you may find [these blog
+       posts](https://qmacro.org/tags/awk/) interesting. 
 
