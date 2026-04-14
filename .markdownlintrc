@@ -1,4 +1,5 @@
 {
+  "table-column-style": { "style": "any" },
   "no-blanks-blockquote": false,
   "no-inline-html": false
 }
