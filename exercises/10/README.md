@@ -11,7 +11,7 @@ section of the Define Providing Services topic in Capire illustrates services
 and their relation to Consumers, and also to where we've been thus far - at the
 Domain Models part:
 
-![service centric paradigm diagram](assets/service-centric-paradigm.png)
+![services as facades diagram](assets/services-as-facades-diagram.png)
 
 We're now moving up the down-arrow on the left hand side from Domain Models up
 to Service Models.
@@ -232,7 +232,7 @@ something like this:
 This is a very nice collection of flat entities, the elements of which are
 calculated and even determined from related entities. For example, while this
 OData entityset is based on a projection on the `Products` entity, the values
-for the `Currency` properties here here are actually from (ready?):
+for the `Currency` properties here here are actually from:
 
 - the `name` element
 - of the `sap.common.CodeList` aspect
@@ -269,7 +269,8 @@ This really brings home the "flatness" and power of even this simple set of defi
 
 ### Follow the path expressions
 
-How do the path expressions work, what's going on there? We have `price.amount` in:
+How do the path expressions[<sup>2</sup>](#footnotes) work, what's going on
+there? We have `price.amount` in:
 
 ```cds
 stock * price.amount as StockValue : Decimal
@@ -287,11 +288,10 @@ and `supplier.company` in:
 supplier.company as Source
 ```
 
-In exercises
-earlier in this workshop, as we built out our domain model, we took the
-occasional look at the CSN. Now that we've got used to that, let's do it again,
-as the insights it can give us in understanding what's going on here are
-valuable.
+In exercises earlier in this workshop, as we built out our domain model, we
+took the occasional look at the CSN. Now that we've got used to that, let's do
+it again, as the insights it can give us in understanding what's going on here
+are valuable.
 
 #### Look at the CSN for detail
 
