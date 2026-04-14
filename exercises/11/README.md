@@ -50,12 +50,10 @@ cases.
 
 If we look at OData (specifically V4), we see that beyond the HTTP oriented
 support for the standard operations (CRUD plus Q for "Query", an OData specific
-form of read), there are provisions for such "out-of-band" mechanisms in the
+form of Read), there are provisions for such "out-of-band" mechanisms in the
 form of actions and functions.
 
-And CAP has [first class
-provision](https://cap.cloud.sap/docs/guides/providing-services#actions-functions)
-for such mechanisms.
+And CAP has first class support for such mechanisms.
 
 > Not only can actions and functions be defined and employed in the context of
 > services that are explicitly or implicitly served via OData, but also via the
@@ -66,22 +64,24 @@ for such mechanisms.
 Actions and functions are for different purposes, and each can be bound or unbound.
 
 👉 Visit Capire's [Actions &
-Functions](https://cap.cloud.sap/docs/guides/providing-services#actions-functions)
+Functions](https://cap.cloud.sap/docs/guides/services/custom-actions)
 topic page where you'll see:
 
 - Actions modify data in the server
 - Functions retrieve data
 - Unbound actions/functions are like plain unbound functions in JavaScript.
 - Bound actions/functions always receive the bound entity's primary key as
-  implicit first argument, similar to this pointers in Java or JavaScript
+  implicit first argument, similar to "this" or "self" style pointers in
+  various programming languages
 
 Additionally:
 
-- functions are invoked via GET, whereas actions, which have side-effects (i.e.
-  they modify data on the server) must be invoked via POST
+- functions are invoked via GET, whereas actions -- because they have
+  side-effects (i.e. they modify data on the server) -- must be invoked via
+  POST
 
 If you really must, you can think of the difference between bound and unbound
-as similar to the difference between instance and static methods in object
+as reflecting the difference between instance and static methods in object
 oriented programming.
 
 ## Define an unbound function in the Simple service
@@ -122,16 +122,17 @@ function:
 
 ![outOfStockProducts() listed in the service](assets/outOfStockProducts-function.png)
 
-Because it's a function, rather than an action, it is to be invoked via HTTP
-GET, which means we can try it out in the browser.
+Being a function rather than an action it can be invoked via HTTP GET, which
+means we can try it out in the browser.
 
 👉 Do that now - select the function
 <http://localhost:4004/simple/outOfStockProducts>.
 
 In contrast to every other request you've made, each of which has been
-fulfilled by the CAP framework itself with built-in handling for all CRUD style
-operations, this "out-of-band" call is something we're going to have to provide
-an implementation for ourselves, as we can see from the error message returned:
+fulfilled by the CAP framework itself with built-in handling for all the
+operations you sent, this "out-of-band" call is something we're going to have
+to provide an implementation for ourselves, as we can see from the error
+message returned:
 
 ```json
 {
@@ -167,7 +168,7 @@ introduction workshop, there are a few points worth highlighting:
 
 - The name of the file matches the name of the service definition file (save
   for the extension), according to the [convention over configuration
-  here](https://cap.cloud.sap/docs/node.js/core-services#in-sibling-js-files-next-to-cds-sources)
+  here](https://cap.cloud.sap/docs/node.js/core-services#in-sibling-js-files-next-to-cds-sources)[<sup>1</sup>](#footnotes)
 - The name of the class is `Simple`, matching the `Simple` service name in the
   CDS file
 - The handler for the unbound function is defined in the [on
@@ -194,8 +195,8 @@ ID,name,stock,price_amount,price_currency_code,supplier_ID
 Let's make it slightly more exciting, so that we have more than one entry in
 the entityset returned.
 
-👉 Edit the CSV file and change the `stock` value `39` for the product with
-`ID` of `1` ("Chai") to `0`.
+👉 Edit the CSV file[<sup>2</sup>](#footnotes) and change the `stock` value
+`39` for the product with `ID` of `1` ("Chai") to `0`.
 
 The CAP server should restart automatically.
 
@@ -309,3 +310,32 @@ Nice!
 ---
 
 [Next](../12/)
+
+---
+
+## Footnotes
+
+1. See also [AXI003 Convention over
+   configuration](https://github.com/qmacro/capref/blob/main/axioms/AXI003.md)
+1. In today's world where the command line is even more important than ever,
+   you might wish to embrace an approach to making this modification from the
+   command line; if so, here's a couple of ways of doing it, using powerful and
+   venerable (both first appeared in the 1970's) tools:
+
+    - using [Sed](https://en.wikipedia.org/wiki/Sed), matching on the product ID:
+
+        ```bash
+        sed -i '/^1,/s/39/0/' db/data/workshop-Products.csv
+        ```
+
+    - using [AWK](https://en.wikipedia.org/wiki/AWK), matching on the product name:
+
+        ```bash
+        mv db/data/workshop-Products.csv /tmp/x \
+          && awk 'BEGIN { FS = OFS = "," } /Chai/ { $3 = 0 }; { print }' x \
+          > db/data/workshop-Products.csv
+        ```
+
+   (The standard version of `awk` has no inplace editing, although the [GNU
+   version
+   does](https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Inplace.html)
