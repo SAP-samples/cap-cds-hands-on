@@ -154,7 +154,7 @@ separate and what we can do there.
 - An [in-depth series looking at the CDS Expression Language
   (CXL)](https://qmacro.org/blog/posts/2025/12/09/a-new-hands-on-sap-dev-mini-series-on-the-core-expression-language-in-cds/)
 
-### Part 5 - Annotations and more solid state programming
+### Part 5 - Annotations and solid state programming
 
 ...
 

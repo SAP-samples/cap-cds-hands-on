@@ -1,14 +1,12 @@
 # 12 - Add a further operation in the form of a bound action
 
-In the previous exercise we explored a custom unbound function, before
-replacing it with a declarative alternative in the form of a projection with an
-infix filter. In this exercise we'll continue our exploration of actions and
-functions by definining and implementing a simple bound action, to see what
-that looks and feels like.
+In the previous exercise we explored a custom unbound function. In this
+exercise we'll continue our exploration of actions and functions by definining
+and implementing a simple bound action, to see what that looks and feels like.
 
 ## Recall what the previous function definition looked like
 
-In the first half of the previous exercise, our `Simple` service looked like
+At the end of the previous exercise, our `Simple` service looked like
 this, after the addition of the function declaration:
 
 ```cds
@@ -23,7 +21,7 @@ service Simple {
 ```
 
 Being unbound, the function `outOfStockProducts` was simply listed alongside
-the entities.
+(as a "peer" of) the entities.
 
 ## Declare the bound action
 
@@ -31,7 +29,7 @@ For a bound function or action, we need a little bit more syntax to be able to
 connect it to the entity to which it should be bound.
 
 👉 Define a bound action `applyDiscount` for the `Products` entity, so that it
-ends up looking like this:
+ends up looking like this (you'll also need to add the `@cds.redirection.target`):
 
 ```cds
 @protocol: 'odata'
@@ -45,38 +43,29 @@ service Simple {
 
   entity Suppliers          as projection on workshop.Suppliers;
   entity Orders             as projection on workshop.Orders;
-  entity OutOfStockProducts as projection on workshop.Products[stock <= 0];
+  function OutOfStockProducts() returns many Products;
 
 }
 ```
 
-👉 The expected `percent` value is defined as type `Percentage`, which is custom,
-so add that to the bottom of the `services.cds` file too:
+👉 The expected `percent` value is defined as type `Percentage`, which is
+custom, so add that to the bottom of the `services.cds` file too (we wouldn't
+normally use a custom type like this, but there's a reason for it which will be
+revealed in a later exercise).
 
 ```cds
-type Percentage : Integer @assert.range: [
-  1,
-  100
-];
+type Percentage : Integer;
 ```
 
-There are a couple of things worth noticing here:
-
-- the action declaration is directly connected to the `Products`
-entity projection via the `actions { ... }` construct
-- the `Percentage` type definition is annotated with a [range
-  assertion](https://cap.cloud.sap/docs/guides/providing-services#assert-range),
-  a feature of CAP's multifaceted [input
-  validation](https://cap.cloud.sap/docs/guides/providing-services#input-validation)
-  where we can yet again express intent (we're expecting a percentage value)
-  and let the framework do the rest
+Note that the action declaration is directly connected to the `Products` entity
+projection via the `actions { ... }` construct.
 
 ## Add the action's implementation
 
 In a similar way to how we added an implementation for the custom unbound
 function in the previous exercise, we need to add an implementation, again in
 the [on
-phase](https://cap.cloud.sap/docs/guides/providing-services#hooks-on-before-after).
+phase](https://cap.cloud.sap/docs/guides/services/custom-code#hooks-on-before-after).
 
 👉 Do that now, recreating `services.js` in the `srv/` directory, with this content:
 
@@ -158,6 +147,7 @@ of a specific product.
 curl \
   --silent \
   --data '{"percent":50}' \
+  --header 'Content-Type: application/json' \
   --url localhost:4004/simple/Products/1/applyDiscount \
   | jq .
 ```
@@ -178,33 +168,15 @@ Additionally, another GET request to the entity (at
 <http://localhost:4004/simple/Products/1>) should reveal that the price has
 indeed been changed.
 
-### Try an invalid percent value
+While there's plenty more to explore here, the primary context for this
+workshop is CDS modelling, rather than programming in JavaScript (or Java), so
+we'll wrap this exercise up here, ready to move on to the next part of the
+workshop.
 
-Do we need to provide an implementation to ensure the percent range restriction
-is heeded?
+Well done!
 
-👉 Try this, to find out:
+---
 
-```bash
-curl \
-  --silent \
-  --data '{"percent":999}' \
-  --url localhost:4004/simple/Products/1/applyDiscount \
-  | jq .
-```
-
-This should result in something like this:
-
-```json
-{
-  "error": {
-    "message": "Enter a value between 1 and 100.",
-    "target": "percent",
-    "code": "ASSERT_RANGE",
-    "@Common.numericSeverity": 4
-  }
-}
-```
-
-Nice - modelling our intent with `@assert.range` is all we need, another
-example of how CDS allows us to focus on "what, not how".
+Let's now move on to the next part of the workshop, on [annotations and solid
+state
+programming](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#part-5---annotations-and-solid-state-programming).
