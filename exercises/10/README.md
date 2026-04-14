@@ -5,21 +5,22 @@ it's for, by extending the rudimentary definitions we already have in there.
 
 ## Understand where services fit
 
-This diagram from the [Service-Centric
-Paradigm](https://cap.cloud.sap/docs/guides/providing-services#service-centric-paradigm)
-section of the Providing Services topic in Capire illustrates services and
-their relation to Consumers, and also to where we've been thus far - at the
+This diagram from the [Services as
+Facades](https://cap.cloud.sap/docs/guides/services/providing-services#services-as-facades)
+section of the Define Providing Services topic in Capire illustrates services
+and their relation to Consumers, and also to where we've been thus far - at the
 Domain Models part:
 
 ![service centric paradigm diagram](assets/service-centric-paradigm.png)
 
-We're now moving up the down-arrow to the Service / API Models part.
+We're now moving up the down-arrow on the left hand side from Domain Models up
+to Service Models.
 
 In many ways, services are where the rubber meets the road, providing
 differently shaped APIs to consumers, in different forms, all based upon the
 foundation that is the domain model. It's also the context in which we can
-provide custom domain (business) logic beyond what's already provided out of
-the box for us by the CAP framework.
+provide custom (business) logic beyond what's already provided out of the box
+for us by the CAP framework.
 
 One might think of the domain model (conventionally at the `db/` layer) as
 being fairly static, i.e. declarative definitions that form the source of truth
@@ -27,8 +28,9 @@ for artifacts in the database and for how queries are resolved at runtime.
 
 In contrast, services (conventionally at the `srv/` layer) are dynamic. They
 marshal, constrain, reimagine, expose and control access to data and functions
-at the domain model via cheap, lightweight declarative definitions that
-describe facades in different forms.
+at the domain model via
+[cheap](https://github.com/qmacro/capref/blob/main/axioms/AXI004.md),
+lightweight declarative definitions that describe facades in different forms.
 
 These facades, or APIs, are dynamic in the sense that they are reified in the
 context of wire protocols such as plain HTTP ("REST"), OData and GraphQL. So at
@@ -39,10 +41,10 @@ built-in and protocol-specific facilities.
 ## Look beyond the pass-through projections
 
 > While some of what's presented in this section could equally apply to domain
-> modelling (at the `db/` level), it is especially useful to know and to have
-> in mind when considering how cheap services are to define and how flexible
-> they can be to present flexible and focused facades on the business data for
-> different consumption contexts and purposes.
+> modelling (at the `db/` level), it is especially useful to to have in mind
+> when considering how cheap services are to define and how capable they are
+> to present flexible and focused facades on the business data for different
+> consumption contexts and purposes.
 
 👉 Open the `srv/simple.cds` file in the editor and take a look, to reveal:
 
@@ -166,9 +168,8 @@ Well, there are a few in play:
 > within which they are
 > described](https://cap.cloud.sap/docs/cds/cql#path-expressions).
 
-👉 Make sure the CAP server has restarted after the addition of this new
-service definition, and then visit the CAP server at <http://localhost:4004>,
-to see the second service presented:
+👉 visit the CAP server at <http://localhost:4004> to see the second service
+presented:
 
 ![second service](assets/second-service.png)
 
@@ -229,7 +230,23 @@ something like this:
 ```
 
 This is a very nice collection of flat entities, the elements of which are
-calculated and even determined from related entities.
+calculated and even determined from related entities. For example, while this
+OData entityset is based on a projection on the `Products` entity, the values
+for the `Currency` properties here here are actually from (ready?):
+
+- the `name` element
+- of the `sap.common.CodeList` aspect
+- which has been used to enhance the `sap.common.Currencies` entity
+- pointed to by the managed to-one association describing the `currency` element
+- of the `workshop.Price` type
+- which is used to define the `price` element
+- of the `Products` entity
+
+All of this expressed simply and beautifully with:
+
+```cds
+price.currency.name as Currency
+```
 
 👉 Look at the `Valuations` service's metadata document at
 <http://localhost:4004/odata/v4/accounting/$metadata> and identify the entity
@@ -288,13 +305,13 @@ If you pick out the `Accounting.Valuations` definition, you'll uncover a wealth
 of information:
 
 ```yaml
-Accounting.Valuations:
+Accounting.Valuations: 
   kind: entity
-  projection:
-    from: { ref: [workshop.Products] }
-    columns:
-      - { ref: [ID], as: ProductID }
-      - { ref: [name], as: ProductName }
+  projection: 
+    from: {ref: [workshop.Products]}
+    columns: 
+      - {ref: [ID], as: ProductID}
+      - {ref: [name], as: ProductName}
       - {
           xpr:
             [
@@ -305,27 +322,21 @@ Accounting.Valuations:
           as: StockValue,
           cast: { type: cds.Decimal },
         }
-      - { ref: [price, currency, name], as: Currency }
-      - { ref: [supplier, company], as: Source }
-  elements:
-    ProductID: { key: true, type: cds.Integer }
-    ProductName: { type: cds.String }
-    StockValue:
-      { "@Core.Computed": true, type: cds.Decimal }
-    Currency:
-      {
-        "@title": { i18n>Name },
-        localized: true,
-        type: cds.String,
-        length: 255,
-      }
-    Source: { type: cds.String }
+      - {ref: [price, currency, name], as: Currency}
+      - {ref: [supplier, company], as: Source}
+  elements: 
+    ProductID: {key: true, type: cds.Integer}
+    ProductName: {type: cds.String}
+    StockValue: {'@Core.Computed': true, type: cds.Decimal, $calc: true}
+    Currency: {'@title': "{i18n>Name}", localized: true, type: cds.String, length: 255}
+    Source: {type: cds.String}
 ```
 
-> Digging into the detail of this is beyond the scope of this workshop, but it's
+> Digging into the detail of this is beyond the scope of this workshop, but
+> it's
 important to know that it exists, and is the gateway to further understanding,
-especially in the context of expression notation
-([CXN](https://cap.cloud.sap/docs/cds/cxn)).
+especially in the context CDL and the powerful CDS Expression Language
+([CXL](https://cap.cloud.sap/docs/cds/cxn))[<sup>1</sup>](#footnotes).
 
 What's happening here is that the path expressions are the declarative, human
 readable version of multi-level view references.
@@ -427,3 +438,15 @@ Phew!
 ---
 
 [Next](../11/)
+
+---
+
+## Footnotes
+
+1. See the link to the CXL series in the [Related resources for part
+   4](https://qmacro.org/blog/posts/2025/12/09/a-new-hands-on-sap-dev-mini-series-on-the-core-expression-language-in-cds/)
+   section.
+
+1. If you want to understand path expressions like this further, look into the
+   concept of [forward-declared
+   joins](https://qmacro.org/tags/forward-declared-joins/).

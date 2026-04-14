@@ -138,7 +138,7 @@ separate and what we can do there.
 - [11 - Take a first look at domain specific custom operations](exercises/11/)
 - [12 - Add a further operation in the form of a bound action](exercises/12/)
 
-#### Related resources for part 3
+#### Related resources for part 4
 
 - The [Providing
   Services](https://cap.cloud.sap/docs/guides/providing-services) topic in
@@ -151,6 +151,8 @@ separate and what we can do there.
   metadata](https://github.com/qmacro/odata-dd-tutorials/blob/main/tutorials/odata-dd-4-metadata/odata-dd-4-metadata.md),
   part of the sources for the tutorials in the [OData Deep Dive
   mission](https://developers.sap.com/mission.odata-deep-dive.html)
+- An [in-depth series looking at the CDS Expression Language
+  (CXL)](https://qmacro.org/blog/posts/2025/12/09/a-new-hands-on-sap-dev-mini-series-on-the-core-expression-language-in-cds/)
 
 ## Support
 
