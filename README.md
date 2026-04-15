@@ -28,8 +28,8 @@ Connect](https://qmacro.org/blog/posts/2025/11/11/hands-on-domain-modelling-with
 ## Prerequisites
 
 In order to work through the exercises, you'll need a development environment
-for CAP Node.js. See the [prerequisites](prerequisites.md) page for details and
-options.
+for CAP Node.js. See the [prerequisites info](prerequisites/README.md) page for
+details and options.
 
 The exercises presume no prior knowledge; nor do they attempt to cover
 everything there is to know about CDS modelling and CDL. For that, see the
