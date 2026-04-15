@@ -153,7 +153,7 @@ const cds = require('@sap/cds')
 
 class Simple extends cds.ApplicationService {
   init() {
-    const { Products } = this.entities('workshop')
+    const { Products } = cds.entities('workshop')
     this.on('outOfStockProducts', async () => {
       return await SELECT.from(Products).where({ stock: 0 })
     })
