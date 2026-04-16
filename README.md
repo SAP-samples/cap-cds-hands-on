@@ -154,7 +154,9 @@ separate and what we can do there.
 
 ### Part 5 - Annotations and solid state programming
 
-...
+With the decent grounding in CDS modelling and CDL features that we have at
+this point, we can turn to more powerful features that make CAP the powerful,
+declarative and concise framework that it is.
 
 - [13 - An introduction to annotations](exercises/13/)
 - [14 - Declarative constraints and assertions](exercises/14/)
