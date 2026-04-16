@@ -8,9 +8,8 @@ it's time to take a first look.
 ## Revisit annotations we've seen so far
 
 We first came across some when we [looked at the reuse library
-source](../05#look-at-the-reuse-library-source), so let's revisit them now to
-get a feel for how & where they are written and for what purposes they can be
-used.
+source](../05#look-at-the-reuse-library-source), so let's revisit those now to
+get a feel for how they are written and for what purposes they can be used.
 
 ```cds
 type Currency : Association to sap.common.Currencies;
@@ -37,7 +36,7 @@ context sap.common {
 👉 Look at the [annotation
 syntax](https://cap.cloud.sap/docs/cds/cdl#annotation-syntax) information to
 see that annotations are prefixed with `@`, can appear in different places, and
-multiple annotations that apply to the same target can be sometimes enclosed in
+multiple annotations that apply to the same target can be enclosed in
 brackets. Sometimes, the brackets that are designed to enclose multiple
 annotations only actually contain a single annotation, as here in the `@title`
 annotations[<sup>1</sup>](#footnotes) for the elements in `Currencies`.
@@ -47,25 +46,26 @@ purpose](https://cap.cloud.sap/docs/cds/annotations#general-purpose)
 annotations:
 
 |Annotation|Alternative|
+|-|-|
 |`@title`|`@Common.Label`|
 |`@description`|`@Core.Description`|
 
 Think of them as short forms of the alternatives. But what are the
-alternatives, what are those "Common" and "Core" prefixes? They relate to
+alternatives - what are those "Common" and "Core" prefixes? They relate to
 annotations in OData. Taking the first alternative as an example, "Common" is a
 vocabulary, and "Label" is a term within that vocabulary.
 
-👉 Look at the list of standard annotation vocabularies:
+👉 Look at the list of standard annotation vocabularies
 
 - from OASIS[<sup>2</sup>](#footnotes):
   <https://oasis-tcs.github.io/odata-vocabularies/>
 - from SAP: <https://sap.github.io/odata-vocabularies/>
 
-to find the
+to find
 [Common](https://sap.github.io/odata-vocabularies/vocabularies/Common.html)
 (from SAP) and
 [Core](https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.html)
-(from OASIS) vocabularies, and identify the corresponding terms.
+(from OASIS), and identify the corresponding terms.
 
 We see that:
 
@@ -77,11 +77,11 @@ We see that:
 > For portability as well as simplicity, [the protocol-agnostic versions are
 > preferred](https://cap.cloud.sap/docs/guides/uis/fiori#prefer-title-and-description).
 
-Let's try our first annotation out, by applying a `@title` annotation to an
-elemenet in one of our entities.
+Let's try out our first annotation, by applying a `@title` annotation to an
+element in one of our entities.
 
-👉 First, call up the products Fiori preview via the link in the CAP server
-landing page:
+👉 Before we do, call up the products Fiori preview via the link in the CAP
+server landing page:
 
 ![CAP server landing page with Fiori preview for Products
 highlighted](assets/fiori-preview-link.png)
@@ -90,13 +90,13 @@ highlighted](assets/fiori-preview-link.png)
 
 ![column selection request](assets/fiori-preview-select-columns.png)
 
-👉 Notice that the column headings are based on the actual element names right
-now:
+👉 Notice that the column headings ("Currency", "ID", "name", "price_amount",
+etc) are generally on the resolved and flattened element names right now:
 
 ![the table with basic column names](assets/fiori-preview-columns-before.png)
 
 👉 Now, in `db/schema.cds`, annotate the `name` element in the `Products`
-entity. Choose from this list of options the way you'd like to do it:
+entity. Choose just one approach from this list of options:
 
 - In the same file, applied directly:
 
@@ -135,7 +135,7 @@ entity. Choose from this list of options the way you'd like to do it:
       ```
 
 - In a new file `db/text-annotations.cds`, organising your CDS model into
-  separate concerns, and using the
+  separate concerns[<sup>3</sup>](#footnotes), and using the
   [annotate](https://cap.cloud.sap/docs/cds/cdl#the-annotate-directive)
   directive:
 
@@ -157,6 +157,14 @@ entity. Choose from this list of options the way you'd like to do it:
       }
       ```
 
+Once you've made and saved the addition of the annotation, the CAP server
+should restart as normal.
+
+👉 Head back over to the products Fiori preview, select the columns again, and
+take a look at the effect of this `@title` annotation:
+
+![the table with the annotated product name column](assets/fiori-preview-columns-after.png)
+
 ---
 
 ## Footnotes
@@ -165,3 +173,11 @@ entity. Choose from this list of options the way you'd like to do it:
    Model](https://ui5.sap.com/#/topic/91f122a36f4d1014b6dd926db0e91070) like
    mechanism which allows us to maintain actual texts in multiple languages
    (the model name "i18n" stands for "internationalisation").
+
+1. The Organization for the Advancement of Structured Information Standards,
+   also known as OASIS Open, is an industry consortium that develops technical
+   standards for information technology. One of the standards they look after
+   is that of OData.
+
+1. See best practice [BES005 Factor out separate
+   concerns](https://github.com/qmacro/capref/blob/main/bestpractices/BES005.md).
