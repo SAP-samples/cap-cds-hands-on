@@ -166,6 +166,9 @@ separate and what we can do there.
   documents](https://developers.sap.com/tutorials/odata-dd-5-vocabularies.html),
   relating to the alternative annotations for `@title` and `@description`
   examined in exercise 13
+- The blog post [A deep dive into OData and CDS
+  annotations](https://qmacro.org/blog/posts/2023/03/10/a-deep-dive-into-odata-and-cds-annotations/)
+  has lots of info on how to read and understand such things
 
 ## Support
 
