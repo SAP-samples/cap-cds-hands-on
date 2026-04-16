@@ -270,6 +270,17 @@ choose columns:
 ![Fiori preview with two
 columns](assets/fiori-preview-two-columns.png)
 
+> Notice how the compilation of the CDS model has ensured that all annotations
+> are coalesced!
+
+### Annotations, annotations annotations!
+
+(With [apologies to Hawkwind](https://en.wikipedia.org/wiki/Levitation_(Hawkwind_album)#Track_listing))
+
+This is just the tip of the iceberg with respect to annotations, the subject of
+which is easily large enough to fill an entire workshop itself. So we'll leave
+it here so we have time for further topics.
+
 ---
 
 ## Footnotes
