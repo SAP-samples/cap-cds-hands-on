@@ -42,7 +42,9 @@ brackets. Sometimes, the brackets that are designed to enclose multiple
 annotations only actually contain a single annotation, as here in the `@title`
 annotations[<sup>1</sup>](#footnotes) for the elements in `Currencies`.
 
-The `@title` annotation is one of two [general purpose](https://cap.cloud.sap/docs/cds/annotations#general-purpose) annotations:
+The `@title` annotation is one of two [general
+purpose](https://cap.cloud.sap/docs/cds/annotations#general-purpose)
+annotations:
 
 |Annotation|Alternative|
 |`@title`|`@Common.Label`|
@@ -98,59 +100,62 @@ entity. Choose from this list of options the way you'd like to do it:
 
 - In the same file, applied directly:
 
-    - Postfix: the same way as the example above, without brackets:
+  - Postfix: the same way as the example above, without brackets:
+  
+      ```cds
+      entity Products : cuid {
+          name     : String @title: 'Product Name';
+          stock    : Integer;
+          price    : Price;
+          supplier : Association to Suppliers;
+      }
+      ```
 
-        ```cds
-        entity Products : cuid {
-            name     : String @title: 'Product Name';
-            stock    : Integer;
-            price    : Price;
-            supplier : Association to Suppliers;
-        }
-        ```
+      or with brackets:
 
-        or
+      ```cds
+      entity Products : cuid {
+          name     : String @(title: 'Product Name');
+          stock    : Integer;
+          price    : Price;
+          supplier : Association to Suppliers;
+      }
+      ```
 
-        ```cds
-        entity Products : cuid {
-            name     : String @(title: 'Product Name');
-            stock    : Integer;
-            price    : Price;
-            supplier : Association to Suppliers;
-        }
-        ```
+  - Prefix: before the element name (again, with or without brackets):
 
-    - Prefix: before the element name (again, with or without brackets):
+      ```cds
+      entity Products : cuid {
+          @title: 'Product Name'
+          name     : String;
+          stock    : Integer;
+          price    : Price;
+          supplier : Association to Suppliers;
+      }
+      ```
 
-        ```cds
-        entity Products : cuid {
-            @title: 'Product Name'
-            name     : String;
-            stock    : Integer;
-            price    : Price;
-            supplier : Association to Suppliers;
-        }
-        ```
+- In a new file `db/text-annotations.cds`, organising your CDS model into
+  separate concerns, and using the
+  [annotate](https://cap.cloud.sap/docs/cds/cdl#the-annotate-directive)
+  directive:
 
-- In a new file `db/text-annotations.cds`, organising your CDS model into separate concerns, and using the [annotate](https://cap.cloud.sap/docs/cds/cdl#the-annotate-directive) directive:
+  - Single element reference:
 
-- Single element reference:
+      ```cds
+      using workshop from './schema';
 
-    ```cds
-    using workshop from './schema';
+      annotate workshop.Products : name with @title: 'Product Name';
+      ```
 
-    annotate workshop.Products : name with @title: 'Product Name';
-    ```
+  - Block reference:
 
-- Block reference:
+      ```cds
+      using workshop from './schema';
 
-    ```cds
-    using workshop from './schema';
-
-    annotate workshop.Products with {
-        name @title: 'Product Name';
-    }
-    ```
+      annotate workshop.Products with {
+          name @title: 'Product Name';
+      }
+      ```
 
 ---
 
