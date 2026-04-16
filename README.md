@@ -160,6 +160,13 @@ separate and what we can do there.
 - [14 - Declarative constraints and assertions](exercises/14/)
 - [15 - Shift left, avoid procedural code](exercises/15/)
 
+#### Related resources for part 5
+
+- The tutorial [Understand how vocabularies are used in OData metadata
+  documents](https://developers.sap.com/tutorials/odata-dd-5-vocabularies.html),
+  relating to the alternative annotations for `@title` and `@description`
+  examined in exercise 13
+
 ## Support
 
 Support for the content in this repository is available during the actual time
