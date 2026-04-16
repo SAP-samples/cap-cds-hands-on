@@ -91,7 +91,7 @@ highlighted](assets/fiori-preview-link.png)
 👉 Notice that the column headings are based on the actual element names right
 now:
 
-![the table with basic column names](asset/fiori-preview-columns-before.png)
+![the table with basic column names](assets/fiori-preview-columns-before.png)
 
 👉 Now, in `db/schema.cds`, annotate the `name` element in the `Products`
 entity. Choose from this list of options the way you'd like to do it:
