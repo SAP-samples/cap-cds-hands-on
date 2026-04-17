@@ -93,7 +93,7 @@ highlighted](assets/fiori-preview-link.png)
 ![column selection request](assets/fiori-preview-select-columns.png)
 
 👉 Notice that the column headings ("Currency", "ID", "name", "price_amount",
-etc) are generally on the resolved and flattened element names right now:
+etc) are generally based on the resolved and flattened element names right now:
 
 ![the table with basic column names](assets/fiori-preview-columns-before.png)
 
@@ -279,7 +279,8 @@ columns](assets/fiori-preview-two-columns.png)
 
 This is just the tip of the iceberg with respect to annotations, the subject of
 which is easily large enough to fill an entire workshop itself. So we'll leave
-it here so we have time for further topics.
+it here with respect to the introduction, but will be employing annotations in
+the next exercise too.
 
 ---
 
