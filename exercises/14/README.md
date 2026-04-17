@@ -119,26 +119,157 @@ This time, the discount of 200% is rejected:
 ```
 
 > If you were to ask for the response headers:
+>
+> ```bash
+> curl \
+>   --data '{"percent":200}'
+>   --include \
+>   --header 'Content-Type: application/json` \
+>   --url localhost:4004/simple/Products/1/applyDiscount
+> ```
+>
+> then you'd see that the status code is appropriately set to 400:
+>
+> ```text
+> HTTP/1.1 400 Bad Request
+> X-Powered-By: Express
+> OData-Version: 4.0
+> Connection: keep-alive
+> Keep-Alive: timeout=5
+> ...
+> ```
+
+Nice - modelling our intent with `@assert.range` is all we need, another
+example of how CDS allows us to focus on "what, not how". And errors can
+be [surfaced to the UI,
+too](https://cap.cloud.sap/docs/guides/services/constraints#served-to-fiori-uis).
+
+## Explore more flexible constraint options
+
+The relatively new[<sup>1</sup>](#footnotes) "general assertion" mechanism
+lends a lot more flexibility for constraints than we have had so far with
+`@assert.range` and its siblings such as `@assert.format` and so on.
+
+This general assertion mechanism combines the simple `@assert` annotation with
+an entire sub language in the CDS family, namely the CDS Expression Language
+([CXL](https://cap.cloud.sap/docs/cds/cxl))[<sup>2</sup>](#footnotes).
+
+Given that flexibility, there's a lot to explore. But let's just, erm,
+_constrain_ ourselves to one example, to keep this exercise at a reasonable
+length.
+
+Let's say we want to ensure that a supplier name should be of a reasonable
+length. We can add a constraint to this effect using `@assert` with a "case"
+style expression, and we should explore doing this in a separate CDS file,
+rather than clutter the `services.cds` file of service definitions.
+
+### Add the constraint
+
+👉 Create `srv/checks.cds` with the following content:
+
+```cds
+using Simple from './services';
+
+annotate Simple.Suppliers with {
+    company @assert: (case
+                          when trim(company)   = ''
+                               then 'Company name cannot be empty'
+                          when length(company) < 2
+                               then 'Company name must be at least 2 characters'
+                      end);
+}
+```
+
+How you end up organising files that make up your CDS model is up to you, but
+adding constraints like this to a separate file in the `srv/` directory makes
+some sense. Also, we learn how to use the `annotate` keyword to _add_ a
+contraint, referring to its target.
+
+It's good practice to enclose the CXL expression in brackets, not least to give
+the language server some help in being able to identify, parse and enhance the
+expression for us in the editor.
+
+### Try out the constraint
+
+Once the CAP server has restarted, try this constraint definition out.
+
+👉 First, send a write request with an empty company name:
 
 ```bash
 curl \
-  --data '{"percent":200}'
-  --include \
-  --header 'Content-Type: application/json` \
-  --url localhost:4004/simple/Products/1/applyDiscount
+  --silent \
+  --request PUT \
+  --url localhost:4004/simple/Suppliers/1 \
+  --header 'content-type: application/json' \
+  --data '{"company":""}' \
+  | jq .
 ```
 
-then you'd see that the status code is appropriately set to 400:
+The first error message is appropriately returned:
 
-```text
-HTTP/1.1 400 Bad Request
-X-Powered-By: Express
-OData-Version: 4.0
-Connection: keep-alive
-Keep-Alive: timeout=5
-...
+```json
+{
+  "error": {
+    "message": "Company name cannot be empty",
+    "code": "ASSERT",
+    "target": "company",
+    "@Common.numericSeverity": 4
+  }
+}
 ```
 
-Nice - modelling our intent with `@assert.range` is all we need, another
-example of how CDS allows us to focus on "what, not how".
+👉 Also send another request, this time with a name that is too short:
 
+```bash
+curl \
+  --silent \
+  --request PUT \
+  --url localhost:4004/simple/Suppliers/1 \
+  --header 'content-type: application/json' \
+  --data '{"company":"Z"}' \
+  | jq .
+```
+
+This time, we receive:
+
+```json
+{
+  "error": {
+    "message": "Company name must be at least 2 characters",
+    "code": "ASSERT",
+    "target": "company",
+    "@Common.numericSeverity": 4
+  }
+}
+```
+
+With the combination of the declarative assertion mechanism and CXL, we can
+[shift left](https://qmacro.org/blog/posts/2026/02/09/shift-left-with-cap/)
+with our CAP modelling and avoid writing code with moving parts and that needs
+maintaining. We'll see another example of this in the next and final exercise.
+
+[Next](../15/)
+
+---
+
+## Footnotes
+
+1. It's in [Gamma](https://cap.cloud.sap/docs/releases/index#status-badges)
+   status at the time of writing, at CAP Node.js version 9.8.
+
+1. See the live stream series on the CDS Expression Language for lots of detail
+   and deep diving into the topic: episode replays and accompanying notes are
+   available via the blog post [A new Hands-on SAP Dev mini-series on the core
+   expression language in
+   CDS](https://qmacro.org/blog/posts/2025/12/09/a-new-hands-on-sap-dev-mini-series-on-the-core-expression-language-in-cds/)
+
+## Support
+
+Support for the content in this repository is available during the actual time
+of the workshop event for which this content has been designed.
+
+## License
+
+Copyright (c) 2025 SAP SE or an SAP affiliate company. All rights reserved.
+This project is licensed under the Apache Software License, version 2.0 except
+as noted otherwise in the [LICENSE](LICENSE) file.

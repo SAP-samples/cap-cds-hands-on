@@ -171,6 +171,11 @@ declarative and concise framework that it is.
 - The blog post [A deep dive into OData and CDS
   annotations](https://qmacro.org/blog/posts/2023/03/10/a-deep-dive-into-odata-and-cds-annotations/)
   has lots of info on how to read and understand such things
+- See the live stream series on the CDS Expression Language for lots of detail
+  and deep diving into the topic: episode replays and accompanying notes are
+  available via the blog post [A new Hands-on SAP Dev mini-series on the core
+  expression language in
+  CDS](https://qmacro.org/blog/posts/2025/12/09/a-new-hands-on-sap-dev-mini-series-on-the-core-expression-language-in-cds/)
 
 ## Support
 
