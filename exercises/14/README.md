@@ -262,14 +262,3 @@ maintaining. We'll see another example of this in the next and final exercise.
    available via the blog post [A new Hands-on SAP Dev mini-series on the core
    expression language in
    CDS](https://qmacro.org/blog/posts/2025/12/09/a-new-hands-on-sap-dev-mini-series-on-the-core-expression-language-in-cds/)
-
-## Support
-
-Support for the content in this repository is available during the actual time
-of the workshop event for which this content has been designed.
-
-## License
-
-Copyright (c) 2025 SAP SE or an SAP affiliate company. All rights reserved.
-This project is licensed under the Apache Software License, version 2.0 except
-as noted otherwise in the [LICENSE](LICENSE) file.
