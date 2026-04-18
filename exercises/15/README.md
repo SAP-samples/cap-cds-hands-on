@@ -1,11 +1,17 @@
-# 11 - Shift left, avoid procedural code
+# 15 - Shift left, avoid procedural code
 
-TAKEN OUT OF THE END OF EXERCISE 11
+In this last exercise, we'll double down on the declarative approach we've
+explored thus far, and look to see how else we can use the same approach to
+avoid custom code, and to embrace more powerful facilities that CDS modelling
+has to offer, linked to a key reason to use CAP - [the code is in the
+framework, not outside of
+it](https://qmacro.org/blog/posts/2024/11/07/five-reasons-to-use-cap/#1-the-code-is-in-the-framework-not-outside-of-it).
 
 ## Replace the function with a declarative infix filter
 
-The function we chose to implement was deliberately simple, of course. But did
-you know that we don't even need a function for such a facility?
+The function we chose to specify and implement in [exercise 11](../11/) was
+deliberately simple, of course. But did you know that we don't even need custom
+code for such a facility?
 
 One of the best features of developing with the CAP framework is that it allows
 us to push out logic and mechanics to the extremities:
@@ -15,19 +21,31 @@ us to push out logic and mechanics to the extremities:
 - downwards to the persistence layer where complex queries can be handled
   directly and natively by the database systems
 
-To round off this exercise, let's make that same feature available (the listing
-of products that are out of stock) without having to write a single line of
-custom code.
+Let's make available that same feature (the listing of products that are out of
+stock) without having to write a single line of custom code.
 
 ### Remove the custom implementation
 
-👉 Start out by deleting the `srv/services.js` file as we don't need it any more.
+👉 Start out by deleting the `srv/services.js` file that we created when we
+[provided the implementation in exercise
+11](../11/README.md#provide-an-implementation) as we don't need it any more.
+Deleting code (while the app or service still does what you want) is a much
+underrated power move! For reference and comparison with what we're about to
+define, here's the salient part of the custom code (although the point also
+is that in order for this custom code to exist in the right calling context,
+more code was needed):
+
+```javascript
+this.on('outOfStockProducts', async () => {
+    return await SELECT.from(Products).where({ stock: 0 })
+})
+```
 
 #### Redefine the facility as a projection
 
 👉 Next, remove the `outOfStockProducts()` function definition from the
 `Simple` service, replacing it with another entity projection called
-`OutOfStockProducts` as shown. Also, add the annotation
+`OutOfStockProducts` as shown below. Also, add the annotation
 `@cds.redirection.target` to the `Products` entity projection. Once you're
 done, the `Simple` service definition should look like this:
 
@@ -68,7 +86,7 @@ make sure the CAP server has restarted and visit the CAP server home page again
 at <http://localhost:4004/>, where this new resource is exposed, as an entity
 this time of course, and not as a function:
 
-![OutOfStockProducts entity exposed](assets/OutOfStockProducts-entity.png)
+![OutOfStockProducts entity exposed](assets/outOfStockProducts-entity.png)
 
 👉 Select that entity link to get to the entityset resource, which should
 reflect the same data as the function did: the products "Chai" and "Chef
