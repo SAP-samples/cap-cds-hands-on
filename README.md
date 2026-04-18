@@ -176,6 +176,9 @@ declarative and concise framework that it is.
   available via the blog post [A new Hands-on SAP Dev mini-series on the core
   expression language in
   CDS](https://qmacro.org/blog/posts/2025/12/09/a-new-hands-on-sap-dev-mini-series-on-the-core-expression-language-in-cds/)
+- The blog post [Constraints, expressions and axioms in
+  action](https://qmacro.org/blog/posts/2026/01/27/constraints-expressions-and-axioms-in-action/)
+  has more on declarative contraints.
 
 ## Support
 

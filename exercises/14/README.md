@@ -185,9 +185,10 @@ adding constraints like this to a separate file in the `srv/` directory makes
 some sense. Also, we learn how to use the `annotate` keyword to _add_ a
 contraint, referring to its target.
 
-It's good practice to enclose the CXL expression in brackets, not least to give
-the language server some help in being able to identify, parse and enhance the
-expression for us in the editor.
+It's [good practice to enclose the CXL expression in
+brackets](https://cap.cloud.sap/docs/cds/cdl#expressions-as-annotation-values),
+not least to give the language server some help in being able to identify,
+parse and enhance the expression for us in the editor.
 
 ### Try out the constraint
 
@@ -246,7 +247,10 @@ This time, we receive:
 With the combination of the declarative assertion mechanism and CXL, we can
 [shift left](https://qmacro.org/blog/posts/2026/02/09/shift-left-with-cap/)
 with our CAP modelling and avoid writing code with moving parts and that needs
-maintaining. We'll see another example of this in the next and final exercise.
+maintaining. We'll see another example of this in the next and final
+exercise[<sup>3</sup>](#footnotes).
+
+---
 
 [Next](../15/)
 
@@ -262,3 +266,8 @@ maintaining. We'll see another example of this in the next and final exercise.
    available via the blog post [A new Hands-on SAP Dev mini-series on the core
    expression language in
    CDS](https://qmacro.org/blog/posts/2025/12/09/a-new-hands-on-sap-dev-mini-series-on-the-core-expression-language-in-cds/)
+
+1. For another example of a `case` expression like this, see the section [A
+   first look at
+   expressions](https://qmacro.org/blog/posts/2026/03/05/cds-expressions-in-cap-notes-on-part-1/#a-first-look-at-expressions)
+   in the notes to part 1 of our series on CXL.
