@@ -141,9 +141,10 @@ added for the entities (just `Products` in this simple setup):
 > To enter this command, while the CAP server (started with `cds watch`) is running,
 > you should start a new terminal session, and use the shell in that second session
 > for such commands, not only here, but throughout the rest of the workshop. Note
-> that when you open the second terminal, you'll be in the shell, but at the root
-> of the repository, i.e. `cap-cds-hands-on/`, so make sure you move into the
-> "project root" (with `cd simple/`) so you're invoking commands in the right place.
+> that when you open the second terminal, you'll be in the shell, but likely at
+> the top level of the repository, i.e. `cap-cds-hands-on/`, so make sure you
+> move into the "project root" (with `cd simple/`) so you're invoking commands
+> in the right place.
 
 ```bash
 cds add data

@@ -5,8 +5,7 @@ and when to employ them (and when not to).
 
 ## Consider the existing product element definitions
 
-Right now our extremely simple `Products` entity is defined in `db/schema.cds`
-like this:
+Right now our `Products` entity is defined in `db/schema.cds` like this:
 
 ```cds
 namespace workshop;
@@ -41,7 +40,9 @@ entity Products {
 }
 ```
 
-> There's a `define` keyword that can be used here, like this:
+> ![NOTE]
+> Here we see the `type` keyword in action. There's also a
+> `define` keyword that can be used here, like this:
 >
 > ```cds
 > define type Stock : Integer;
@@ -51,7 +52,7 @@ entity Products {
 > too, for that matter.
 
 This looks neat and has an academic and abstract appeal, especially perhaps to
-those schooled in ABAP development in the context of the all important Data
+those schooled in development in the context ABAP and the all-important Data
 Dictionary, where there are Domains, Data Elements and Data Types supplying
 metadata at different layers, bringing about this kind of relationship:
 
@@ -64,7 +65,7 @@ Field <- Data Element <- Domain <- Type
 But on the whole this is considered bad practice in CAP, where there is a fresh
 approach to design and no (need for a) Data Dictionary. In domain modelling
 terms, CAP [encourages the KISS
-approach](https://cap.cloud.sap/docs/guides/domain-modeling#keep-it-simple-stupid).
+approach](https://cap.cloud.sap/docs/guides/domain/#keep-it-simple-stupid).
 
 This custom type `Stock` merely causes us to have to think harder to understand
 what we're looking at:
@@ -85,7 +86,7 @@ when elements belong together.
 ## Add price information
 
 Let's add price information. While a price is typically represented as a
-decimal, it is meaningless without a currency.
+decimal, it is largely meaningless without a currency.
 
 What does good look like here? Well, it depends. But for the sake of learning
 about types, let's explore a custom [structured
@@ -93,7 +94,8 @@ type](https://cap.cloud.sap/docs/cds/cdl#structured-types).
 
 ### Use an ad hoc structure
 
-👉 Add a new element `price` described by a structure like this:
+👉 In `db/schema.cds`, add a new element `price` described by a structure like
+this:
 
 ```cds
 namespace workshop;
@@ -113,12 +115,12 @@ entity Products {
 👉 Look at what this turns into from a CSN point of view:
 
 ```bash
-cds compile --to yaml srv/
+cds compile --to yaml db/
 ```
 
 > Sometimes it's easier to specify an entire directory as the target for
 > compilation; in this case we'll get the same results as if we'd specified
-> `srv/simple.cds`.
+> `db/schema.cds`.
 
 This shows us:
 
@@ -139,7 +141,12 @@ definitions:
               currency: { type: cds.String },
             },
         }
-meta: { creator: CDS Compiler v6.4.6, flavor: inferred }
+meta:
+  {
+    creator: CDS Compiler v6.8.0,
+    compilerCsnFlavor: inferred,
+    flavor: inferred,
+  }
 $version: 2.0
 ```
 
@@ -189,7 +196,12 @@ definitions:
       name: { type: cds.String }
       stock: { type: cds.Integer }
       price: { type: workshop.Price }
-meta: { creator: CDS Compiler v6.4.6, flavor: inferred }
+meta:
+  {
+    creator: CDS Compiler v6.8.0,
+    compilerCsnFlavor: inferred,
+    flavor: inferred,
+  }
 $version: 2.0
 ```
 

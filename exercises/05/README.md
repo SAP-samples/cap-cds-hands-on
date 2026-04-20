@@ -139,12 +139,11 @@ type. It will also introduce us to some other CDL features.
 ### Look at the reuse library source
 
 Let's take a look into this resource, it's a file called `common.cds`, and it's
-contained in the `@sap/cds/`, which is a relative path representing the
-so-called "CDS home", the directory "[from which the current instance of the
-cds facade module was
-loaded](https://cap.cloud.sap/docs/node.js/cds-facade#cds-home)". We can see
-what the absolute path of the current "CDS home" is with the command `cds
-version` (`cds v` for short).
+contained in `@sap/cds/`, which is a relative path representing the so-called
+"CDS home", the directory "[from which the current instance of the cds facade
+module was loaded](https://cap.cloud.sap/docs/node.js/cds-facade#cds-home)". We
+can see what the absolute path of the current "CDS home" is with the command
+`cds version` (`cds v` for short).
 
 👉 Run `cds v` to see various version details, which should include the path to
 the current "CDS home"; the output should look something like this:
@@ -265,11 +264,13 @@ context sap.common {
 > mid-way point, as the model loading phase has now found duplicate definitions
 > (in `db/common.cds` as well as `@sap/cds/common.cds`):
 >
-> [ERROR] db/common.cds:1:6-14: Duplicate definition of artifact “Currency” (in
-> type:“Currency”) [ERROR] db/common.cds:3:9-19: Duplicate definition of
-> artifact “sap.common” (in context:“sap.common”) ...
+> ```text
+> [ERROR] db/common.cds:1:6-14: Duplicate definition of artifact “Currency” (in type:“Currency”)
+> [ERROR] db/common.cds:3:9-19: Duplicate definition of artifact “sap.common” (in context:“sap.common”)
+> ...
+> ```
 >
-> This is fine and merely fleeting, as we make the transition.
+> This is fine and merely temporary, as we make the transition.
 
 ### Adjust the import to point to this library
 
@@ -295,7 +296,7 @@ to use our own `Currency` definition in this simpler version.
 
 ## Study the component parts of the Currency construct
 
-Let's take the definitions one by one.
+Let's take the definitions that make up `Currency` one by one.
 
 The [context](https://cap.cloud.sap/docs/cds/cdl#context) directive is similar
 to the `namespace` directive we already know about. It allows us to create
@@ -311,7 +312,8 @@ therefore have these fully qualified names:
 - `sap.common.Currencies`
 - `sap.common.CodeList`
 
-Knowing this helps us to understand the "target" of the `type` definition:
+👉 Cement this understanding by looking at the definition of the `Currency` type
+and how it refers to its "target":
 
 ```cds
 type Currency : Association to sap.common.Currencies;
@@ -320,10 +322,12 @@ type Currency : Association to sap.common.Currencies;
 The word "target" is relevant here, as the `Association to` part is a so-called
 [managed to-one
 association](https://cap.cloud.sap/docs/guides/domain/#managed-1-associations),
-a type of relationship. Here, it means that the possible currencies themselves
-are maintained elsewhere, and a "currency key" pointing to a specific, single
-("to-one") currency with the rest of that currency's details is what is to be
-stored in an element that is described with this `Currency` type.
+a type of relationship.
+
+Here, it means that the possible currencies themselves are maintained
+elsewhere, and a "currency key" pointing to a specific, single ("to-one")
+currency with the rest of that currency's details is what is to be stored in an
+element that is described with this `Currency` type.
 
 We'll look at associations and other relationships in a later exercise.
 
@@ -456,7 +460,7 @@ be "scalar", i.e. they must contain elements (i.e. have a `{ ... }` structure).
 Aspects can be used to extend existing structures, most commonly entities. And
 the shortest, most idiomatic way to do this is with a `:` symbol, a [shortcut
 syntax construct](https://cap.cloud.sap/docs/cds/cdl#includes) that says "oh,
-and include the elements in this aspect too".
+and include the elements from this aspect too".
 
 The upshot of this is that the `Currencies` entity, when fully defined, has the
 three elements directly defined with it (`code`, which is a key element, plus
@@ -464,7 +468,8 @@ three elements directly defined with it (`code`, which is a key element, plus
 `CodeList` aspect (`name` and `descr`).
 
 👉 Consider the five fields in the header for the corresponding initial CSV
-data file, where their number and origin should now make sense:
+data file `db/data/sap.common-Currencies.csv`, where their number and origin
+should now make sense:
 
 ```csv
 code,symbol,minorUnit,name,descr

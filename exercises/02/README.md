@@ -2,7 +2,7 @@
 
 In the previous exercise we conjured up a simple but fully functional OData
 service from a declarative definition that is just a few lines long. In this
-exercise we'll explore what we have, to understand the central importance of
+exercise we'll explore what we have - to understand the central importance of
 the model, what the service is, and how the definition relates to a database
 layer.
 
@@ -91,8 +91,8 @@ curl \
 ## Understand how the definition is used
 
 These days it's hard to imagine how much work it used to be, before the advent
-of CAP, to get an OData service like this up and running and providing a full
-set of service functions.
+of CAP, to get an OData service like this up and running and providing full
+support for the entire set of service operations.
 
 But that's not the point of this exercise nor this workshop. Instead, let's
 take a quick look at what "descends" from the definition.
@@ -100,7 +100,7 @@ take a quick look at what "descends" from the definition.
 The definition is written using the Conceptual Definition Language
 ([CDL](https://cap.cloud.sap/docs/cds/cdl)), the human-readable form of the
 declarative language designed to be used by domain experts and developers to
-build a solution based on the foundation of the domain model that underpins it.
+create the domain model as the foundation for the solution based upon it.
 
 ### Get an introduction to Core Schema Notation
 
@@ -167,9 +167,11 @@ This emits:
 > This is a very common request and so can also be produced with the shorter
 > `cds c .`, where `.` is a reference to the current directory, which only
 > contains a single `services.cds` source file at this point anyway. The output
-> emitted to the terminal is not strictly JSON, it's actually a syntactically
+> emitted to the terminal from this command (which doesn't explicitly use the
+> `--to json` option) is not strictly JSON, it's actually a syntactically
 > valid JavaScript object, but that's by the by - the point is that it's easier
-> on the eye.
+> on the eye (and if the output is sent downstream to a file or process, then
+> JSON is indeed created.
 
 While JSON is arguably the default, YAML is arguably easier on the eye so we'll
 use that as our go-to representation throughout this workshop whenever we want
@@ -200,9 +202,16 @@ meta: { creator: CDS Compiler v6.4.6, flavor: inferred }
 $version: 2.0
 ```
 
-> Here, for purposes of display and readability in these workshop exercises,
+> For purposes of display and readability in these workshop exercises,
 > the YAML has been passed through [Prettier](https://prettier.io/), "an
 > opinionated code formatter", largely to split long lines up.
+>
+> For example, the specifically formatted YAML here was produced like this:
+>
+> ```bash
+> cds compile --to yaml services.cds \
+>   | prettier --parser yaml --print-width 60
+> ```
 
 While we won't need to look much further at CSN in this workshop, it's
 important to understand that it exists and is the "processable" version of the
@@ -314,7 +323,8 @@ done > wrote output to:
 build completed in 87 ms
 ```
 
-You can now take a peek inside the `hdbtable` file that contains the DDL for the single entity we have so far:
+You can now take a peek inside the `gen/db/src/gen/Simple.Products.hdbtable`
+file that contains the DDL for the single entity we have so far:
 
 ```sql
 COLUMN TABLE Simple_Products (

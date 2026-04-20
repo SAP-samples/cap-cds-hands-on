@@ -71,9 +71,9 @@ modelling with CDS.
 
 ### Part 2 - More on structure with types, aspects and reuse
 
-The definition we have so far is deliberately very basic. What are the
-facilities in CDL to expand on that, to allow for the definition of custom
-types, to bring consistency and at the same time avoid repetition? Perhaps most
+The definition we have so far is deliberately very basic. What facilities in
+CDL are available to expand on that? Whaat about the definition of custom types
+to bring consistency and at the same time avoid repetition? Perhaps most
 importantly, how can we define our domain models in a way that reuse is always
 possible, both in and of what we are building?
 

@@ -17,10 +17,9 @@ traditional command in the shell such as `tree -F`, which will reveal:
 │       └── Simple.Products.csv
 ├── readme.md
 ├── services.cds
-├── srv/
-└── test.db
+└── srv/
 
-5 directories, 4 files
+5 directories, 3 files
 ```
 
 The simple OData service we have so far is the result of definitions in a
@@ -58,7 +57,7 @@ concerns](https://cap.cloud.sap/docs/cds/aspects#separation-of-concerns).
 > revisit that later in this exercise.
 
 This workshop is focusing on what CAP and in particular CDS modelling can
-bring, so we can safely ignore the `app/` directory for the rest of the
+bring, so we can safely ignore the `app/` directory for most of the rest of the
 workshop.
 
 ## Rework the content of services.cds into the service and persistence layers
@@ -111,7 +110,7 @@ service Simple {
 > [!NOTE] The [using](https://cap.cloud.sap/docs/cds/cdl#using) directive is a
 > key enabler of componentisation, separation of concerns and model reuse. The
 > CDL in this `simple.cds` file starts by importing the definitions from the
-> `schema.cds` file at the `db/` layer, by their top-level name
+> `schema.cds` file in the `db/` layer, by their top-level name
 > (namespace)[<sup>1</sup>](#footnotes).
 >
 > Moreover, we have `as projection on` which is [one of
