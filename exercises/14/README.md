@@ -1,24 +1,26 @@
 # 14 - Declarative contraints and assertions
 
 Now that we've become somewhat familiar with annotations at a basic level, it's
-time to explore some more. We'll remain declarative here and look at how we can
-add annotations to our CDS model to impose
+time to explore some more. We'll remain on our declarative trajectory here and
+look at how we can add annotations to our CDS model to impose
 [constraints](https://cap.cloud.sap/docs/guides/services/constraints) and
 checks.
 
 ## Constrain the allowable discount values
 
-In [exercise 12](../12/) we added a bound action called `applyDiscount` to our
-`Simple` service, using a custom type for the percentage value:
+In a previous exercise we [added a bound
+action](../12#declare-the-bound-action) called `applyDiscount` to our `Simple`
+service, using a custom type for the percentage value:
 
 ```cds
+using workshop from '../db/schema';
+
 @protocol: 'odata'
 @path    : '/simple'
 service Simple {
-  @cds.redirection.target
-  entity Products           as projection on workshop.Products
+  entity Products  as projection on workshop.Products
     actions {
-      action applyDiscount(percent: Percentage) returns Products:price;
+      action applyDiscount(percent: Percentage) returns Products:price
     };
 
   ...
@@ -26,6 +28,7 @@ service Simple {
 }
 
 type Percentage : Integer;
+
 ```
 
 Values for this `Percentage` type logically can only be between 1 and 100. But
@@ -43,7 +46,9 @@ curl \
   | jq .
 ```
 
-Right now, the value is 18:
+Right now, the value is 18 (the original price, as our CAP server has been
+restarted and thus data has been redeployed to the in-memory persistence
+mechanism):
 
 ```json
 {
@@ -56,7 +61,7 @@ Right now, the value is 18:
 
 ```bash
 curl \
-  --data '{"percent":200}'
+  --data '{"percent":200}' \
   --silent \
   --header 'Content-Type: application/json` \
   --url localhost:4004/simple/Products/1/applyDiscount \
