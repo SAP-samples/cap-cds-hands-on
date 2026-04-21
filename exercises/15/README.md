@@ -31,7 +31,7 @@ stock) without having to write a single line of custom code.
 
 ### Remove the custom implementation
 
-👉 Start out by deleting the `srv/services.js` file that we created when we
+👉 Start out by deleting the `srv/ecommerce.js` file that we created when we
 [provided the implementation in exercise
 11](../11/README.md#provide-an-implementation) as we don't need it any more.
 Deleting code (while the app or service still does what you want) is a much
@@ -86,7 +86,7 @@ that we have defined a second projection on the same base entity
   to help the compiler resolve any ambiguity between the two possible
   destinations for association based relationships
 
-Now that we've made these changes and got rid of the `srv/services.js` file,
+Now that we've made these changes and got rid of the `srv/ecommerce.js` file,
 make sure the CAP server has restarted and visit the CAP server home page again
 at <http://localhost:4004/>, where this new resource is exposed, as an entity
 this time of course, and not as a function:

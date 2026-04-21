@@ -146,7 +146,7 @@ error message returned:
 
 ### Provide an implementation
 
-👉 Create a new file `srv/services.js`, with the following content:
+👉 Create a new file `srv/ecommerce.js`, with the following content:
 
 ```javascript
 const cds = require('@sap/cds')

@@ -67,7 +67,7 @@ function in the previous exercise, we need to add an implementation, again in
 the [on
 phase](https://cap.cloud.sap/docs/guides/services/custom-code#hooks-on-before-after).
 
-👉 Do that now, recreating `services.js` in the `srv/` directory, with this content:
+👉 Do that now, recreating `ecommerce.js` in the `srv/` directory, with this content:
 
 ```javascript
 const cds = require('@sap/cds')
