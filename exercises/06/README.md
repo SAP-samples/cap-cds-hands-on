@@ -229,8 +229,8 @@ let's take a look at some more immediately useful aspects from
 
 ### Go back to @sap/common/cds
 
-👉 Before we continue, let's edit the `using` line to import from the proper
-common source, rather than our own custom one:
+👉 Before we continue, let's edit the `using` line in `db/schema.cds` to import
+from the proper common source, rather than our own custom one:
 
 ```cds
 using Currency from '@sap/cds/common';
@@ -388,9 +388,10 @@ aspect managed {
 ```
 
 > [!NOTE]
-> Here we see some `@` and `$` prefixed constructs for the first time. The
-> former are annotations which we'll cover generally in a later exercise, and
-> the latter are [pseudo
+> Here we see some `@` prefixed constructs (annotations), which we've passed
+> over briefly in some previous exercises, and `$` prefixed constructs which
+> we're seeing for the first time. We're set to cover the former generally in a
+> later exercise, and the latter are [pseudo
 > variables](https://cap.cloud.sap/docs/guides/domain/#pseudo-variables) which
 > resolve as you'd probably expect, given their names.
 
@@ -490,7 +491,7 @@ useful they are in modelling!
 ## Re-simplify our model for the remaining exercises
 
 In order to cut down on information and data that might otherwise cause "noise"
-and get in the way of our understanding, let's re-simplify our model by going
+and get in the way of our exploration, let's re-simplify our model by going
 back to a numeric key field for both entities, and doing away with the
 tracking information.
 
@@ -507,7 +508,8 @@ the types as much as we can. This means that while using the standard `cuid`
 aspect is best practice, we'll use our own custom version that defines the
 element as an `Integer` type instead of a `UUID` type. This reflects the key
 properties in the [corresponding Northbreeze
-service](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/$metadata),
+service](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/$metadata)[<sup>3</sup>](#footnotes)
+
 such as this `Products` entity type definition, where the `ProductID` property
 has the (OData entity data model) integer type `Edm.Int32`:
 
@@ -554,11 +556,15 @@ entity Suppliers : cuid, managed {
 }
 ```
 
+> This custom aspect is a good example of something we covered previously,
+> albeit briefly: unlike types, aspects are always structures, even if they
+> represent only a single element, as here.
+
 ### Remove the managed aspect
 
 Again, to keep things simple for the remainder of this workshop, let's remove
 the use of the `managed` aspect, so that we're not inundated with `createdAt`,
-`createdBy`, `modifiedAt` and `modifiedBy` elements and their default values as
+`createdBy`, `modifiedAt` & `modifiedBy` elements and their default values as
 we continue through the exercises.
 
 👉 Remove all references to `managed`, both from the `using` directive and from
@@ -590,6 +596,55 @@ entity Suppliers : cuid {
 }
 ```
 
+## Exploring the YAML CSN with powerful tools (bonus)
+
+Here's an optional bonus part to this exercise.
+
+Looking at CSN, whether in YAML or in JSON form, is important for understanding
+and sometimes just confirmation.
+
+There are plenty of tools that can help with parsing and displaying YAML output
+such as we saw when we [used the managed
+aspect](#use-the-managed-aspect-for-basic-data-tracking) earlier in this
+exercise.
+
+👉 Try piping the YAML output from the CDS compiler to
+[prettier](https://prettier.io/), which describes itself as "an opinionated
+code formatter":
+
+```bash
+cds compile --to yaml db/schema.cds \
+  | prettier --parser yaml --print-width 60
+```
+
+> This, by the way, is the `prettier` invocation that has been used in the
+> preparation of YAML examples for this workshop.
+
+You'll see pretty-printed and narrower (easier to read) output. But colour
+helps too.
+
+👉 Pipe the output of `prettier` into [bat](https://github.com/sharkdp/bat), "a
+`cat` clone with wings":
+
+```bash
+cds compile --to yaml db/schema.cds \
+  | prettier --parser yaml --print-width 60 \
+  | bat --plain -l yaml
+```
+
+There's also [yq](https://github.com/mikefarah/yq), "a lightweight and portable
+command-line YAML, JSON, INI and XML processor", which works in a similar way
+to `jq`[<sup>2</sup>](#footnotes). With `yq` we can, for example, just ask for the
+specific section.
+
+👉 Pipe the output of the CDS compiler into `yq`, asking for just the
+`workshop.Suppliers` (which is within `definitions`):
+
+```bash
+cds compile --to yaml db/schema.cds \
+  | yq '.definitions["workshop.Suppliers"]'
+```
+
 Good work!
 
 ---
@@ -606,3 +661,8 @@ of this workshop.
    (which we've [seen
    before](https://github.com/SAP-samples/cap-cds-hands-on/tree/main/exercises/04#explore-definition-abstraction))
    which is optional and usually omitted.
+
+1. For further reading on `jq`, there are [various posts tagged
+   "jq"](https://qmacro.org/tags/jq/) available.
+
+1. Which itself reflects the original Northwind service.
