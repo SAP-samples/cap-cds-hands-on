@@ -42,8 +42,8 @@ more opaque and the semantics of the operation do not align cleanly with the
 HTTP method used; in fact, HTTP is relegated to a transport protocol in such
 cases.
 
-> Yes, I care deeply about Representational State Transfer (REST) and its
-> constraints; indeed my [narrowboat
+> Yes, the author of this workshop content cares deeply about Representational
+> State Transfer (REST) and its constraints; indeed their [narrowboat
 > home](https://qmacro.org/tags/narrowboat/)'s name is "FULLY RESTFUL".
 
 ## Consider OData's actions and functions
@@ -130,9 +130,9 @@ means we can try it out in the browser.
 
 In contrast to every other request you've made, each of which has been
 fulfilled by the CAP framework itself with built-in handling for all the
-operations you sent, this "out-of-band" call is something we're going to have
-to provide an implementation for ourselves, as we can see from the error
-message returned:
+standard operations you sent, this "out-of-band" call is something we're going
+to have to provide an implementation for ourselves, as we can see from the
+error message returned:
 
 ```json
 {
