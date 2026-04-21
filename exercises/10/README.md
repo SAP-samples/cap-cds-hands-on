@@ -76,9 +76,9 @@ file for simplicity and ease of viewing.
 
 ### Change the name of the service CDS file
 
-👉 Rename the `srv/simple.cds` file to `srv/ecommerce.cds` to reflect the fact
-that (shortly) there will be more than one service, not just the `Simple`
-service, defined:
+👉 Rename the `srv/simple.cds` file to `srv/ecommerce.cds` to reflect a more
+general name and one that that "allows for" the definition more than one
+service, not just the `Simple` service:
 
 ```bash
 mv srv/simple.cds srv/ecommerce.cds
@@ -125,7 +125,7 @@ paths, from the same server base (listening on port `4004` on `localhost`):
 }
 [cds] - serving Accounting {
   at: [ '/odata/v4/accounting' ],
-  decl: 'srv/ecommerce.cds:13'
+  decl: 'srv/ecommerce.cds:11'
 }
 [cds] - server listening on { url: 'http://localhost:4004' }
 ```
@@ -136,7 +136,8 @@ Now let's turn our attention back to the definition of the `Valuations` entity
 in our new `Accounting` service:
 
 - we're still employing a
-  [projection](https://cap.cloud.sap/docs/cds/cdl#as-projection-on) here
+  [projection](https://cap.cloud.sap/docs/cds/cdl#as-projection-on) here, based
+  on the `Products` entity
 - however, we're not using the [inferred elements
   signature](https://cap.cloud.sap/docs/cds/cdl#views-with-inferred-signatures)
   (i.e. an implicit "all elements of this projectee" pass-through) that
@@ -144,9 +145,8 @@ in our new `Accounting` service:
 - instead, there is an explicit signature within the structure block (`{ ...
   }`), containing different element expressions
 
-What are the features of those element expressions?
-
-Well, there are a few in play:
+👉 Look at the features of those element expressions. There are quite a few in
+play:
 
 - with `as`, the elements are presented with aliased names (e.g. `ID` is
   aliased as `ProductID`)
@@ -159,7 +159,7 @@ Well, there are a few in play:
   [cast](https://cap.cloud.sap/docs/cds/cql#casts-in-cdl) to set the type for
   `StockValue` explicitly (to `Decimal`)
 - two elements (plus one part of the expression forming `StockValue`) have
-  values which are defined via dotted multi-path names: these are [path
+  values which are defined via dotted multi-part names: these are [path
   expressions](https://cap.cloud.sap/docs/cds/cql#path-expressions) multi-path
   names)
 
@@ -335,7 +335,7 @@ Accounting.Valuations:
 > Digging into the detail of this is beyond the scope of this workshop, but
 > it's
 important to know that it exists, and is the gateway to further understanding,
-especially in the context CDL and the powerful CDS Expression Language
+especially in the context of CDL and the powerful CDS Expression Language
 ([CXL](https://cap.cloud.sap/docs/cds/cxn))[<sup>1</sup>](#footnotes).
 
 What's happening here is that the path expressions are the declarative, human
