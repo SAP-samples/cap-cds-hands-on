@@ -49,7 +49,7 @@ service Simple {
 ```
 
 👉 The expected `percent` value is defined as type `Percentage`, which is
-custom, so add that to the bottom of the `services.cds` file too (we wouldn't
+custom, so add that to the bottom of the `ecommerce.cds` file too (we wouldn't
 normally use a custom type like this, but there's a reason for it which will be
 revealed in a later exercise).
 

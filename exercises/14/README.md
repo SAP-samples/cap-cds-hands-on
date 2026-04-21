@@ -79,7 +79,7 @@ Whoops, that "discount" was accepted!
 We can address that declaratively, in the CDS model, with no custom coding
 required. Let's do that now.
 
-👉 Extend the definition of the custom `Percentage` type in `srv/services.cds`
+👉 Extend the definition of the custom `Percentage` type in `srv/ecommerce.cds`
 with an assert-based constraint:
 
 ```cds
@@ -161,7 +161,7 @@ length.
 Let's say we want to ensure that a supplier name should be of a reasonable
 length. We can add a constraint to this effect using `@assert` with a "case"
 style expression, and we should explore doing this in a separate CDS file,
-rather than clutter the `services.cds` file of service definitions.
+rather than clutter the `ecommerce.cds` file of service definitions.
 
 ### Add the constraint
 

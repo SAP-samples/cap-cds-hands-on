@@ -76,12 +76,12 @@ file for simplicity and ease of viewing.
 
 ### Change the name of the service CDS file
 
-👉 Rename the `srv/simple.cds` file to `srv/services.cds` to reflect the fact
+👉 Rename the `srv/simple.cds` file to `srv/ecommerce.cds` to reflect the fact
 that (shortly) there will be more than one service, not just the `Simple`
 service, defined:
 
 ```bash
-mv srv/simple.cds srv/services.cds
+mv srv/simple.cds srv/ecommerce.cds
 ```
 
 ### Add a second service definition
@@ -121,11 +121,11 @@ paths, from the same server base (listening on port `4004` on `localhost`):
 ```log
 [cds] - serving Simple {
   at: [ '/simple' ],
-  decl: 'srv/services.cds:5'
+  decl: 'srv/ecommerce.cds:5'
 }
 [cds] - serving Accounting {
   at: [ '/odata/v4/accounting' ],
-  decl: 'srv/services.cds:13'
+  decl: 'srv/ecommerce.cds:13'
 }
 [cds] - server listening on { url: 'http://localhost:4004' }
 ```
@@ -295,10 +295,10 @@ are valuable.
 
 #### Look at the CSN for detail
 
-👉 Request the CSN, in YAML format as always, for the `srv/services.cds` resource:
+👉 Request the CSN, in YAML format as always, for the `srv/ecommerce.cds` resource:
 
 ```bash
-cds compile --to yaml srv/services.cds
+cds compile --to yaml srv/ecommerce.cds
 ```
 
 If you pick out the `Accounting.Valuations` definition, you'll uncover a wealth

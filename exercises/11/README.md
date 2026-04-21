@@ -95,7 +95,7 @@ unbound rather than bound.
 
 ### Add the declaration
 
-👉 In `srv/services.cds`, add the definition for an `outOfStockProducts`
+👉 In `srv/ecommerce.cds`, add the definition for an `outOfStockProducts`
 function within the `Simple` service as shown:
 
 ```cds
