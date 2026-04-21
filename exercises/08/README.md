@@ -25,14 +25,14 @@ perspective](https://cap.cloud.sap/docs/guides/domain/#compositions):
 
 > While using regular association constructs would go some way to modelling
 > such relationships, it's the wrong approach, unless we want a whole load of
-> extra and unnecessary work and complexity to achieve what CAP provides for us
+> extra and unnecessary work & complexity to achieve what CAP provides for us
 > out of the box with compositions.
 
 ## Model a simple order facility
 
 To illustrate the support and the use of
 [compositions](https://cap.cloud.sap/docs/cds/cdl#compositions) in CDL, let's
-add a parent-child construct for an order business object.
+add a parent-child construct for an order style business object.
 
 👉 To the list of entities we have so far in `db/schema.cds`, add the
 (deliberately simple) `Orders` entity, paying close attention to how the order
@@ -94,18 +94,20 @@ the child, the containee - in this case, the structure of the order item.
 
 An order item, the existence of which cannot be outside the context of a parent
 order, will usually have a key made up of two elements: one for the parent, and
-one for the item (the child). Let's look at all the elements of this structure
-to see where they are:
+one for the item (the child).
 
-- there's a `pos` element representing the item via its unique position (item
-  number)
+👉 Look at all the elements of this structure to see where they are:
+
+- there's a `pos` element representing the item (the child) via its unique
+  position (item number)
 - there are also a couple of basic order item elements, one being a managed
   to-one association to the `Products` entity, the other being a simple integer
-  representing the order quantity for the given product
+  representing the order quantity for the given product ... but these are not
+  key elements
 
-So where's the other key element - the one for the parent order?
+So where's the other key element - the one for the parent?
 
-There isn't one defined explicitly ... the primary key for the parent order is
+There isn't one defined _explicitly_ ... the primary key for the parent order is
 implicit. This is another form of "managed" relationship, where the intent is
 of primary concern, and the implementation left to the system.
 
@@ -176,8 +178,8 @@ few important parts:
 - the anonymous inline structure is indeed an `aspect` as we can see from the
   `targetAspect` of the `items` property for the `workshop.Orders` definition
 - a new entity `workshop.Orders.items` has been generated automatically, with
-  the name being constructed from the namespace and the source entity and
-  element
+  the name being constructed from the namespace, the source entity and
+  the element
 - the link between the parent (see the `on` condition) and the child (the
   generated entity) is via an element called `up_`. This generated element is
   part of how this composition-based relationship is "managed" for us, in a
@@ -216,7 +218,8 @@ up__ID,pos,product_ID,quantity
 
 The managed foreign key for the order item records has been constructed in the
 same way as `supplier_ID` before - the source element name `up_` and the
-target's key element `ID`, joined with an underscore.
+target's key element `ID`, joined with an underscore (so that there are two
+underscores in the name).
 
 In the next exercise we'll explore this construct with some data.
 

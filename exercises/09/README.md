@@ -7,7 +7,7 @@ our new parent-child order construct for a data test drive.
 
 At the end of the previous exercise we deferred the final tyre-kicking of our
 contained-in relationship, as we didn't yet have the `Orders` entity exposed
-for in the OData service that represented the current service definition in
+in the OData service that represented the current service definition in
 `srv/simple.cds`.
 
 👉 Do that now; start by adding another projection within the `Simple` service
@@ -50,7 +50,7 @@ service available on a different
 [path](https://cap.cloud.sap/docs/node.js/cds-serve#path) to the default (shown
 in the `at:` property in the log output above). Let's do that.
 
-> Annotations in general will be covered in a future exercise.
+> Annotations in general will be covered later on in this workshop.
 
 👉  Add the annotations as shown:
 
@@ -66,7 +66,10 @@ service Simple {
 }
 ```
 
-> There's a short form of the `@protocol: 'odata'` annotation: `@odata` (see the [cds.protocols](https://cap.cloud.sap/docs/node.js/cds-serve#cds-protocols) section in Capire).
+> There's a short form of the `@protocol: 'odata'` annotation: `@odata` (see
+> the
+> [cds.protocols](https://cap.cloud.sap/docs/node.js/cds-serve#cds-protocols)
+> section in Capire).
 
 As the CAP server should still be running in watch mode, it will notice this
 change and restart, whereupon we should see the custom path `/simple`:
@@ -83,7 +86,7 @@ relating to the order construct.
 
 ## Explore the order construct as it manifests in the service
 
-Now that we've added `Orders` as a projection, let's have a quick explore.
+Now that we've added `Orders` as a projection, let's briefly explore.
 
 ### Look at the service's metadata document
 
@@ -117,7 +120,9 @@ The `Orders` entity type should be defined like this:
 > metadata as the namespace of the entire schema:
 >
 > ```xml
-> <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="Simple">
+> <Schema
+>   xmlns="http://docs.oasis-open.org/odata/ns/edm"
+>   Namespace="Simple">
 > ```
 
 We also see that:
@@ -156,12 +161,14 @@ Additionally we see the `Orders_items` entity type:
 👉 Take a moment to study the detail here:
 
 - there are two key properties as we'd expect and thought about already in the
-  previous exercise: `up__ID` (the order ID) and `pos` (the item number)
+  previous exercise:
+  - `up__ID` (the order ID)
+  - `pos` (the item number)
 - the target of the `up_` navigation property is described not as a
   `Collection( ... )` this time, but as a (single) `Orders` entity type
 - for both the navigation properties, each of which involve the use of foreign
   key values, there are referential contraints that ensure that the navigation
-  leads to the appropriate target entity instance
+  leads to the appropriate target entity instance:
   - the value of the `Order_items` element `up__ID` and the value of the target
     `Orders` element `ID` need to match
   - the value of the `Order_items` element `product_ID` and the value of the
@@ -171,12 +178,12 @@ What's also worth noting is that:
 
 - this entity type appears even though we haven't explicitly defined a
   projection in the service for the items - it's been automatically exposed for
-  us
+  us[<sup>1</sup>](#footnotes)
 
 ### Request some OData operations
 
-👉 Copy the two order related CSV files to the `db/data/` directory and check
-that the CAP server restarts:
+👉 Copy the two prepared order related CSV files to the `db/data/` directory
+and check that the CAP server restarts:
 
 ```bash
 cp ../exercises/09/assets/workshop-Orders*.csv db/data/
@@ -188,9 +195,9 @@ The pair of CSV files contain data for a simple initial order with a couple of i
 
 #### Make an OData query with expanded navigation
 
-👉 Visit <http://localhost:4004/simple/Orders?$expand=items> to perform an
-OData query operation to retrieve this order and its corresponding items, which
-should look something like this:
+👉 Visit <http://localhost:4004/simple/Orders?$expand=items($expand=product)>
+to perform an OData query operation to retrieve this order and its
+corresponding items, which should look something like this:
 
 ```json
 {
@@ -219,7 +226,7 @@ should look something like this:
 ```
 
 > For a bonus exploration, add some initial currency
-> data[<sup>1</sup>](#footnotes):
+> data[<sup>2</sup>](#footnotes):
 >
 > ```bash
 > cp ../exercises/09/assets/sap-common.Currencies.csv db/data/
@@ -300,9 +307,9 @@ successful, including:
 > relative, becoming `/simple/Orders(100)` as the complete URL path.
 
 👉 Check for yourself, either by revisiting the previous OData query operation
-URL <http://localhost:4004/simple/Orders?$expand=items> or by following the
-path to this specific new resource as pointed to by the `Location` header, i.e.
-an OData read operation
+URL <http://localhost:4004/simple/Orders?$expand=items($expand=product)> or by
+following the path to this specific new resource as pointed to by the
+`Location` header, i.e. an OData read operation
 <http://localhost:4004/simple/Orders(100)?$expand=items>
 
 #### Send an OData delete operation and check that cascading deletes happen
@@ -369,9 +376,14 @@ This should show the two records representing the items:
 
 > Remember, these two item records in the database came directly from the
 > [workshop-Orders.items.csv](assets/workshop-Orders.items.csv) initial data
-> CSV file.
+> CSV file. The columns, respectively, represent:
+>
+> - order ID
+> - item position ID
+> - product ID
+> - quantity
 
-👉 Now start up the CAP server, specifying that you want to see debug level
+👉 Now restart the CAP server, specifying that you want to see debug level
 output for the SQL activities:
 
 ```bash
@@ -453,7 +465,7 @@ Great stuff.
 
 ---
 
-In the [final
+In the [next
 part](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#part-4---exposing-models-via-services---interfaces-for-the-outside-world)
 of this workshop, we'll turn our attention to the service layer and start to
 explore what else we can do there.
@@ -465,3 +477,7 @@ explore what else we can do there.
 1. See the blog post [ISO content for common CAP
    types](https://qmacro.org/blog/posts/2024/03/12/iso-content-for-common-cap-types/)
    for more on standard initial data like this.
+
+1. Composition targets are auto-exposed in service interfaces, see the
+   [Compositions](https://cap.cloud.sap/docs/guides/domain/#compositions)
+   section of the domain modelling topic in Capire.

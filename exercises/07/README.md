@@ -833,6 +833,9 @@ OData query operation transmitted.
 >         ORDER  BY "$S".id ASC
 >         LIMIT  ?) [ 1000 ] 
 > ```
+>
+> Remember to restart `cds watch` without `DEBUG=sql` before continuing, to
+> avoid too much output in subsequent exercises.
 
 Success!
 
