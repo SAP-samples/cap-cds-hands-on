@@ -4,7 +4,7 @@ ARG VARIANT="24"
 FROM mcr.microsoft.com/devcontainers/javascript-node:${VARIANT}
 
 # Install some generally useful tools
-RUN apt-get update && apt-get -y install --no-install-recommends curl git sqlite3 bat
+RUN apt-get update && apt-get -y install --no-install-recommends curl git sqlite3 bat yq
 
 # Install SAP CAP SDK globally and prettier
 USER node
