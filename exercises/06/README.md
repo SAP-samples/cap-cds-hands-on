@@ -601,10 +601,8 @@ entity Suppliers : cuid {
 Here's an optional bonus part to this exercise.
 
 Looking at CSN, whether in YAML or in JSON form, is important for understanding
-and sometimes just confirmation.
-
-There are plenty of tools that can help with parsing and displaying YAML output
-such as we saw when we [used the managed
+and sometimes just confirmation. There are plenty of tools that can help with
+parsing and displaying YAML output such as we saw when we [used the managed
 aspect](#use-the-managed-aspect-for-basic-data-tracking) earlier in this
 exercise.
 
