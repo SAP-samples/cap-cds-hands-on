@@ -174,6 +174,23 @@ introduction workshop, there are a few points worth highlighting:
 - The handler for the unbound function is defined in the [on
   phase](https://cap.cloud.sap/docs/node.js/core-services#srv-on-request)
 
+👉 Observe the log output, which now shows extra information for the services
+being served, namely the location of the (custom) implementation file(s), in
+the `impl` properties:
+
+```log
+[cds] - serving Simple {
+  at: [ '/simple' ],
+  decl: 'srv/ecommerce.cds:5',
+  impl: 'srv/ecommerce.js'
+}
+[cds] - serving Accounting {
+  at: [ '/odata/v4/accounting' ],
+  decl: 'srv/ecommerce.cds:12',
+  impl: 'srv/ecommerce.js'
+}
+```
+
 ### Try the function invocation again
 
 👉 Take a look at our initial data in the CSV files, specifically
