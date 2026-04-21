@@ -29,29 +29,26 @@ For a bound function or action, we need a little bit more syntax to be able to
 connect it to the entity to which it should be bound.
 
 👉 Define a bound action `applyDiscount` for the `Products` entity, so that it
-ends up looking like this (you'll also need to add the `@cds.redirection.target`):
+ends up looking like this:
 
 ```cds
 @protocol: 'odata'
 @path    : '/simple'
 service Simple {
-  @cds.redirection.target
-  entity Products           as projection on workshop.Products
+  entity Products  as projection on workshop.Products
     actions {
-      action applyDiscount(percent: Percentage) returns Products:price;
+      action applyDiscount(percent: Percentage) returns Products:price
     };
 
-  entity Suppliers          as projection on workshop.Suppliers;
-  entity Orders             as projection on workshop.Orders;
-  function OutOfStockProducts() returns many Products;
-
+  entity Suppliers as projection on workshop.Suppliers;
+  entity Orders    as projection on workshop.Orders;
+  function outOfStockProducts() returns many Products;
 }
 ```
 
 👉 The expected `percent` value is defined as type `Percentage`, which is
-custom, so add that to the bottom of the `ecommerce.cds` file too (we wouldn't
-normally use a custom type like this, but there's a reason for it which will be
-revealed in a later exercise).
+custom, so add that to the bottom of the `ecommerce.cds` file
+too[<sup>1</sup>](#footnotes):
 
 ```cds
 type Percentage : Integer;
@@ -180,3 +177,10 @@ Well done!
 Let's now move on to the next part of the workshop, on [annotations and solid
 state
 programming](https://github.com/SAP-samples/cap-cds-hands-on/tree/main?tab=readme-ov-file#part-5---annotations-and-solid-state-programming).
+
+---
+
+## Footnotes
+
+1. We wouldn't normally use a custom type like this, but there's a reason for
+   it which will be revealed in a later exercise.
