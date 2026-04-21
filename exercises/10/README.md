@@ -8,16 +8,16 @@ it's for, by extending the rudimentary definitions we already have in there.
 This diagram from the [Services as
 Facades](https://cap.cloud.sap/docs/guides/services/providing-services#services-as-facades)
 section of the Define Providing Services topic in Capire illustrates services
-and their relation to Consumers, and also to where we've been thus far - at the
+and their relation to Consumers, and also to where we've been thus far - the
 Domain Models part:
 
 ![services as facades diagram](assets/services-as-facades-diagram.png)
 
-We're now moving up the down-arrow on the left hand side from Domain Models up
-to Service Models.
+We're now moving up on the left hand side from Domain Models up to Service
+Models.
 
 In many ways, services are where the rubber meets the road, providing
-differently shaped APIs to consumers, in different forms, all based upon the
+appropriately shaped APIs to consumers, in different forms, all based upon the
 foundation that is the domain model. It's also the context in which we can
 provide custom (business) logic beyond what's already provided out of the box
 for us by the CAP framework.
@@ -34,7 +34,7 @@ lightweight declarative definitions that describe facades in different forms.
 
 These facades, or APIs, are dynamic in the sense that they are reified in the
 context of wire protocols such as plain HTTP ("REST"), OData and GraphQL. So at
-that level there are moving parts. But at a level below there are moving parts
+that level there are moving parts. But there are moving parts at a level below
 too, built into the framework, to provide full and complete support for the
 built-in and protocol-specific facilities.
 
@@ -44,7 +44,7 @@ built-in and protocol-specific facilities.
 > modelling (at the `db/` level), it is especially useful to to have in mind
 > when considering how cheap services are to define and how capable they are
 > to present flexible and focused facades on the business data for different
-> consumption contexts and purposes.
+> consumption purposes, contexts and auth scenarios.
 
 👉 Open the `srv/simple.cds` file in the editor and take a look, to reveal:
 
@@ -60,8 +60,8 @@ service Simple {
 }
 ```
 
-Let's start to explore, or at least to scratch the surface of, what we can do
-beyond just the plain "pass-through" projections we have so far.
+Let's start to scratch the surface of what we can do beyond just the plain
+"pass-through" projections we have so far.
 
 ### Define a new service for accounting
 
@@ -70,7 +70,7 @@ offer a service for them relating to the products on file. While we could just
 as easily define this new service in a separate file, let's keep it in the same
 file for simplicity and ease of viewing.
 
-> Exploration of separation of concerns, mixins, and general reuse and
+> Further exploration of separation of concerns, mixins, and general reuse and
 > definition management, as well as role based access control, are topics for
 > future exercises.
 
