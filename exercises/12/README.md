@@ -60,25 +60,29 @@ projection via the `actions { ... }` construct.
 ## Add the action's implementation
 
 In a similar way to how we added an implementation for the custom unbound
-function in the previous exercise, we need to add an implementation, again in
-the [on
-phase](https://cap.cloud.sap/docs/guides/services/custom-code#hooks-on-before-after).
+function in the previous exercise, we need to add an implementation for this
+bound action.
 
-👉 Do that now, recreating `ecommerce.js` in the `srv/` directory, with this content:
+👉 Do that now, by adding another `this.on(...)` handler for `applyDiscount` to
+the `Simple` class in `srv/ecommerce.js`, so it looks like this:
 
 ```javascript
 const cds = require('@sap/cds')
 
 class Simple extends cds.ApplicationService {
-  init() {
-    this.on('applyDiscount', async (req) => {
-      const result = await UPDATE(req.subject)
-        .set`price_amount = price_amount * ${req.data.percent / 100}`
-      if (!result) return failed(req)
-      return await SELECT.columns`price_amount`.from(req.subject)
-    })
-    return super.init()
-  }
+    init() {
+        const { Products } = cds.entities('workshop')
+        this.on('outOfStockProducts', async () => {
+            return await SELECT.from(Products).where({ stock: 0 })
+        })
+        this.on('applyDiscount', async (req) => {
+            const result = await UPDATE(req.subject)
+                .set`price_amount = price_amount * ${req.data.percent / 100}`
+            if (!result) return failed(req)
+            return await SELECT.columns`price_amount`.from(req.subject)
+        })
+        return super.init()
+    }
 }
 module.exports = { Simple }
 ```
@@ -86,7 +90,7 @@ module.exports = { Simple }
 This is very similar to the implementation for the unbound function
 `outOfStockProducts` in the previous exercise, not least in its deliberate
 simplicity. There are a couple of points worthy of note here. But before we
-look at those, let's try out the bound action.
+look at those, let's actually try out the bound action.
 
 ## Make a call to the bound action
 
@@ -162,7 +166,7 @@ This should result in something like this:
 ```
 
 Additionally, another GET request to the entity (at
-<http://localhost:4004/simple/Products/1>) should reveal that the price has
+<http://localhost:4004/simple/Products/1>) should confirm that the price has
 indeed been changed.
 
 While there's plenty more to explore here, the primary context for this
