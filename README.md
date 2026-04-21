@@ -130,7 +130,7 @@ definition on occasion, that was just a means to an end, to allow us to look at
 our model constructions through the lens of the OData V4 standard.
 
 In this part we'll turn our focus to the `srv/` layer and look at why it's
-separate and what we can do there.
+separate and start to explore what we can do there.
 
 - [10 - Explore projections with a second service](exercises/10/)
 - [11 - Take a first look at domain specific custom operations](exercises/11/)

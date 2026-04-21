@@ -173,7 +173,7 @@ relationship:
 
 Why only half of it? Well, a one-to-one relationship is "_a type of cardinality
 that refers to the relationship between two entities A and B in which one
-element of A may only be linked to one element of B, **and vice versa**_". And
+element of A **may only be linked to one element of** B, **and vice versa**_". And
 while a product may only have one supplier, a supplier may have more than one
 product in our scenario.
 
@@ -276,7 +276,7 @@ This shows us that:
 ### Understand the effect from the CSV header point of view
 
 Moreover, we can see the effect of this association if we ask for CSV headers
-to be re-generated at this point ...
+to be re-generated at this point.
 
 👉 Do that now:
 
@@ -353,7 +353,9 @@ Given that, let's put the association to the test.
 association) to the supplier in each case, via this URL:
 <http://localhost:4004/odata/v4/simple/Products?$select=name&$expand=supplier>
 
-Oh. Something's not quite right:
+Oh!
+
+Something's not quite right:
 
 ```json
 {
@@ -367,7 +369,7 @@ Oh. Something's not quite right:
 
 This emphasises the different layers and the different purposes they fulfil.
 
-### Take a look at the OData metadata
+### Examine the OData metadata
 
 At the `db/` layer the data model includes this relationship, most prominently
 via the new `supplier` element as an association to the `Suppliers` entity.
@@ -395,11 +397,11 @@ document](http://localhost:4004/odata/v4/simple/$metadata), and pick out the
 </EntityType>
 ```
 
-The foreign key property `supplier_ID` is there, but there is no
-`NavigationProperty` that uses it.
+The foreign key property[<sup>1</sup>](#footnotes) `supplier_ID` is there, but
+there is no `NavigationProperty` that uses it.
 
-What's going on? Well, in order to provide a complete entity data model (EDM),
-in the form of a metadata document for the service (at
+What's going on? Well, in order to provide a complete entity data model (EDM)
+for the service, in the form of a metadata document (at
 <http://localhost:4004/odata/v4/simple/$metadata>), all relevant parts of the
 model needs to be made available.
 
@@ -540,7 +542,7 @@ This should return:
 
 ### Attempt to navigate from suppliers to products
 
-👉 Now try adding a `$expand` for the products navigation property with this
+👉 Now try adding a `$expand` for a products navigation property with this
 URL: <http://localhost:4004/odata/v4/simple/Suppliers?$expand=products>
 
 Well, we should already be able to guess what will happen. Where did we get the
@@ -557,7 +559,8 @@ Well, we should already be able to guess what will happen. Where did we get the
 }
 ```
 
-As we perhaps noticed just now, the `Suppliers` entity type is rather simple at this point, with no navigation properties expressed in this OData context:
+As we perhaps noticed just now, the `Suppliers` entity type is rather simple at
+this point, with no navigation properties expressed in this OData context:
 
 ```xml
 <EntityType Name="Suppliers">
@@ -569,9 +572,10 @@ As we perhaps noticed just now, the `Suppliers` entity type is rather simple at 
 </EntityType>
 ```
 
-That's because there's nothing yet even in the CDS model at this point that would cause a
-navigation property to be made present in this entity type! Let's address that
-next.
+That's because there's nothing yet even in the CDS model at this point that
+would cause a navigation property to be made present in this entity type!
+
+Let's address that next.
 
 ### Consider the cardinality and association type needed
 
@@ -629,11 +633,16 @@ entity Suppliers : cuid {
 
 ### Understand how to read the on condition
 
-Here's how to think about this `on` condition `products.supplier = $self`:
+Here's how to think about this `on` condition:
+
+```cds
+products.supplier = $self
+```
 
 - `products` refers to the `Suppliers:products` element
-- `supplier` refers to the `Products:supplier` entity
-- `$self` refers to the given `Suppliers` entity instance
+- `supplier` refers to the `Products:supplier` element
+- `$self` refers to the given `Suppliers` entity instance, and the key value is
+  implied
 
 ```text
     entity Products : cuid {
@@ -645,13 +654,13 @@ Here's how to think about this `on` condition `products.supplier = $self`:
  |             +--------------------+
  |             |
  |             V
- |  entity Suppliers : cuid {
- |    company  : String;
- +--- products : Association to many Products
-         ^         on products.supplier = $self;
-    }    |            -----------------
-         |                    |
-         +--------------------+
+ |  entity Suppliers : cuid {                 <--+
+ |    company  : String;                         |
+ +--- products : Association to many Products    |
+         ^         on products.supplier = $self; |
+    }    |            -----------------   -----  |
+         |                    |             |    |
+         +--------------------+             +----+
 ```
 
 ### Check the CSV header requirements
@@ -663,19 +672,22 @@ to supply a different ("throwaway") target directory for the CSV file
 generation so we don't clobber the data records we already have:
 
 ```bash
-mkdir /tmp/tempcsv \
-  && cds add data --out /tmp/tempcsv \
-  && head /tmp/tempcsv/workshop-*.csv
+TEMPDIR=$(mktemp -d) \
+  && cds add data --out "$TEMPDIR" \
+  && head "$TEMPDIR"/workshop-*.csv
 ```
 
 As we can see from what the last command in this chain produces:
 
 ```text
-==> /tmp/tempcsv/workshop-Products.csv <==
+==> /tmp/tmp.d0xMQiNjkp/workshop-Products.csv <==
 ID,name,stock,price_amount,price_currency_code,supplier_ID
-==> /tmp/tempcsv/workshop-Suppliers.csv <==
+==> /tmp/tmp.d0xMQiNjkp/workshop-Suppliers.csv <==
 ID,company
 ```
+
+> `mktemp` generates random names, your output will look slightly different
+> to this.
 
 there are no "artificially constructed" (managed) header fields beyond what was
 already there in the form of `supplier_ID` in the CSV file for products, and
@@ -708,7 +720,7 @@ It should now look like this:
 Great - the CAP server, specifically the support for OData service provision
 and handling, has made a `NavigationProperty` element available for the
 `Suppliers` entity type. Note that our previous "guess" as to what this would
-be named, "products", was correct, i.e. based on our newly added `products`
+be named, "products", made sense, i.e. based on our newly added `products`
 element in the `Suppliers` entity:
 
 ```cds
@@ -800,7 +812,8 @@ OData query operation transmitted.
 > [sql] - COMMIT
 > ```
 >
-> As this is quite hard to read, here's that `SELECT` statement nicely formatted:
+> As this is quite hard to read in a single log line, here's that `SELECT`
+> statement nicely formatted:
 >
 > ```sql
 > SELECT json_insert('{}', '$."ID"', id, '$."company"', company, '$."products"',
@@ -826,3 +839,10 @@ Success!
 ---
 
 [Next](../08/)
+
+---
+
+## Footnotes
+
+1. While thinking in terms of CDS modelling, we use the term "element". Here,
+   in the context of OData, we switch to the term "property".
