@@ -8,8 +8,10 @@ it's time to take a first look.
 ## Revisit annotations we've seen so far
 
 We first came across some when we [looked at the reuse library
-source](../05#look-at-the-reuse-library-source), so let's revisit those now to
-get a feel for how they are written and for what purposes they can be used.
+source](../05#look-at-the-reuse-library-source).
+
+👉 Take a moment to study these now, to get a feel for how they are written and
+for what purposes they can be used:
 
 ```cds
 type Currency : Association to sap.common.Currencies;
@@ -33,13 +35,13 @@ context sap.common {
 }
 ```
 
-👉 Look at the [annotation
+👉 Refer to the [annotation
 syntax](https://cap.cloud.sap/docs/cds/cdl#annotation-syntax) information to
 see that annotations are prefixed with `@`, can appear in different places, and
 multiple annotations that apply to the same target can be enclosed in
 brackets. Sometimes, the brackets that are designed to enclose multiple
 annotations only actually contain a single annotation, as here in the `@title`
-annotations[<sup>1</sup>](#footnotes) for the elements in `Currencies`.
+annotations[<sup>1</sup>](#footnotes) for the elements in `sap.common.Currencies`.
 
 ### Explore the @title annotation
 
@@ -57,17 +59,17 @@ alternatives - what are those "Common" and "Core" prefixes? They relate to
 annotations in OData. Taking the first alternative as an example, "Common" is a
 vocabulary, and "Label" is a term within that vocabulary.
 
-👉 Look at the list of standard annotation vocabularies
+👉 Look at the list of standard annotation vocabularies:
 
 - from OASIS[<sup>2</sup>](#footnotes):
   <https://oasis-tcs.github.io/odata-vocabularies/>
 - from SAP: <https://sap.github.io/odata-vocabularies/>
 
-to find
+👉 Find the
 [Common](https://sap.github.io/odata-vocabularies/vocabularies/Common.html)
 (from SAP) and
 [Core](https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.html)
-(from OASIS), and identify the corresponding terms.
+(from OASIS) vocabularies, and identify the corresponding terms.
 
 We see that:
 
@@ -82,27 +84,33 @@ We see that:
 Let's try out our first annotation, by applying a `@title` annotation to an
 element in one of our entities.
 
-👉 Before we do, call up the products Fiori preview via the link in the CAP
-server landing page:
+👉 Before we do, call up the Fiori preview for Products via the link in the CAP
+server landing page at <http://localhost:4004>:
 
 ![CAP server landing page with Fiori preview for Products
 highlighted](assets/fiori-preview-link.png)
 
-👉 Now use the settings icon to select all six columns for the table:
+👉 In its basic unconfigured form, you'll need to add columns to be able to see
+data:
 
 ![column selection request](assets/fiori-preview-select-columns.png)
 
-👉 Notice that the column headings ("Currency", "ID", "name", "price_amount",
-etc) are generally based on the resolved and flattened element names right now:
+👉 Use the settings icon shown to select all the columns for the table:
+
+👉 Observe that the column headings in the table that is produced are based on
+the resolved and flattened element names by default ("Currency", "ID", "name",
+"price_amount", etc):
 
 ![the table with basic column names](assets/fiori-preview-columns-before.png)
 
-👉 Now, in `db/schema.cds`, annotate the `name` element in the `Products`
-entity. Choose just one approach from this list of options:
+Let's improve the heading for one of the columns.
 
-- In the same file, applied directly:
+👉 In `db/schema.cds`, annotate the `name` element in the `Products`
+entity, by choosing just one approach from this list of options:
 
-  - Postfix: the same way as the example above, without brackets:
+- Either in the same file, applied directly:
+
+  - Either "postfix": the same way as the example above, without brackets:
   
       ```cds
       entity Products : cuid {
@@ -113,7 +121,7 @@ entity. Choose just one approach from this list of options:
       }
       ```
 
-      or with brackets:
+      Or with brackets:
 
       ```cds
       entity Products : cuid {
@@ -124,7 +132,7 @@ entity. Choose just one approach from this list of options:
       }
       ```
 
-  - Prefix: before the element name (again, with or without brackets):
+  - Or "prefix": before the element name (again, with or without brackets):
 
       ```cds
       entity Products : cuid {
@@ -136,12 +144,13 @@ entity. Choose just one approach from this list of options:
       }
       ```
 
-- In a new file `db/text-annotations.cds`, organising your CDS model into
+- Or in a new file `db/text-annotations.cds`, organising your CDS model into
   separate concerns[<sup>3</sup>](#footnotes), and using the
   [annotate](https://cap.cloud.sap/docs/cds/cdl#the-annotate-directive)
-  directive:
+  directive (to be able to refer to the target of the annotation, rather than
+  "decorate" it directly in situ):
 
-  - Single element reference:
+  - Either using a single element reference:
 
       ```cds
       using workshop from './schema';
@@ -149,7 +158,7 @@ entity. Choose just one approach from this list of options:
       annotate workshop.Products : name with @title: 'Product Name';
       ```
 
-  - Block reference:
+  - Or using a block reference:
 
       ```cds
       using workshop from './schema';
@@ -173,12 +182,11 @@ How do these annotations work, how do they affect the UI? The `@title` and
 `@description` annotations we've looked at here, and many many others, are
 OData related. So let's follow that thread.
 
-👉 Request the [OData metadata for the `Simple`
-service](http://localhost:4004/simple/$metadata) at
+👉 Request the OData metadata for the `Simple` service at
 <http://localhost:4004/simple/$metadata>, and you should see the effect of the
 annotation you've added.
 
-First, we have the entity type definition:
+First, we have the entity type definition, which we've seen before:
 
 ```xml
 <EntityType Name="Products">
@@ -201,7 +209,7 @@ First, we have the entity type definition:
 ```
 
 And there is now annotation information in the metadata, using the
-"alternative" (OData) term `Common.Label`[<sup>5</sup>](#footnotes) with the
+"alternative" (OData) term `Common.Label`[<sup>4</sup>](#footnotes) with the
 value we specified:
 
 ```xml
@@ -226,22 +234,26 @@ aspect CodeList @(
 }
 ```
 
-> The `@cds.persistence.skip: 'if-unused'` is a little too technical for this
-> level, so let's skip that for now[<sup>4</sup>](#footnotes).
+Briefly:
 
-👉 Visit the [Auto-Exposed
-Entities](https://cap.cloud.sap/docs/guides/services/providing-services#auto-exposed-entities)
-section in Capire to understand what this annotation is.
+- [@cds.autoexpose](https://cap.cloud.sap/docs/guides/services/providing-services#auto-exposed-entities)
+  controls whether a _referenced_ entity is exposed in a service
+- [@cds.persistence.skip](https://cap.cloud.sap/docs/guides/databases/cdl-to-ddl#cds-persistence-skip)
+  controls whether artifacts are created at the persistence layer for entities
+
+Note that the annotations here apply to whatever entities are extended with the
+`CodeList` aspect[<sup>5</sup>](#footnotes).
 
 ### Add one more UI specific annotation
 
 In using the Fiori preview so far we've had to specify the columns for the
-table, each time we've used the preview. We can use an annotation to pre-define
+table each time we've used the preview. We can use an annotation to pre-define
 the columns, so that this is not a burden on the user. Let's round out this
 exercise by adding that.
 
-> We'll create a new CDS file in the `app/` directory here, as arguably that's
-> where it belongs, containing annotations for purely UI configuration.
+> We'll make an exception for this workshop and create a new CDS file in the
+> `app/` directory here, as arguably that's where it belongs, containing
+> annotations for purely UI configuration.
 
 👉 In the `app/` directory of the project create a file `general.cds` with the
 following content:
@@ -303,9 +315,7 @@ the next exercise too.
 1. See best practice [BES005 Factor out separate
    concerns](https://github.com/qmacro/capref/blob/main/bestpractices/BES005.md).
 
-1. Capire has a section on
-   [@cds.persistence.skip](https://cap.cloud.sap/docs/guides/databases/cdl-to-ddl#cds-persistence-skip)
-   in case you are interested nonetheless.
-
 1. Not to be confused with the corresponding actual CDS level annotation
    `@Common.Label`. But they are very much directly related, of course.
+
+1. Useful for `CodeList` based entities used in Value List UI controls.
