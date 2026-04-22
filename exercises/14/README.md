@@ -46,9 +46,7 @@ curl \
   | jq .
 ```
 
-Right now, the value is 18 (the original price, as our CAP server has been
-restarted and thus data has been redeployed to the in-memory persistence
-mechanism):
+Right now, the value is back to 18:
 
 ```json
 {
@@ -63,7 +61,7 @@ mechanism):
 curl \
   --data '{"percent":200}' \
   --silent \
-  --header 'Content-Type: application/json` \
+  --header 'Content-Type: application/json' \
   --url localhost:4004/simple/Products/1/applyDiscount \
   | jq .
 ```
@@ -103,9 +101,9 @@ what it was, i.e. 18).
 
 ```bash
 curl \
-  --data '{"percent":200}'
+  --data '{"percent":200}' \
   --silent \
-  --header 'Content-Type: application/json` \
+  --header 'Content-Type: application/json' \
   --url localhost:4004/simple/Products/1/applyDiscount \
   | jq .
 ```
@@ -127,9 +125,9 @@ This time, the discount of 200% is rejected:
 >
 > ```bash
 > curl \
->   --data '{"percent":200}'
+>   --data '{"percent":200}' \
 >   --include \
->   --header 'Content-Type: application/json` \
+>   --header 'Content-Type: application/json' \
 >   --url localhost:4004/simple/Products/1/applyDiscount
 > ```
 >
@@ -173,7 +171,7 @@ rather than clutter the `ecommerce.cds` file of service definitions.
 👉 Create `srv/checks.cds` with the following content:
 
 ```cds
-using Simple from './services';
+using Simple from './ecommerce';
 
 annotate Simple.Suppliers with {
     company @assert: (case

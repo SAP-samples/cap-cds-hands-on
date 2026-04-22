@@ -12,11 +12,12 @@ left](https://qmacro.org/blog/posts/2026/02/09/shift-left-with-cap/) was
 introduced right at the end of the previous exercise. The tasks described in
 this exercise explore that idea further.
 
-## Replace the function in exercise 11 with a declarative infix filter
+## Replace the unbound function with a declarative infix filter
 
-The function we chose to specify and implement in [exercise 11](../11/) was
-deliberately simple, of course. But did you know that we don't even need custom
-code for such a facility?
+The [unbound function we specified and
+implemented](../11#define-an-unbound-function-in-the-simple-service) in a
+previous exercise was deliberately simple, of course. But did you know that we
+don't even need custom code for such a facility?
 
 One of the best features of developing with the CAP framework is that it allows
 us to push out logic and mechanics to the extremities:
@@ -31,28 +32,44 @@ stock) without having to write a single line of custom code.
 
 ### Remove the custom implementation
 
-👉 Start out by deleting the `srv/ecommerce.js` file that we created when we
-[provided the implementation in exercise
+👉 Start out by removing (or commenting out) the implementation from the
+`srv/ecommerce.js` file [provided the function's implementation
 11](../11/README.md#provide-an-implementation) as we don't need it any more.
-Deleting code (while the app or service still does what you want) is a much
-underrated power move! For reference and comparison with what we're about to
-define, here's the salient part of the custom code (although the point also
-is that in order for this custom code to exist in the right calling context,
-more code was needed):
+The relevant lines are shown commented out here:
 
 ```javascript
-this.on('outOfStockProducts', async () => {
-    return await SELECT.from(Products).where({ stock: 0 })
-})
+const cds = require('@sap/cds')
+
+class Simple extends cds.ApplicationService {
+    init() {
+        // const { Products } = cds.entities('workshop')
+        // this.on('outOfStockProducts', async () => {
+        //     return await SELECT.from(Products).where({ stock: 0 })
+        // })
+        this.on('applyDiscount', async (req) => {
+            const result = await UPDATE(req.subject)
+                .set`price_amount = price_amount * ${req.data.percent / 100}`
+            if (!result) return failed(req)
+            return await SELECT.columns`price_amount`.from(req.subject)
+        })
+        return super.init()
+    }
+}
+module.exports = { Simple }
 ```
+
+Deleting code (while the app or service still does what you want) is a much
+underrated power move!
 
 ### Redefine the facility as a projection
 
 👉 Next, remove the `outOfStockProducts()` function definition from the
 `Simple` service, replacing it with another entity projection called
-`OutOfStockProducts` as shown below. Also, add the annotation
-`@cds.redirection.target` to the `Products` entity projection. Once you're
-done, the `Simple` service definition should look like this:
+`OutOfStockProducts` as shown.
+
+👉 Also, add the annotation `@cds.redirection.target` to the `Products` entity
+projection. Once you're done, the `Simple` service definition should look like
+this:
 
 ```cds
 @protocol: 'odata'
@@ -78,18 +95,18 @@ What have we done here? Importantly, we have:
   filter](https://cap.cloud.sap/docs/cds/cdl#publish-associations-with-filter)
 
 Unrelated directly to the use of an infix filter, and more related to the fact
-that we have defined a second projection on the same base entity
-(`workshop.Products`), we have also:
+that we have defined a second projection (at the same "distance" from the
+source) on the same base entity (`workshop.Products`), we have also:
 
 - added the annotation
   [@cds.redirection.target](https://cap.cloud.sap/docs/cds/cdl#using-cds-redirection-target-annotations)
   to help the compiler resolve any ambiguity between the two possible
   destinations for association based relationships
 
-Now that we've made these changes and got rid of the `srv/ecommerce.js` file,
-make sure the CAP server has restarted and visit the CAP server home page again
-at <http://localhost:4004/>, where this new resource is exposed, as an entity
-this time of course, and not as a function:
+Now that we've made these changes, make sure the CAP server has restarted and
+visit the CAP server home page again at <http://localhost:4004/>, where this
+new resource is exposed, as an entity this time of course, and not as a
+function:
 
 ![OutOfStockProducts entity exposed](assets/outOfStockProducts-entity.png)
 
