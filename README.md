@@ -59,15 +59,16 @@ modelling with CDS.
 - The [What is CAP?](https://cap.cloud.sap/docs/about/#what-is-cap) and
   [Jumpstart & Grow As You
   Go](https://cap.cloud.sap/docs/about/#jumpstart-grow-as-you-go) sections of
-  the Getting Started topic in Capire.
+  the Getting Started topic in Capire
 - [Exercise 01 - cds watch, SQLite, initial data and sample
   data](https://github.com/SAP-samples/cap-local-development-workshop/tree/main/exercises/01)
   of the [CAP local development
   workshop](https://github.com/SAP-samples/cap-local-development-workshop)
-  material, for more on initial vs sample data.
+  material, for more on initial vs sample data
 - The [Keep services
   simple](https://qmacro.org/blog/posts/2026/04/07/cds-expressions-in-cap-notes-on-part-5/#keep-services-simple)
   section of the - notes on Part 5 of the CDS expressions in CAP series
+- Axiom [AXI004 Services are cheap](https://github.com/qmacro/capref/blob/main/axioms/AXI004.md)
 
 ### Part 2 - More on structure with types, aspects and reuse
 
