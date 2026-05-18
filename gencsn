@@ -8,7 +8,10 @@ declare myname="$(basename "$0")"
 filter() {
   local match="c$"
   if [[ $myname =~ $match ]]; then
-    bat --language yaml --plain
+    bat \
+      --language yaml \
+      --paging never \
+      --plain
   else
     cat
   fi
