@@ -8,7 +8,7 @@ RUN apt-get update && apt-get -y install --no-install-recommends curl git sqlite
 
 # Install SAP CAP SDK globally and prettier
 USER node
-RUN npm install -g @sap/cds-dk prettier
+RUN npm install -g @sap/cds-dk@9.8 prettier
 
 # Create ~/.local/bin/ (as it's in the PATH) & symlink bat -> batcat
 RUN mkdir -p "$HOME/.local/bin/" && ln -s "$(which batcat)" "$HOME/.local/bin/bat"
