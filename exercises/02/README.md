@@ -210,8 +210,10 @@ $version: 2.0
 >
 > For example, the specifically formatted YAML here was produced like this:
 >
-> ```bash cds compile --to yaml services.cds \ | prettier --parser yaml
-> --print-width 60 ```
+> ```bash
+> cds compile --to yaml services.cds \
+>   | prettier --parser yaml --print-width 60
+> ```
 >
 > You can try this yourself if you wish, as `prettier` [has been included in
 > the container image build](../../.devcontainer/Dockerfile#L11) used for these
