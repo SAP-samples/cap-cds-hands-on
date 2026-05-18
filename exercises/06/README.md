@@ -37,7 +37,7 @@ and `descr` elements that are defined in the `CodeList` aspect.
 ### Try using extend with an anonymous aspect
 
 👉 Modify the definitions inside the `sap.common` context in `db/common.cds` so
-it looks like this (leave the `type` definition as it is):
+it looks like this (leave the `type` definition as it is, it's not shown here):
 
 ```cds
 context sap.common {
@@ -594,53 +594,6 @@ entity Products : cuid {
 entity Suppliers : cuid {
   company : String;
 }
-```
-
-## Exploring the YAML CSN with powerful tools (bonus)
-
-Here's an optional bonus part to this exercise.
-
-Looking at CSN, whether in YAML or in JSON form, is important for understanding
-and sometimes just confirmation. There are plenty of tools that can help with
-parsing and displaying YAML output such as we saw when we [used the managed
-aspect](#use-the-managed-aspect-for-basic-data-tracking) earlier in this
-exercise.
-
-👉 Try piping the YAML output from the CDS compiler to
-[prettier](https://prettier.io/), which describes itself as "an opinionated
-code formatter":
-
-```bash
-cds compile --to yaml db/schema.cds \
-  | prettier --parser yaml --print-width 60
-```
-
-> This, by the way, is the `prettier` invocation that has been used in the
-> preparation of YAML examples for this workshop.
-
-You'll see pretty-printed and narrower (easier to read) output. But colour
-helps too.
-
-👉 Pipe the output of `prettier` into [bat](https://github.com/sharkdp/bat), "a
-`cat` clone with wings":
-
-```bash
-cds compile --to yaml db/schema.cds \
-  | prettier --parser yaml --print-width 60 \
-  | bat --plain -l yaml
-```
-
-There's also [yq](https://github.com/mikefarah/yq), "a lightweight and portable
-command-line YAML, JSON, INI and XML processor", which works in a similar way
-to `jq`[<sup>2</sup>](#footnotes). With `yq` we can, for example, just ask for the
-specific section.
-
-👉 Pipe the output of the CDS compiler into `yq`, asking for just the
-`workshop.Suppliers` (which is within `definitions`):
-
-```bash
-cds compile --to yaml db/schema.cds \
-  | yq '.definitions["workshop.Suppliers"]'
 ```
 
 Good work!
