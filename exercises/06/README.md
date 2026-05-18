@@ -508,7 +508,7 @@ the types as much as we can. This means that while using the standard `cuid`
 aspect is best practice, we'll use our own custom version that defines the
 element as an `Integer` type instead of a `UUID` type. This reflects the key
 properties in the [corresponding Northbreeze
-service](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/$metadata)[<sup>3</sup>](#footnotes)
+service](https://developer-challenge.cfapps.eu10.hana.ondemand.com/odata/v4/northbreeze/$metadata)[<sup>2</sup>](#footnotes)
 
 such as this `Products` entity type definition, where the `ProductID` property
 has the (OData entity data model) integer type `Edm.Int32`:
@@ -612,8 +612,5 @@ of this workshop.
    (which we've [seen
    before](https://github.com/SAP-samples/cap-cds-hands-on/tree/main/exercises/04#explore-definition-abstraction))
    which is optional and usually omitted.
-
-1. For further reading on `jq`, there are [various posts tagged
-   "jq"](https://qmacro.org/tags/jq/) available.
 
 1. Which itself reflects the original Northwind service.
