@@ -44,7 +44,7 @@ rather limited nature of our dataset), such as:
 
 At the shell prompt, try one or more of these:
 
-👉 Add a new product:
+👉 Add a new product[<sup>1</sup>](#footnotes):
 
 ```bash
 # Get the latest product ID
@@ -95,20 +95,21 @@ of CAP, to get an OData service like this up and running and providing full
 support for the entire set of service operations.
 
 But that's not the point of this exercise nor this workshop. Instead, let's
-take a quick look at what "descends" from the definition.
+take a quick look at what "descends" from our simple model definition.
 
 The definition is written using the Conceptual Definition Language
 ([CDL](https://cap.cloud.sap/docs/cds/cdl)), the human-readable form of the
 declarative language designed to be used by domain experts and developers to
-create the domain model as the foundation for the solution based upon it.
+create the domain model as the foundation for the solution to the business
+need.
 
 ### Get an introduction to Core Schema Notation
 
 The CAP server uses the CDS model definition to provide an appropriate OData
-service here, out of the box. But it uses it in a more readily machine-readable
-form called Core Schema Notation ([CSN](https://cap.cloud.sap/docs/cds/csn),
-pronounced "season") and which can come in two common representations - JSON and
-YAML.
+service here, by default and out of the box. But it uses it in a more readily
+machine-readable form called Core Schema Notation
+([CSN](https://cap.cloud.sap/docs/cds/csn), pronounced "season") and which can
+come in two common representations - JSON and YAML.
 
 Let's remind ourselves of the CDS model we have, written in CDL:
 
@@ -166,12 +167,13 @@ This emits:
 
 > This is a very common request and so can also be produced with the shorter
 > `cds c .`, where `.` is a reference to the current directory, which only
-> contains a single `services.cds` source file at this point anyway. The output
-> emitted to the terminal from this command (which doesn't explicitly use the
-> `--to json` option) is not strictly JSON, it's actually a syntactically
-> valid JavaScript object, but that's by the by - the point is that it's easier
-> on the eye (and if the output is sent downstream to a file or process, then
-> JSON is indeed created.
+> contains a single `services.cds` source file at this point anyway.
+>
+> The output emitted to the terminal from this command (which doesn't
+> explicitly use the `--to json` option) is not strictly JSON, it's actually a
+> syntactically valid JavaScript object, mostly because it's easier on the eye
+> ... and if the output is sent downstream to a file or process, then JSON is
+> indeed created.
 
 While JSON is arguably the default, YAML is arguably easier on the eye so we'll
 use that as our go-to representation throughout this workshop whenever we want
@@ -202,16 +204,18 @@ meta: { creator: CDS Compiler v6.4.6, flavor: inferred }
 $version: 2.0
 ```
 
-> For purposes of display and readability in these workshop exercises,
-> the YAML has been passed through [Prettier](https://prettier.io/), "an
-> opinionated code formatter", largely to split long lines up.
+> For purposes of display and readability in these workshop exercises, the YAML
+> has been passed through [Prettier](https://prettier.io/), "an opinionated
+> code formatter", largely to split long lines up.
 >
 > For example, the specifically formatted YAML here was produced like this:
 >
-> ```bash
-> cds compile --to yaml services.cds \
->   | prettier --parser yaml --print-width 60
-> ```
+> ```bash cds compile --to yaml services.cds \ | prettier --parser yaml
+> --print-width 60 ```
+>
+> You can try this yourself if you wish, as `prettier` [has been included in
+> the container image build](../../.devcontainer/Dockerfile#L11) used for these
+> exercises.
 
 While we won't need to look much further at CSN in this workshop, it's
 important to understand that it exists and is the "processable" version of the
@@ -431,3 +435,14 @@ Good work!
 ---
 
 [Next](../03/)
+
+---
+
+## Footnotes
+
+1. For those of you wondering why we're working out the next ID manually here
+   for the new product, it's because we're using [an extremely simple domain
+   model](../01/#define-a-simple-domain-model) with an `Integer` ID type. If we
+   were to embrace best practices and use the `cuid` aspect (which we'll look
+   at in [exercise 06](../06/#get-to-know-the-cuid-and-managed-aspects)) then
+   this would not be needed.
