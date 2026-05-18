@@ -1,0 +1,192 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+declare PROJLOC=..
+declare HERE
+HERE="$(dirname "$0")"
+
+ex01() {
+
+  echo "01 - Create a simple definition for a first service"
+
+  cds init simple \
+    && cd "$_"
+
+  cat << EOSERVICES > services.cds
+service Simple {
+  entity Products {
+    key ID    : Integer;
+        name  : String;
+        stock : Integer;
+  }
+}
+EOSERVICES
+
+  cds add data
+
+  cat << EODATA > db/data/Simple.Products.csv
+1,Chai,39
+2,Chang,17
+3,Aniseed Syrup,13
+EODATA
+}
+
+ex02() {
+
+  ex01
+  echo "02 - Understand the basic model, services and persistence features"
+
+}
+
+ex03() {
+
+  ex02
+  echo "03 - Separate out the data model from the service definition"
+
+  cat << EOSCHEMA > db/schema.cds
+namespace workshop;
+
+entity Products {
+  key ID    : Integer;
+      name  : String;
+      stock : Integer;
+}
+EOSCHEMA
+
+  cat << EOSERVICE > srv/simple.cds
+using workshop from '../db/schema';
+
+service Simple {
+  entity Products as projection on workshop.Products;
+}
+EOSERVICE
+
+  rm -f services.cds
+  mv db/data/Simple.Products.csv db/data/workshop-Products.csv
+
+}
+
+ex04() {
+
+  ex03
+  echo "04 - Design and use custom types for a richer entity definition"
+
+  cat << EOSCHEMA > db/schema.cds
+namespace workshop;
+
+type Price {
+  amount   : Decimal;
+  currency : String;
+}
+
+entity Products {
+  key ID    : Integer;
+      name  : String;
+      stock : Integer;
+      price : Price;
+}
+EOSCHEMA
+
+}
+
+ex05() {
+
+  ex04
+  echo "05 - Explore reuse and standard common definitions"
+
+  cat << EOCOMMON > db/common.cds
+type Currency : Association to sap.common.Currencies;
+
+context sap.common {
+
+  entity Currencies : CodeList {
+    key code      : String(3);
+        symbol    : String(5);
+        minorUnit : Int16;
+  }
+
+  aspect CodeList {
+    name  : String(255);
+    descr : String(1000);
+  }
+
+}
+EOCOMMON
+
+  cat << EOSCHEMA > db/schema.cds
+using Currency from '@sap/cds/common';
+
+namespace workshop;
+
+type Price {
+  amount   : Decimal;
+  currency : Currency;
+}
+
+entity Products {
+  key ID    : Integer;
+      name  : String;
+      stock : Integer;
+      price : Price;
+}
+EOSCHEMA
+
+  sed -i 's/@sap\/cds\/common/\.\/common/' db/schema.cds
+
+  cds add data --force
+
+}
+
+ex06() {
+
+  ex05
+  echo "06 - Understand and use aspects"
+
+  rm -f db/common.cds
+
+  cat << EOSCHEMA > db/schema.cds
+using {Currency} from '@sap/cds/common';
+
+namespace workshop;
+
+aspect cuid {
+  key ID : Integer;
+}
+
+type Price {
+  amount   : Decimal;
+  currency : Currency;
+}
+
+entity Products : cuid {
+  name  : String;
+  stock : Integer;
+  price : Price;
+}
+
+entity Suppliers : cuid {
+  company : String;
+}
+EOSCHEMA
+
+}
+
+resetproj() {
+
+  echo "00 - Reset"
+  rm -rf simple/
+
+}
+
+main() {
+
+  local ex="${1:?Specify exercise number e.g. 01}"
+  [[ "${#ex}" == 1 ]] && ex="0${ex}" # zero prefix
+  mkdir -p "$HERE/$PROJLOC" \
+    && cd "$HERE/$PROJLOC"
+  resetproj
+  "ex$ex"
+
+}
+
+main "$@"
