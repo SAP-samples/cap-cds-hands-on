@@ -56,9 +56,9 @@ concerns](https://cap.cloud.sap/docs/cds/aspects#separation-of-concerns).
 > directory to hold [initial data](../01#add-some-initial-data), and we'll
 > revisit that later in this exercise.
 
-This workshop is focusing on what CAP and in particular CDS modelling can
-bring, so we can safely ignore the `app/` directory for most of the rest of the
-workshop.
+This workshop is mainly focusing on what CAP and in particular CDS modelling
+can bring to backend services, so we can safely ignore the `app/` directory for
+most of the rest of the workshop.
 
 ## Rework the content of services.cds into the service and persistence layers
 
@@ -107,9 +107,10 @@ service Simple {
 }
 ```
 
-> [!NOTE] The [using](https://cap.cloud.sap/docs/cds/cdl#using) directive is a
-> key enabler of componentisation, separation of concerns and model reuse. The
-> CDL in this `simple.cds` file starts by importing the definitions from the
+> [!NOTE]
+> The [using](https://cap.cloud.sap/docs/cds/cdl#using) directive is a key
+> enabler of componentisation, separation of concerns and model reuse. The CDL
+> in this `simple.cds` file starts by importing the definitions from the
 > `schema.cds` file in the `db/` layer, by their top-level name
 > (namespace)[<sup>1</sup>](#footnotes).
 >
@@ -126,7 +127,7 @@ the CSV file to fit the namespaced entity name so it will be picked up
 and used for initial data:
 
 ```bash
-rm services.cds
+rm -f services.cds
 mv db/data/Simple.Products.csv db/data/workshop-Products.csv
 ```
 
@@ -136,7 +137,7 @@ Before we leave the depths of the persistence layer and the corresponding Data
 Definition Language
 ([DDL](https://en.wikipedia.org/wiki/Data_definition_language)) statements,
 let's remind ourselves of what the initial incarnation of our service
-definition [translated to in DDL](../02#sql-and-ddl) translated to:
+definition [translated to in DDL](../02#sql-and-ddl):
 
 ```sql
 CREATE TABLE Simple_Products (
@@ -173,8 +174,8 @@ CREATE VIEW Simple_Products AS SELECT
 FROM workshop_Products AS Products_0;
 ```
 
-The reification of the projection as a view at the persistence layer is what we
-expected, given the explanation of `as projection on` earlier.
+The materialisation of the projection as a view at the persistence layer is
+what we expected, given the explanation of `as projection on` earlier.
 
 ## Check the service works as before
 
