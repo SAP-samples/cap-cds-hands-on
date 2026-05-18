@@ -74,9 +74,10 @@ The common reuse facility described in this Capire topic is commonly known as
 namespace (@sap) / module (cds) / location (common)
 ```
 
-> Referring to locations within modules like this in other related contexts
-> (such as handler logic) is sometimes to be avoided, but here at the CDS
-> modelling level we are OK.
+> The "location" part is a file, actually
+> `common.cds`[<sup>1</sup>](#footnotes). Referring to locations within modules
+> like this in other related contexts (such as handler logic) is sometimes to
+> be avoided, but here at the CDS modelling level we are OK.
 
 Being a location within `@sap/cds` which is the core runtime for CAP Node.js
 (and thus also available in the globally installed CAP development kit
@@ -480,3 +481,15 @@ We'll look at aspects in more detail in the next exercise.
 ---
 
 [Next](../06/)
+
+---
+
+## Footnotes
+
+1. The CDS model file extensions are generally omitted, as in this example
+   (`@sap/cds/common` is really `@sap/cds/common.cds`), and when we [defined
+   the service in exercise 03](../03#define-the-service) with `using workshop
+   from '../db/schema';` (`../db/schema` is really `../db/schema.cds`). This is
+   because the compiler can also interpret already-compiled model definitions
+   in CSN format, and we want to allow for those files to be included in such
+   references too, so we miss off the extension to cast a wider net.

@@ -167,7 +167,8 @@ monetary value (that is, without repeating it each time).
 
 ### Use a named type
 
-👉 To address this, declare a named custom type and use that, like this:
+👉 To address this, declare a named custom type in `db/schema.cds` instead, and
+use that:
 
 ```cds
 namespace workshop;
