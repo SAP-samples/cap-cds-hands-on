@@ -40,7 +40,7 @@ entity Products {
 }
 ```
 
-> ![NOTE]
+> [!NOTE]
 > Here we see the `type` keyword in action. There's also a
 > `define` keyword that can be used here, like this:
 >
@@ -150,9 +150,20 @@ meta:
 $version: 2.0
 ```
 
-This type structure is anonymous and thus effectively ad hoc, as it cannot be
-reused anywhere else we might want to have an element representing a monetary
-value (that is, without repeating it each time).
+> If you're already tired of typing this sort of thing in, and then manually
+> piping the output to `prettier` (as [mentioned in exercise
+> 02](../02#csn-in-yaml)), then you can use a convenience script put together
+> during the creation of this content. It's called `gencsn` and there's version
+> that outputs in colour, called `gencsnc`, and they're both in the [repo
+> root](../) and can be used like this (from the `simple/` directory):
+>
+> ```bash
+> ../gencsnc db/
+> ```
+
+The type structure we added is anonymous and thus effectively ad hoc, as it
+cannot be reused anywhere else we might want to have an element representing a
+monetary value (that is, without repeating it each time).
 
 ### Use a named type
 
