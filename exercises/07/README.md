@@ -327,7 +327,7 @@ cp ../exercises/07/assets/workshop-*.csv db/data/
 👉 Ensure the CAP server is still running (restart it with `cds watch` if it
 isn't).
 
-Looking at our service definition in `srv/simple.cds`, which looks like this:
+Looking at our service definition in `srv/simple.cds`:
 
 ```cds
 using workshop from '../db/schema';
@@ -411,7 +411,7 @@ definition for `Products` would not make sense, as it has nowhere to point to
 ... because there's no projection on `Suppliers` in the service.
 
 👉 Fix this by adding a projection to the `Suppliers` to the `Simple` service
-in `srv/simple.cds`:
+in `srv/simple.cds`[<sup>2</sup>](#footnotes):
 
 ```cds
 using workshop from '../db/schema';
@@ -422,7 +422,10 @@ service Simple {
 }
 ```
 
-👉 Look again at the [metadata document](http://localhost:4004/odata/v4/simple/$metadata), and you should now see that there is a `Suppliers` entity type, and also a `NavigationProperty` in the `Products` entity type that points to it:
+👉 Look again at the [metadata
+document](http://localhost:4004/odata/v4/simple/$metadata), and you should now
+see that there is a `Suppliers` entity type, and also a `NavigationProperty` in
+the `Products` entity type that points to it:
 
 ```xml
 <EntityType Name="Products">
@@ -452,7 +455,9 @@ service Simple {
 </EntityType>
 ```
 
-👉 Request the products entityset again at <http://localhost:4004/odata/v4/simple/Products?$select=name&$expand=supplier>, which should this time return data, like this:
+👉 Request the products entityset again at
+<http://localhost:4004/odata/v4/simple/Products?$select=name&$expand=supplier>,
+which should this time return data, like this:
 
 ```json
 {
@@ -633,11 +638,13 @@ entity Suppliers : cuid {
 
 ### Understand how to read the on condition
 
-Here's how to think about this `on` condition:
+Let's have another look at that `on` condition:
 
 ```cds
 products.supplier = $self
 ```
+
+Here's how to think about it:
 
 - `products` refers to the `Suppliers:products` element
 - `supplier` refers to the `Products:supplier` element
@@ -677,6 +684,9 @@ TEMPDIR=$(mktemp -d) \
   && head "$TEMPDIR"/workshop-*.csv
 ```
 
+> `mktemp` generates random names, your output will look slightly different
+> to this.
+
 As we can see from what the last command in this chain produces:
 
 ```text
@@ -685,9 +695,6 @@ ID,name,stock,price_amount,price_currency_code,supplier_ID
 ==> /tmp/tmp.d0xMQiNjkp/workshop-Suppliers.csv <==
 ID,company
 ```
-
-> `mktemp` generates random names, your output will look slightly different
-> to this.
 
 there are no "artificially constructed" (managed) header fields beyond what was
 already there in the form of `supplier_ID` in the CSV file for products, and
@@ -798,44 +805,46 @@ OData query operation transmitted.
 > still a very valid and capable database platform, and well suited to
 > design-time development.
 
-> If you're extra curious, you can see the `SELECT` statement that is generated
-> to resolve this query, by setting the `DEBUG` environment variable to `sql`
-> before starting the `cds watch` command, like this, for example: `DEBUG=sql
-> cds watch`.
->
-> If you do, you'll see something like this:
->
-> ```log
-> [odata] - GET /odata/v4/simple/Suppliers { '$expand': 'products($select=name)' }
-> [sql] - BEGIN
-> [sql] - SELECT json_insert('{}','$."ID"',ID,'$."company"',company,'$."products"',products->'$') as _json_ FROM (SELECT "$S".ID,"$S".company,(SELECT jsonb_group_array(jsonb_insert('{}','$."name"',name,'$."ID"',ID)) as _json_ FROM (SELECT "$p".name,"$p".ID FROM Simple_Products as "$p" WHERE "$S".ID = "$p".supplier_ID)) as products FROM Simple_Suppliers as "$S" ORDER BY "$S".ID ASC LIMIT ?) [ 1000 ]
-> [sql] - COMMIT
-> ```
->
-> As this is quite hard to read in a single log line, here's that `SELECT`
-> statement nicely formatted:
->
-> ```sql
-> SELECT json_insert('{}', '$."ID"', id, '$."company"', company, '$."products"',
->        products
->               -> '$') AS _json_
-> FROM   (SELECT "$S".id,
->                "$S".company,
->                (SELECT jsonb_group_array(jsonb_insert('{}', '$."name"', name,
->                                          '$."ID"',
->                                          id)) AS
->                        _json_
->                 FROM   (SELECT "$p".name,
->                                "$p".id
->                         FROM   simple_products AS "$p"
->                         WHERE  "$S".id = "$p".supplier_id)) AS products
->         FROM   simple_suppliers AS "$S"
->         ORDER  BY "$S".id ASC
->         LIMIT  ?) [ 1000 ] 
-> ```
->
-> Remember to restart `cds watch` without `DEBUG=sql` before continuing, to
-> avoid too much output in subsequent exercises.
+## See the SELECT statements that are generated (bonus)
+
+If you're extra curious, you can see the `SELECT` statement that is generated
+to resolve this query, by setting the `DEBUG` environment variable to `sql`
+before starting the `cds watch` command, like this, for example: `DEBUG=sql
+cds watch`.
+
+If you do, you'll see something like this:
+
+```log
+[odata] - GET /odata/v4/simple/Suppliers { '$expand': 'products($select=name)' }
+[sql] - BEGIN
+[sql] - SELECT json_insert('{}','$."ID"',ID,'$."company"',company,'$."products"',products->'$') as _json_ FROM (SELECT "$S".ID,"$S".company,(SELECT jsonb_group_array(jsonb_insert('{}','$."name"',name,'$."ID"',ID)) as _json_ FROM (SELECT "$p".name,"$p".ID FROM Simple_Products as "$p" WHERE "$S".ID = "$p".supplier_ID)) as products FROM Simple_Suppliers as "$S" ORDER BY "$S".ID ASC LIMIT ?) [ 1000 ]
+[sql] - COMMIT
+```
+
+As this is quite hard to read in a single log line, here's that `SELECT`
+statement nicely formatted:
+
+```sql
+SELECT json_insert('{}', '$."ID"', id, '$."company"', company, '$."products"',
+       products
+              -> '$') AS _json_
+FROM   (SELECT "$S".id,
+               "$S".company,
+               (SELECT jsonb_group_array(jsonb_insert('{}', '$."name"', name,
+                                         '$."ID"',
+                                         id)) AS
+                       _json_
+                FROM   (SELECT "$p".name,
+                               "$p".id
+                        FROM   simple_products AS "$p"
+                        WHERE  "$S".id = "$p".supplier_id)) AS products
+        FROM   simple_suppliers AS "$S"
+        ORDER  BY "$S".id ASC
+        LIMIT  ?) [ 1000 ] 
+```
+
+Remember to restart `cds watch` without `DEBUG=sql` before continuing, to
+avoid too much output in subsequent exercises.
 
 Success!
 
@@ -849,3 +858,8 @@ Success!
 
 1. While thinking in terms of CDS modelling, we use the term "element". Here,
    in the context of OData, we switch to the term "property".
+
+1. This is not the only way to address this. If you're curious to learn more,
+   read the section on [auto-exposed
+   entities](https://cap.cloud.sap/docs/guides/services/providing-services#auto-exposed-entities)
+   and the `@cds.autoexpose` annotation in Capire.

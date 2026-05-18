@@ -171,6 +171,54 @@ EOSCHEMA
 
 }
 
+ex07() {
+
+  ex06
+  echo "07 - Link entities together with associations"
+
+  cat << EOSCHEMA > db/schema.cds
+using {Currency} from '@sap/cds/common';
+
+namespace workshop;
+
+aspect cuid {
+  key ID : Integer;
+}
+
+type Price {
+  amount   : Decimal;
+  currency : Currency;
+}
+
+entity Products : cuid {
+  name     : String;
+  stock    : Integer;
+  price    : Price;
+  supplier : Association to Suppliers;
+}
+
+entity Suppliers : cuid {
+  company  : String;
+  products : Association to many Products
+               on products.supplier = \$self;
+}
+EOSCHEMA
+
+  cds add data --force
+
+  cp ../exercises/07/assets/workshop-*.csv db/data/
+
+  cat << EOSERVICE > srv/simple.cds
+using workshop from '../db/schema';
+
+service Simple {
+  entity Products  as projection on workshop.Products;
+  entity Suppliers as projection on workshop.Suppliers;
+}
+EOSERVICE
+
+}
+
 resetproj() {
 
   echo "00 - Reset"
