@@ -108,11 +108,6 @@ entity Products {
 }
 ```
 
-> [!NOTE]
-> Here we see a new CDL construct - the
-> [using](https://cap.cloud.sap/docs/cds/cdl#using) directive, which we're
-> employing to import a definition from another CDS model (`@sap/cds/common`).
-
 Right now this new definition is all a bit opaque; what have we really got here
 now?
 
