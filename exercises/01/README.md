@@ -68,6 +68,14 @@ the CAP project we'll be building as we go through the workshop. Any
 relative reference to directories or files will be relative to this `simple/`
 location, unless otherwise explicitly stated.
 
+> If you're using VS Code and have the entire repo open right now, but are
+> using a Web browser to read this content separately, then you might wish to
+> re-open just this "simple" project content in VS Code, using `File -> Open
+> Folder` and selecting the `simple/` directory (which is likely to be found as
+> `/workspaces/cap-cds-hands-on/simple/`). VS Code should re-open focused on
+> `simple/`, and any new terminals opened will also be in that directory by
+> default.
+
 👉 Add the following content to a new file called `services.cds`:
 
 > The name of the file (`services.cds`) is important in this example, it is one
@@ -138,13 +146,16 @@ out of the box. But let's add some data to make it a little easier to explore.
 👉 Use the `data` facet of `cds add` to have a CSV file with a header line
 added for the entities (just `Products` in this simple setup):
 
-> To enter this command, while the CAP server (started with `cds watch`) is running,
-> you should start a new terminal session, and use the shell in that second session
-> for such commands, not only here, but throughout the rest of the workshop. Note
-> that when you open the second terminal, you'll be in the shell, but likely at
-> the top level of the repository, i.e. `cap-cds-hands-on/`, so make sure you
-> move into the "project root" (with `cd simple/`) so you're invoking commands
-> in the right place.
+> To enter this command, while the CAP server (started with `cds watch`) is
+> running, you should start a new terminal session, and use the shell in that
+> second session for such commands, not only here, but throughout the rest of
+> the workshop.
+>
+> Note that when you open the second terminal, you'll be in the
+> shell, but unless you re-opened VS Code at `simple/` following the earlier
+> hint, you'll find yourself at the top level of the repository, i.e.
+> `cap-cds-hands-on/`, so make sure you move into the "project root" (with `cd
+> simple/`) so you're invoking commands in the right place.
 
 ```bash
 cds add data
