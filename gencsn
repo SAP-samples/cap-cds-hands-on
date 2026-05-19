@@ -3,7 +3,8 @@
 set -eo pipefail
 
 declare model="${1:-srv/}"
-declare myname="$(basename "$0")"
+declare HERE
+HERE="$(dirname "$0")"
 
 filter() {
   local match="c$"
@@ -18,5 +19,5 @@ filter() {
 }
 
 cds compile --to yaml "$model" \
-  | ./yfmt \
+  | "$HERE/yfmt" \
   | filter
