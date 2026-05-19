@@ -862,4 +862,6 @@ Success!
 1. This is not the only way to address this. If you're curious to learn more,
    read the section on [auto-exposed
    entities](https://cap.cloud.sap/docs/guides/services/providing-services#auto-exposed-entities)
-   and the `@cds.autoexpose` annotation in Capire.
+   and the `@cds.autoexpose` annotation in Capire, which we'll [see again in
+   exercise
+   13](../13#look-briefly-at-the-other-annotations-in-the-reuse-library-source).

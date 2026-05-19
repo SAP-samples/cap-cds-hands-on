@@ -33,9 +33,8 @@ stock) without having to write a single line of custom code.
 ### Remove the custom implementation
 
 👉 Start out by removing (or commenting out) the implementation from the
-`srv/ecommerce.js` file [provided the function's implementation
-11](../11/README.md#provide-an-implementation) as we don't need it any more.
-The relevant lines are shown commented out here:
+`srv/ecommerce.js` file as we don't need it any more. The relevant lines are
+shown commented out here:
 
 ```javascript
 const cds = require('@sap/cds')
@@ -59,7 +58,7 @@ module.exports = { Simple }
 ```
 
 Deleting code (while the app or service still does what you want) is a much
-underrated power move!
+underrated power move[<sup>1</sup>](#foonotes)!
 
 ### Redefine the facility as a projection
 
@@ -103,9 +102,9 @@ source) on the same base entity (`workshop.Products`), we have also:
   to help the compiler resolve any ambiguity between the two possible
   destinations for association based relationships
 
-Now that we've made these changes, make sure the CAP server has restarted and
-visit the CAP server home page again at <http://localhost:4004/>, where this
-new resource is exposed, as an entity this time of course, and not as a
+👉 Now that we've made these changes, make sure the CAP server has restarted
+and visit the CAP server home page again at <http://localhost:4004/>, where
+this new resource is exposed, as an entity this time of course, and not as a
 function:
 
 ![OutOfStockProducts entity exposed](assets/outOfStockProducts-entity.png)
@@ -129,7 +128,9 @@ We'll make all the changes first, and then review the outcome at the end.
 ### Add stock value information
 
 It's not unlikely that consumers of product data may wish to know the total
-stock values. Referring to the diagram in the [Shift left with
+stock values.
+
+👉 Take a look at this diagram from the [Shift left with
 CAP](https://qmacro.org/blog/posts/2026/02/09/shift-left-with-cap/) blog post:
 
 ```text
@@ -146,8 +147,8 @@ CAP](https://qmacro.org/blog/posts/2026/02/09/shift-left-with-cap/) blog post:
                 +---------+
 ```
 
-the calculation of the total stock value could be done in any of the stages
-shown, and it's often on the far right, at the frontend.
+The calculation of the total stock value could be done in any of the stages
+shown here, and it's often on the far right, at the frontend.
 
 But if we shift that calculation left to the entity model at the `db/` layer,
 everyone and everything downstream (right) benefits.
@@ -189,7 +190,7 @@ entity Suppliers : cuid {
 > designed to show some but not all products.
 
 This is known as an [association-like calculated
-element](https://cap.cloud.sap/docs/cds/cdl#association-like-calculated-elements)[<sup>1</sup>](#footnotes)
+element](https://cap.cloud.sap/docs/cds/cdl#association-like-calculated-elements)[<sup>2</sup>](#footnotes)
 and is similar to the infix filter we used in the projection at the `srv/`
 layer at the start of this exercise.
 
@@ -230,7 +231,7 @@ Let's first add a new supplier, to explore the `stored` feature we've just used.
 curl \
   --silent \
   --include \
-  --data '{"company": "SAP"}' \
+  --data '{"company": "ACME Fruit And Vegetables"}' \
   --header 'Content-Type: application/json' \
   --url localhost:4004/simple/Suppliers \
   | grep ^HTTP
@@ -288,8 +289,8 @@ Now let's request the suppliers and their premium products, with an OData Query 
     },
     {
       "ID": 4,
-      "company": "SAP",
-      "searchname": "sap",
+      "company": "ACME Fruit And Vegetables",
+      "searchname": "acme fruit and vegetables",
       "premiumproducts": []
     }
   ]
@@ -298,21 +299,25 @@ Now let's request the suppliers and their premium products, with an OData Query 
 
 In this entityset we can see:
 
-- the lowercased company names, including the one for the supplier (SAP) we
-  just added
+- the lowercased company names, including the one for the supplier that we
+  just added[<sup>4</sup>](#footnotes)
 - the list of zero or more "premium" (price more than 22) products per supplier
 - the value of each product (being the price multiplied by the stock)
 
 All this, with no custom coding, no JavaScript or Java service layer. In fact,
 we are still effectively at the same stage we [we started the
 project](01#start-a-new-cap-project), with no specific runtime (JavaScript or
-Java) needing to be specified[<sup>2</sup>](#footnotes).
+Java) needing to be specified[<sup>3</sup>](#footnotes).
 
 That's all we have time for in this workshop. Well done for reaching the end!
 
 ---
 
 ## Footnotes
+
+1. After all, on the imaginary software balance sheet, we should be treating
+   [code as liability](https://www.alex.social/code-as-liability/), not an
+   asset. Even more so in today's AI context.
 
 1. See also the [Association-like calculated
    element](https://qmacro.org/blog/posts/2026/03/27/cds-expressions-in-cap-notes-on-part-4/#association-like-calculated-element)
@@ -322,3 +327,12 @@ That's all we have time for in this workshop. Well done for reaching the end!
    that is facilitating everything here, the one that belongs to the globally
    installed CAP development kit. But the point is that we've come this far and
    not had to create any custom code.
+
+1. Showing that these lowercase names are persisted, due to the `stored`
+   keyword used in the definition (see the [on-write subsection of the section
+   on calculated elements](https://cap.cloud.sap/docs/cds/cdl#on-write) in
+   Capire), is left as an exercise for you, dear reader (hint: use the
+   persistent form of SQLite [as we did in exercise
+   09](09#send-an-odata-delete-operation-and-check-that-cascading-deletes-happen)
+   and then check the `workshop_Suppliers` table once the OData Create
+   operation is sent).

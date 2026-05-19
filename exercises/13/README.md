@@ -3,7 +3,7 @@
 Until now, we've studiously avoided
 [annotations](https://cap.cloud.sap/docs/cds/cdl#annotations). They're
 important, but would have distracted us too much in the early stages. But now
-it's time to take a first look.
+it's time to take a look.
 
 ## Revisit annotations we've seen so far
 
@@ -95,11 +95,11 @@ data:
 
 ![column selection request](assets/fiori-preview-select-columns.png)
 
-👉 Use the settings icon shown to select all the columns for the table:
+👉 Use the settings icon shown to select all the columns for the table
 
 👉 Observe that the column headings in the table that is produced are based on
 the resolved and flattened element names by default ("Currency", "ID", "name",
-"price_amount", etc):
+"price_amount", etc)
 
 ![the table with basic column names](assets/fiori-preview-columns-before.png)
 
@@ -186,7 +186,7 @@ OData related. So let's follow that thread.
 <http://localhost:4004/simple/$metadata>, and you should see the effect of the
 annotation you've added.
 
-First, we have the entity type definition, which we've seen before:
+👉 First, look for the `Products` entity type definition, which we've seen before:
 
 ```xml
 <EntityType Name="Products">
@@ -208,7 +208,7 @@ First, we have the entity type definition, which we've seen before:
 </EntityType>
 ```
 
-And there is now annotation information in the metadata, using the
+👉 Now look for the annotation information in the metadata, using the
 "alternative" (OData) term `Common.Label`[<sup>4</sup>](#footnotes) with the
 value we specified:
 

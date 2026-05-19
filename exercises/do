@@ -351,6 +351,155 @@ EOSRVIMPL
 
 }
 
+ex13() {
+
+  ex12
+  echo "13 - An introduction to annotations"
+
+  cat > db/text-annotations.cds << "EOTEXTANNOTATIONS"
+using workshop from './schema';
+
+annotate workshop.Products with {
+    name @title: 'Product Name';
+}
+EOTEXTANNOTATIONS
+
+  cat > app/general.cds << "EOGENERAL"
+using workshop from '../db/schema';
+
+annotate workshop.Products with @UI.LineItem: [
+    {Value: name},
+    {Value: stock}
+]
+EOGENERAL
+
+}
+
+ex14() {
+
+  ex13
+  echo "14 - Declarative contraints and assertions"
+
+  sed -i \
+    's/Integer;/Integer @assert.range: [1, 100];/' \
+    srv/ecommerce.cds
+
+  cat > srv/checks.cds << "EOCHECKS"
+using Simple from './ecommerce';
+
+annotate Simple.Suppliers with {
+    company @assert: (case
+                          when trim(company)   = ''
+                               then 'Company name cannot be empty'
+                          when length(company) < 2
+                               then 'Company name must be at least 2 characters'
+                      end);
+}
+EOCHECKS
+
+}
+
+ex15() {
+
+  ex14
+  echo "15 - Shift left, avoid procedural code"
+
+  cat > srv/ecommerce.js << "EOECOMMERCEIMPL"
+const cds = require('@sap/cds')
+
+class Simple extends cds.ApplicationService {
+    init() {
+        // const { Products } = cds.entities('workshop')
+        // this.on('outOfStockProducts', async () => {
+        //     return await SELECT.from(Products).where({ stock: 0 })
+        // })
+        this.on('applyDiscount', async (req) => {
+            const result = await UPDATE(req.subject)
+                .set`price_amount = price_amount * ${req.data.percent / 100}`
+            if (!result) return failed(req)
+            return await SELECT.columns`price_amount`.from(req.subject)
+        })
+        return super.init()
+    }
+}
+module.exports = { Simple }
+EOECOMMERCEIMPL
+
+  cat > srv/ecommerce.cds << "EOECOMMERCEDEFN"
+using workshop from '../db/schema';
+
+@protocol: 'odata'
+@path    : '/simple'
+service Simple {
+  @cds.redirection.target
+  entity Products           as projection on workshop.Products;
+
+  entity Suppliers          as projection on workshop.Suppliers;
+  entity Orders             as projection on workshop.Orders;
+  entity OutOfStockProducts as projection on workshop.Products[stock <= 0];
+}
+
+service Accounting {
+  entity Valuations as
+    projection on workshop.Products {
+      ID                   as ProductID,
+      name                 as ProductName,
+      stock * price.amount as StockValue : Decimal,
+      price.currency.name  as Currency,
+      supplier.company     as Source
+    }
+}
+
+type Percentage : Integer @assert.range: [
+  1,
+  100
+];
+
+EOECOMMERCEDEFN
+
+  cat > db/schema.cds << "EOSCHEMA"
+using {Currency} from '@sap/cds/common';
+
+namespace workshop;
+
+aspect cuid {
+  key ID : Integer;
+}
+
+type Price {
+  amount   : Decimal;
+  currency : Currency;
+}
+
+entity Products : cuid {
+  name     : String;
+  stock    : Integer;
+  price    : Price;
+  supplier : Association to Suppliers;
+}
+
+entity Suppliers : cuid {
+  company    : String;
+  products   : Association to many Products
+                 on products.supplier = $self;
+  premiumproducts = products[price.amount >= 22];
+  searchname : String = (
+    tolower(company)
+  ) stored;
+}
+
+entity Orders : cuid {
+  date  : Date default $now;
+  items : Composition of many {
+            key pos      : Integer;
+                product  : Association to Products;
+                quantity : Integer;
+          }
+}
+EOSCHEMA
+
+}
+
 resetproj() {
 
   echo "00 - Reset"

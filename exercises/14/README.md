@@ -46,7 +46,8 @@ curl \
   | jq .
 ```
 
-Right now, the value is back to 18:
+Right now, the value is back to 18 (due to the CAP server restart in watch
+mode):
 
 ```json
 {
@@ -55,7 +56,7 @@ Right now, the value is back to 18:
 }
 ```
 
-👉 Apply a 200% discount:
+👉 Apply a 200% "discount":
 
 ```bash
 curl \
@@ -158,13 +159,13 @@ an entire sub language in the CDS family, namely the CDS Expression Language
 ([CXL](https://cap.cloud.sap/docs/cds/cxl))[<sup>2</sup>](#footnotes).
 
 Given that flexibility, there's a lot to explore. But let's just, erm,
-_constrain_ ourselves to one example, to keep this exercise at a reasonable
+_constrain_ ourselves to one example, to keep this exercise brief.
 length.
 
 Let's say we want to ensure that a supplier name should be of a reasonable
 length. We can add a constraint to this effect using `@assert` with a "case"
 style expression, and we should explore doing this in a separate CDS file,
-rather than clutter the `ecommerce.cds` file of service definitions.
+rather than clutter the `srv/ecommerce.cds` file of service definitions.
 
 ### Add the constraint
 
