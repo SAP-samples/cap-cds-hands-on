@@ -18,5 +18,5 @@ filter() {
 }
 
 cds compile --to yaml "$model" \
-  | prettier --parser yaml --print-width 60 \
+  | ./yfmt \
   | filter

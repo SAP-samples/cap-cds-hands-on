@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+prettier --parser yaml --print-width 60
