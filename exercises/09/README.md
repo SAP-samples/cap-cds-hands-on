@@ -211,13 +211,29 @@ corresponding items, which should look something like this:
           "up__ID": 1,
           "pos": 1,
           "product_ID": 1,
-          "quantity": 10
+          "quantity": 10,
+          "product": {
+            "ID": 1,
+            "name": "Chai",
+            "stock": 39,
+            "price_amount": 18,
+            "price_currency_code": "GBP",
+            "supplier_ID": 1
+          }
         },
         {
           "up__ID": 1,
           "pos": 2,
           "product_ID": 2,
-          "quantity": 10
+          "quantity": 10,
+          "product": {
+            "ID": 2,
+            "name": "Chang",
+            "stock": 17,
+            "price_amount": 19,
+            "price_currency_code": "GBP",
+            "supplier_ID": 1
+          }
         }
       ]
     }
@@ -229,7 +245,7 @@ corresponding items, which should look something like this:
 > data[<sup>2</sup>](#footnotes):
 >
 > ```bash
-> cp ../exercises/09/assets/sap-common.Currencies.csv db/data/
+> cp ../exercises/09/assets/sap.common-Currencies.csv db/data/
 > ```
 >
 > Now make another OData query operation with a further nested expansion to get

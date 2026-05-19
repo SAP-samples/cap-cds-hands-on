@@ -240,6 +240,32 @@ EOORDERS
 
 }
 
+ex09() {
+
+  ex08
+  echo "09 - Try out deep inserts and cascaded deletes"
+
+  cat << EOSERVICE > srv/simple.cds
+using workshop from '../db/schema';
+
+@protocol: 'odata'
+@path    : '/simple'
+service Simple {
+  entity Products  as projection on workshop.Products;
+  entity Suppliers as projection on workshop.Suppliers;
+  entity Orders    as projection on workshop.Orders;
+}
+EOSERVICE
+
+  cp ../exercises/09/assets/workshop-Orders*.csv db/data/
+  cp ../exercises/09/assets/sap.common-Currencies.csv db/data/
+
+  cds deploy --to sqlite
+
+  # echo 'cds.requires.db.kind=sqlite' > .env (only temporary)
+
+}
+
 resetproj() {
 
   echo "00 - Reset"
