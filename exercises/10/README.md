@@ -13,7 +13,7 @@ Domain Models part:
 
 ![services as facades diagram](assets/services-as-facades-diagram.png)
 
-We're now moving up on the left hand side from Domain Models up to Service
+We're now moving up on the left hand side from Domain Models to Service
 Models.
 
 In many ways, services are where the rubber meets the road, providing
@@ -26,9 +26,9 @@ One might think of the domain model (conventionally at the `db/` layer) as
 being fairly static, i.e. declarative definitions that form the source of truth
 for artifacts in the database and for how queries are resolved at runtime.
 
-In contrast, services (conventionally at the `srv/` layer) are dynamic. They
-marshal, constrain, reimagine, expose and control access to data and functions
-at the domain model via
+In contrast, services (conventionally at the `srv/` layer) are more dynamic.
+They marshal, constrain, reimagine, expose and control access to data and
+functions at the domain model via
 [cheap](https://github.com/qmacro/capref/blob/main/axioms/AXI004.md),
 lightweight declarative definitions that describe facades in different forms.
 
@@ -42,7 +42,7 @@ built-in and protocol-specific facilities.
 
 > While some of what's presented in this section could equally apply to domain
 > modelling (at the `db/` level), it is especially useful to to have in mind
-> when considering how cheap services are to define and how capable they are
+> when considering how cheap services are to define, and how capable they are
 > to present flexible and focused facades on the business data for different
 > consumption purposes, contexts and auth scenarios.
 
@@ -60,7 +60,7 @@ service Simple {
 }
 ```
 
-Let's start to scratch the surface of what we can do beyond just the plain
+Let's start to scratch the surface of what we can do beyond just these plain
 "pass-through" projections we have so far.
 
 ### Define a new service for accounting
@@ -86,7 +86,8 @@ mv srv/simple.cds srv/ecommerce.cds
 
 ### Add a second service definition
 
-👉  Add a second `Accounting` service definition as shown:
+👉  Add a second `Accounting` service definition (in the `srv/ecommerce.cds`
+file) as shown:
 
 ```cds
 using workshop from '../db/schema';
@@ -160,8 +161,7 @@ play:
   `StockValue` explicitly (to `Decimal`)
 - two elements (plus one part of the expression forming `StockValue`) have
   values which are defined via dotted multi-part names: these are [path
-  expressions](https://cap.cloud.sap/docs/cds/cql#path-expressions) multi-path
-  names)
+  expressions](https://cap.cloud.sap/docs/cds/cql#path-expressions)
 
 > Path expressions are part of CAP's query language
 > ([CQL](https://cap.cloud.sap/docs/cds/cql)), as you'll see from the [topic
@@ -248,9 +248,9 @@ All of this expressed simply and beautifully with:
 price.currency.name as Currency
 ```
 
-👉 Look at the `Valuations` service's metadata document at
-<http://localhost:4004/odata/v4/accounting/$metadata> and identify the entity
-type definition, which looks like this:
+👉 Look at the `Accounting` service's metadata document at
+<http://localhost:4004/odata/v4/accounting/$metadata> and identify the
+`Valuations` entity type definition, which looks like this:
 
 ```xml
 <EntityType Name="Valuations">
@@ -265,7 +265,8 @@ type definition, which looks like this:
 </EntityType>
 ```
 
-This really brings home the "flatness" and power of even this simple set of definitions.
+This really brings home the "flatness" and power of even this simple set of CDS
+model definitions.
 
 ### Follow the path expressions
 
@@ -290,8 +291,8 @@ supplier.company as Source
 
 In exercises earlier in this workshop, as we built out our domain model, we
 took the occasional look at the CSN. Now that we've got used to that, let's do
-it again, as the insights it can give us in understanding what's going on here
-are valuable.
+it again, as there are valuable insights it can give us in understanding what's
+going on here.
 
 #### Look at the CSN for detail
 
@@ -303,6 +304,13 @@ cds compile --to yaml srv/ecommerce.cds
 
 If you pick out the `Accounting.Valuations` definition, you'll uncover a wealth
 of information:
+
+> You can do this programmatically as before, with, for example:
+>
+> ```bash
+> ../gencsn srv/ecommerce.cds \
+>   | yq -y '.definitions["Accounting.Valuations"]'
+> ```
 
 ```yaml
 Accounting.Valuations: 

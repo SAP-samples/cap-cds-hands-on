@@ -266,6 +266,29 @@ EOSERVICE
 
 }
 
+ex10() {
+
+  ex09
+  echo "10 - Explore projections with a second service"
+
+  mv srv/simple.cds srv/ecommerce.cds
+
+  cat << EOACCOUNTING >> srv/ecommerce.cds
+
+service Accounting {
+  entity Valuations as
+    projection on workshop.Products {
+      ID                   as ProductID,
+      name                 as ProductName,
+      stock * price.amount as StockValue : Decimal,
+      price.currency.name  as Currency,
+      supplier.company     as Source
+    }
+}
+EOACCOUNTING
+
+}
+
 resetproj() {
 
   echo "00 - Reset"
