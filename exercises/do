@@ -219,6 +219,27 @@ EOSERVICE
 
 }
 
+ex08() {
+
+  ex07
+  echo "08 - Defined contained-in relationships with compositions"
+
+  cat << EOORDERS >> db/schema.cds
+
+entity Orders : cuid {
+  date  : Date default \$now;
+  items : Composition of many {
+            key pos      : Integer;
+                product  : Association to Products;
+                quantity : Integer;
+          }
+}
+EOORDERS
+
+  cds add data --filter Orders
+
+}
+
 resetproj() {
 
   echo "00 - Reset"

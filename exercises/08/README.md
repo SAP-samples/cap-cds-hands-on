@@ -11,9 +11,10 @@ relationships, in the form of compositions.
 ## Consider a contained-in relationship
 
 The classic example of such a "contained-in" relationship in ERP is the
-document, which has a header and items. Think of the header as the
-container, and the items as the containees. If the container is removed,
-the containees should be too, i.e. they cannot exist independently.
+document, which has a header and items. Think of the header as representing the
+whole document, i.e. the container, and the items as the containees. If the
+container is removed, the containees should be too, as it makes no sense for
+them to exist independently.
 
 With compositions, CAP supports such "contained-in" relationships, from a
 modelling perspective, and also [from a runtime
@@ -30,9 +31,8 @@ perspective](https://cap.cloud.sap/docs/guides/domain/#compositions):
 
 ## Model a simple order facility
 
-To illustrate the support and the use of
-[compositions](https://cap.cloud.sap/docs/cds/cdl#compositions) in CDL, let's
-add a parent-child construct for an order style business object.
+To illustrate [compositions](https://cap.cloud.sap/docs/cds/cdl#compositions)
+in CDL, let's add a parent-child construct for an order style business object.
 
 👉 To the list of entities we have so far in `db/schema.cds`, add the
 (deliberately simple) `Orders` entity, paying close attention to how the order
@@ -76,10 +76,10 @@ It's worth
 at this new definition for a moment or two, as there's plenty to think about.
 Let's unpack what we see:
 
-- the `Orders` entity gets a simple primary key via our custom local `cuid`
-  aspect, just like the other entities
+- the `Orders` entity gets a primary key via our custom local `cuid` aspect,
+  just like the other entities
 - if no value is supplied for the `date` element in a creation scenario, it
-  will be defaulted (to the date of creation)
+  will be defaulted to the date of creation
 - the only other element is `items`, described as a `Composition of many`
 
 So far so good. Let's dig in further:
@@ -94,7 +94,7 @@ the child, the containee - in this case, the structure of the order item.
 
 An order item, the existence of which cannot be outside the context of a parent
 order, will usually have a key made up of two elements: one for the parent, and
-one for the item (the child).
+one for the child (the item).
 
 👉 Look at all the elements of this structure to see where they are:
 
@@ -122,6 +122,18 @@ cds compile --to yaml db/schema.cds
 ```
 
 👉 Pick out the relevant parts of the structure, to see:
+
+> You can either scroll through the `cds compile` output, or use the `gencsn`
+> utility [introduced in exercise 04](../04#add-price-information), along with
+> a script version (`yfmt`) of the `prettier` facility [introduced in exercise
+> 02](../02#csn-in-yaml), like this:
+>
+> ```bash
+> ../gencsnc db/schema.cds \
+>   | yq -y -f ../exercises/08/csn-detail.jq \
+>   | ../yfmt
+>
+> It uses `yq` with a `jq` filter to pick out the relevant parts for us.
 
 ```yaml
 namespace: workshop
