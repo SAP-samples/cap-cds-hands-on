@@ -289,6 +289,68 @@ EOACCOUNTING
 
 }
 
+ex11() {
+
+  ex10
+  echo "11 - Take a first look at domain specific custom operations"
+
+  sed -i \
+    '/entity Orders/a\ \ function outOfStockProducts() returns many Products;' \
+    srv/ecommerce.cds
+
+  cat > srv/ecommerce.js << "EOSRVIMPL"
+const cds = require('@sap/cds')
+
+class Simple extends cds.ApplicationService {
+  init() {
+    const { Products } = cds.entities('workshop')
+    this.on('outOfStockProducts', async () => {
+      return await SELECT.from(Products).where({ stock: 0 })
+    })
+    return super.init()
+  }
+}
+module.exports = { Simple }
+EOSRVIMPL
+
+  sed -i '/^1,/s/39/0/' db/data/workshop-Products.csv
+
+}
+
+ex12() {
+
+  ex11
+  echo "12 - Add a further operation in the form of a bound action"
+
+  sed -i \
+    '/entity Products/s/;/\n\ \ \ \ actions {\n\ \ \ \ \ \ action applyDiscount(percent: Percentage) returns Products:price\n\ \ \ \ };\n/' \
+    srv/ecommerce.cds
+
+  sed -i '$atype Percentage : Integer;' srv/ecommerce.cds
+
+  cat > srv/ecommerce.js << "EOSRVIMPL"
+const cds = require('@sap/cds')
+
+class Simple extends cds.ApplicationService {
+    init() {
+        const { Products } = cds.entities('workshop')
+        this.on('outOfStockProducts', async () => {
+            return await SELECT.from(Products).where({ stock: 0 })
+        })
+        this.on('applyDiscount', async (req) => {
+            const result = await UPDATE(req.subject)
+                .set`price_amount = price_amount * ${req.data.percent / 100}`
+            if (!result) return failed(req)
+            return await SELECT.columns`price_amount`.from(req.subject)
+        })
+        return super.init()
+    }
+}
+module.exports = { Simple }
+EOSRVIMPL
+
+}
+
 resetproj() {
 
   echo "00 - Reset"

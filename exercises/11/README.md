@@ -29,10 +29,10 @@ that normally represent business data.
 > |Update|PUT (or PATCH)|
 > |Delete|DELETE|
 
-The entities in our domain model, exposed via projections in our `Simple`
-service, are a perfect example of that, and through that service we are able to
-send requests of each operational type to create, read, update and delete
-instances of the entities (products, suppliers, and so on).
+The entities in our domain model, exposed via projections in our services, are
+a perfect example of that, and through those services we are able to send
+requests of each operational type to create, read, update and delete instances
+of the entities (products, suppliers, and so on).
 
 While this approach is aligned with the philosophy of the underlying
 application protocol (HTTP), there are some circumstances where a more "remote
@@ -44,7 +44,8 @@ cases.
 
 > Yes, the author of this workshop content cares deeply about Representational
 > State Transfer (REST) and its constraints; indeed their [narrowboat
-> home](https://qmacro.org/tags/narrowboat/)'s name is "FULLY RESTFUL".
+> home](https://qmacro.org/tags/narrowboat/)'s name is [FULLY
+> RESTFUL](https://qmacro.org/images/2023/07/moored-at-shobnall-fields.jpg).
 
 ## Consider OData's actions and functions
 
@@ -298,9 +299,8 @@ Good work!
           > db/data/workshop-Products.csv
         ```
 
-       The standard version of AWK has no inplace editing, although the [GNU
+       The standard version of AWK has no inplace editing (although the [GNU
        version
-       does](https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Inplace.html).
-       For more on AWK, you may find [these blog
-       posts](https://qmacro.org/tags/awk/) interesting.
-
+       does](https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Inplace.html)),
+       hence the need for an intermediate file. For more on AWK, you may find
+       [these blog posts](https://qmacro.org/tags/awk/) interesting.
