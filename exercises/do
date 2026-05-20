@@ -24,7 +24,12 @@ EOSERVICES
 
   cds add data
 
-  cat << EODATA > db/data/Simple.Products.csv
+  # Need newline before first record until @sap/cds-dk 9.9.0
+  # https://github.tools.sap/cap/cds-dk/releases/tag/rel%2F9.9.0: "cds add data
+  # now adds a newline character at the end of csv files to make appending
+  # content easier"
+  cat >> db/data/Simple.Products.csv << "EODATA"
+
 1,Chai,39
 2,Chang,17
 3,Aniseed Syrup,13

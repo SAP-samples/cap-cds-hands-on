@@ -21,7 +21,8 @@ a desire to learn!
 
 This workshop was originally written for a hands-on session at UKISUG Connect
 2025 (see [Hands-on domain modelling with CAP's CDS at UKISUG
-Connect](https://qmacro.org/blog/posts/2025/11/11/hands-on-domain-modelling-with-caps-cds-at-ukisug-connect/)).
+Connect](https://qmacro.org/blog/posts/2025/11/11/hands-on-domain-modelling-with-caps-cds-at-ukisug-connect/)),
+but has now been significantly extended.
 
 ## Prerequisites
 
@@ -37,7 +38,8 @@ relevant sections of [Capire](https://cap.cloud.sap/docs), particularly the
 ## Exercises
 
 To get started, clone this repository and open it in your favourite editor or
-IDE.
+IDE. Alternatively, launch a GitHub Codespace directly from this repository -
+see the [prerequisites] for more info.
 
 ### Part 1 - Understanding the context and some basic definitions
 
