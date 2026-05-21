@@ -132,6 +132,7 @@ cds compile --to yaml db/schema.cds
 > ../gencsnc db/schema.cds \
 >   | yq -y -f ../exercises/08/csn-detail.jq \
 >   | ../yfmt
+> ```
 >
 > It uses `yq` with a `jq` filter to pick out the relevant parts for us.
 
