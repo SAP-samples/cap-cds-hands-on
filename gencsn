@@ -3,6 +3,7 @@
 set -eo pipefail
 
 declare model="${1:-srv/}"
+declare myname="$(basename "$0")"
 declare HERE
 HERE="$(dirname "$0")"
 
