@@ -473,6 +473,21 @@ code,symbol,minorUnit,name,descr
 
 We'll look at aspects in more detail in the next exercise.
 
+## Summary
+
+In this exercise, we:
+
+- compared the simple currency type to something closer to reality
+- explored the common reuse types and aspects library
+- thought about why reuse is important
+- imported and used the currency type from the common library
+- examined the resulting CSN
+- found and opened the `@sap/cds/common.cds` file
+- looked at how the currency type in there is defined
+- created our own cut-down version of the common library and used that
+- used the data facet and looked at the CSV headers to understand how the elements fit together
+- took a first look at aspects
+
 ---
 
 [Next](../06/)

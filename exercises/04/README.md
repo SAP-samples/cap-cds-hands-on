@@ -249,6 +249,15 @@ used in other entity definitions as the model grows.
 > be shared between multiple currency-based values such as (here) `price` and
 `cost`.
 
+## Summary
+
+In this exercise, we:
+
+- thought about definition abstraction
+- explored an anonymous custom type
+- replaced that with a named custom type
+- examined the difference at the CSN level
+
 ---
 
 [Next](../05/)

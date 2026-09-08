@@ -597,6 +597,16 @@ entity Suppliers : cuid {
 
 Good work!
 
+## Summary
+
+In this exercise, we:
+
+- looked further at named & anonymous aspects
+- tried out the extend directive
+- understood how context and scoped names work 
+- tried out some common reuse aspects
+- explored the effect of such reuse aspects on the entities, by looking at the CSN
+
 ---
 
 Now we're all set to move on to [the next
