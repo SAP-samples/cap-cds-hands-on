@@ -8,7 +8,7 @@ has a well thought out model at its core.
 
 ## Start a new CAP project
 
-👉 Within the `hands-on-with-cap-cds/` directory, initialise a new CAP project,
+👉 Within the `cap-cds-hands-on/` directory, initialise a new CAP project,
 and change into that newly created project directory:
 
 ```bash
@@ -190,7 +190,7 @@ ID,name,stock
 > [Northwind](https://services.odata.org/V4/Northwind/Northwind.svc/) dataset.
 
 In the section of the CAP server log that we saw before announcing the use of
-SQLite, we now see an extra line telling us this CSV file has been found and
+SQLite, there is also an extra line telling us this CSV file has been found and
 initial data is being loaded from it:
 
 ```log
