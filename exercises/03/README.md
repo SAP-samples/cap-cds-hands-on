@@ -65,7 +65,7 @@ most of the rest of the workshop.
 👉 Before making these changes, stop (with `Ctrl-C`) any currently running CAP
 server (i.e. the server you started with `cds watch` in a previous exercise) -
 this is just so we don't get too many log messages during the restarts that
-will take place as we create files and edit their content.
+would take place as we create files and edit their content.
 
 Examining the content of `services.cds` we see the keywords `service` and
 `entity`; these logically belong at separate levels, so let's adjust that now.

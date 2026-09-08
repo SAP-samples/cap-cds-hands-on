@@ -190,7 +190,7 @@ ID,name,stock
 > [Northwind](https://services.odata.org/V4/Northwind/Northwind.svc/) dataset.
 
 In the section of the CAP server log that we saw before announcing the use of
-SQLite, there is also an extra line telling us this CSV file has been found and
+SQLite, we now see an extra line telling us this CSV file has been found and
 initial data is being loaded from it:
 
 ```log

@@ -167,17 +167,18 @@ This emits:
 
 > This is a very common request and so can also be produced with the shorter
 > `cds c .`, where `.` is a reference to the current directory, which only
-> contains a single `services.cds` source file at this point anyway.
+> contains a single `services.cds` source file at this point anyway, and
+> the standard `app/`, `srv/` and `db/` directories are empty.
 >
 > The output emitted to the terminal from this command (which doesn't
 > explicitly use the `--to json` option) is not strictly JSON, it's actually a
-> syntactically valid JavaScript object, mostly because it's easier on the eye
+> syntactically valid JavaScript object, mostly because it's easier to read
 > ... and if the output is sent downstream to a file or process, then JSON is
 > indeed created.
 
-While JSON is arguably the default, YAML is arguably easier on the eye so we'll
-use that as our go-to representation throughout this workshop whenever we want
-to look at CSN.
+While JSON is arguably the default, YAML is arguably more pleasant on the eye
+so we'll use that as our go-to representation throughout this workshop whenever
+we want to look at CSN.
 
 #### CSN in YAML
 
