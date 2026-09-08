@@ -52,7 +52,7 @@ entity Products {
 > too, for that matter.
 
 This looks neat and has an academic and abstract appeal, especially perhaps to
-those schooled in development in the context ABAP and the all-important Data
+those schooled in development in the context of ABAP and the all-important Data
 Dictionary, where there are Domains, Data Elements and Data Types supplying
 metadata at different layers, bringing about this kind of relationship:
 

@@ -162,11 +162,11 @@ extend Currencies with CodeList;
 ```
 
 If your editor doesn't already, then the compiler itself will have something to
-say about this:
+say about this (you can use `cds c db/` to get this):
 
 ```log
-[ERROR] db/common.cds:18:8-18: No artifact has been found
-with name “Currencies” (in extend:“Currencies”)
+[ERROR] db/common.cds:18:8-18: Artifact “Currencies”
+has not been found (in extend:“Currencies”)
 ```
 
 This is because context (literally!) matters. If we want to refer to
@@ -283,9 +283,8 @@ Notice that both entities have a single primary key `ID`, defined as an
 have their challenges (to which as anyone who has worked with number range
 management and value generation can attest).
 
-A primary key like this is common, and there is an aspect that can be applied
-to both entities here that can replace the explicit and manual definition of
-such.
+There is an aspect that can be applied to both entities here that can replace
+the explicit and manual definition of a primary key like this.
 
 That aspect is `cuid`.
 
@@ -306,8 +305,8 @@ Let's try out both of these aspects.
 #### Use the cuid aspect for a primary key
 
 👉 Modify the contents of `db/schema.cds` to also import `cuid` from
-`@sap/cds/common`, and use it in place of the explicit `ID` elements (which you
-should remove):
+`@sap/cds/common`, and use it (with the `:` construct) in place of the explicit
+`ID` elements (which you should remove):
 
 ```cds
 using {
