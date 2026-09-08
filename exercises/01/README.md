@@ -207,6 +207,18 @@ initial data is being loaded from it:
 
 Great! Time to explore our fledgling design.
 
+## Summary
+
+In this exercise, we:
+
+- used the `cds` command to initialize a new CAP Node.js project
+- created a very simple all-in-one CDS model, using CDL
+- added some initial data via the [mock
+  Data](https://qmacro.org/blog/posts/2026/05/11/local-first-dev-with-cap-node-js-mocking-data/)
+  Facility
+- saw evidence of CAP's embrace of [convention over
+  configuration](https://github.com/qmacro/capref/blob/main/axioms/AXI003.md)
+
 ---
 
 [Next](../02/)

@@ -196,6 +196,14 @@ previous exercise](../02#explore-the-service).
 
 Well done!
 
+## Summary
+
+In this exercise, we:
+
+- examined the standard layers
+- separated our simple CDS model out into schema and service
+- re-examined the DDL constructs
+
 ---
 
 We can now move on to [the next

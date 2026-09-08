@@ -435,6 +435,17 @@ rm -rf gen/ test.db
 
 Good work!
 
+## Summary
+
+In this exercise, we:
+
+- explored the fully-fledged OData service that was generated for us
+- got our first glimpse of CSN, the machine readable version of our model
+- looked at different representations of that CSN
+- saw how SQL (DDL) is created for the model for the persistence layer
+- understood how SQLite is used for local development by default
+- looked briefly at database deployment
+
 ---
 
 [Next](../03/)
