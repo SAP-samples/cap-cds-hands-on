@@ -115,7 +115,7 @@ service Accounting {
 There's a lot to unpack here, but first, let's look at the CAP server's log
 output.
 
-👉 Pay attention to the log output from the CAP server when it restarts, where
+👉 Pay attention to the output from the CAP server when it restarts, where
 you should see that indeed there are two services being served, on two separate
 paths, from the same server base (listening on port `4004` on `localhost`):
 
@@ -230,9 +230,11 @@ something like this:
 ```
 
 This is a very nice collection of flat entities, the elements of which are
-calculated and even determined from related entities. For example, while this
-OData entityset is based on a projection on the `Products` entity, the values
-for the `Currency` properties here here are actually from:
+calculated and even determined from related entities.
+
+For example, while this OData entityset is based on a projection on the
+`Products` entity, the values for the `Currency` properties here here are
+actually from:
 
 - the `name` element
 - of the `sap.common.CodeList` aspect
@@ -270,7 +272,7 @@ model definitions.
 
 ### Follow the path expressions
 
-How do the path expressions[<sup>2</sup>](#footnotes) work, what's going on
+How do the path expressions[<sup>1</sup>](#footnotes) work, what's going on
 there? We have `price.amount` in:
 
 ```cds
@@ -344,7 +346,7 @@ Accounting.Valuations:
 > it's
 important to know that it exists, and is the gateway to further understanding,
 especially in the context of CDL and the powerful CDS Expression Language
-([CXL](https://cap.cloud.sap/docs/cds/cxn))[<sup>1</sup>](#footnotes).
+([CXL](https://cap.cloud.sap/docs/cds/cxn))[<sup>2</sup>](#footnotes).
 
 What's happening here is that the path expressions are the declarative, human
 readable version of multi-level view references.
