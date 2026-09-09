@@ -845,6 +845,21 @@ avoid too much output in subsequent exercises.
 
 Success!
 
+## Summary
+
+In this exercise, we:
+
+- looked at the relationship between products and suppliers in Northwind
+- studied the to-one relationship
+- defined a to-one product-to-supplier relationship
+- examined the resulting CSN and the headers in the CSV files
+- added initial data and explored OData metadata and entity navigation
+- studied the to-many relationship
+- defined a to-many supplier-to-product relationship
+- focused on the 'on' condition construction
+- tested the new relationship
+- dug into the actual SELECT statements generated
+
 ---
 
 [Next](../08/)

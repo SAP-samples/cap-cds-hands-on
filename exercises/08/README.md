@@ -238,6 +238,15 @@ In the next exercise we'll explore this construct with some data.
 
 So far, so good!
 
+## Summary
+
+In this exercise, we:
+
+- considered a different type of relationship to express 'contained-in'
+- modelled such a relationship (in an orders context) with a composition
+- explored that definition in detail
+- examined the resulting CSN and the CSV headers
+
 ---
 
 [Next](../09/)

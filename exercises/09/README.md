@@ -481,6 +481,17 @@ This should bring us back to in-memory persistence:
 
 Great stuff.
 
+## Summary
+
+In this exercise, we:
+
+- included the orders in the service
+- annotated the service
+- explored the OData metadata with respect to the orders and order items
+- added some orders data
+- tried out some OData operations
+- used a file-based persistence mechanism with SQLite to check the cascaded delete feature
+
 ---
 
 In the [next
