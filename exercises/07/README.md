@@ -291,10 +291,7 @@ using '--force' ... existing files will be overwritten
 
 adding data
 adding headers only, use --records to create random entries
-  overwriting db/data/sap.common-Currencies.csv
-  overwriting db/data/sap.common-Currencies.texts.csv
-  overwriting db/data/workshop-Products.csv
-  overwriting db/data/workshop-Suppliers.csv
+  [...]
 
 successfully added features to your project
 ==> db/data/workshop-Products.csv <==
@@ -308,7 +305,7 @@ There are two important things to note here:
 - the `db/data/workshop-Products.csv` header has a new field `supplier_ID`,
   constructed by default (in the "managed" mode) from the source element name
   `supplier` and the target key element's name `ID`, joined with an underscore
-- the `db/data/workshop-Suppliers.csv` has -- and needs -- nothing for this
+- the `db/data/workshop-Suppliers.csv` has - and needs - nothing for this
   relationship
 
 ### Add some supplier and product data
