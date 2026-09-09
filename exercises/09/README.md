@@ -492,10 +492,11 @@ explore what else we can do there.
 
 ## Footnotes
 
+1. Composition targets are auto-exposed in service interfaces, see the
+   [Compositions](https://cap.cloud.sap/docs/guides/domain/#compositions)
+   section of the domain modelling topic in Capire.
+
 1. See the blog post [ISO content for common CAP
    types](https://qmacro.org/blog/posts/2024/03/12/iso-content-for-common-cap-types/)
    for more on standard initial data like this.
 
-1. Composition targets are auto-exposed in service interfaces, see the
-   [Compositions](https://cap.cloud.sap/docs/guides/domain/#compositions)
-   section of the domain modelling topic in Capire.
