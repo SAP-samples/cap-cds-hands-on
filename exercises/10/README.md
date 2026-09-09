@@ -459,4 +459,4 @@ Phew!
 
 1. If you want to understand path expressions like this further, look into the
    concept of [forward-declared
-   joins](https://qmacro.org/tags/forward-declared-joins/).
+   joins](https://qmacro.org/blog/posts/2026/03/27/cds-expressions-in-cap-notes-on-part-4/#a-brief-digression-on-the-term-forward-declared-join).
