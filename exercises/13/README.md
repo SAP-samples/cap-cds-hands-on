@@ -294,6 +294,16 @@ which is easily large enough to fill an entire workshop itself. So we'll leave
 it here with respect to the introduction, but will be employing annotations in
 the next exercise too.
 
+## Summary
+
+In this exercise, we:
+
+- revisited the reuse library
+- looked at the @title annotation
+- saw the link between the protocol agnostic and the OData specific terms
+- tried out a @title annotation and looked at how it's conveyed
+- added a @UI.LineItem annotation to pre-select columns for output
+
 ---
 
 [Next](../14/)

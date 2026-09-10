@@ -254,6 +254,14 @@ with our CAP modelling and avoid writing code with moving parts and that needs
 maintaining. We'll see another example of this in the next and final
 exercise[<sup>3</sup>](#footnotes).
 
+## Summary
+
+In this exercise, we:
+
+- considered the looseness of the applyDiscount action's percent specification
+- addressed the problem with a declarative constraint in the form of an @assert.range annotation
+- explored the more general @assert constraint, with expressions
+
 ---
 
 [Next](../15/)

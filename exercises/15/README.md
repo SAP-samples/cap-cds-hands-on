@@ -312,6 +312,18 @@ Java) needing to be specified[<sup>3</sup>](#footnotes).
 
 That's all we have time for in this workshop. Well done for reaching the end!
 
+## Summary
+
+In this exercise, we:
+
+- removed the unbound function and its corresponding custom JavaScript implementation
+- replaced it with a simple declarative construct, an infix filter
+- helped the CDS compiler with a target hint annotation
+- explored the "shift left" concept by adding a new element at the schema level
+- defined that new element using an expression
+- added an association-like calculated element to explore further succinct and declarative ways to achieve what the business might need
+- added a further calculated element with on-write persistence
+
 ---
 
 ## Footnotes
