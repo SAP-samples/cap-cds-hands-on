@@ -186,7 +186,7 @@ annotate Simple.Suppliers with {
 
 How you end up organising files that make up your CDS model is up to you, but
 adding constraints like this to a separate file in the `srv/` directory makes
-some sense. Also, we learn how to use the `annotate` keyword to _add_ a
+some sense. Also, we learn how to use the `annotate` directive to _add_ a
 contraint, referring to its target.
 
 It's [good practice to enclose the CXL expression in

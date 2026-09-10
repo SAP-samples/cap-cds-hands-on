@@ -71,11 +71,12 @@ projection. Once you're done, the `Simple` service definition should look like
 this:
 
 ```cds
-@protocol: 'odata'
-@path    : '/simple'
 service Simple {
   @cds.redirection.target
-  entity Products           as projection on workshop.Products;
+  entity Products           as projection on workshop.Products
+    actions {
+      action applyDiscount(percent: Percentage) returns Products:price
+    };
 
   entity Suppliers          as projection on workshop.Suppliers;
   entity Orders             as projection on workshop.Orders;
@@ -88,8 +89,8 @@ service Simple {
 What have we done here? Importantly, we have:
 
 - moved from a procedural approach that required custom business logic,
-  to a purely declarative one using the power of CAP's domain modelling
-  language CDL
+  to a purely declarative one using the power of the CDS modelling
+  family of languages
 - that power specifically here is the `[stock <= 0]` part which is an [infix
   filter](https://cap.cloud.sap/docs/cds/cdl#publish-associations-with-filter)
 
