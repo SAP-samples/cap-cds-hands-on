@@ -269,6 +269,15 @@ business logic code where it is.
 
 Good work!
 
+## Summary
+
+In this exercise, we:
+
+- thought about protocols, and in particular HTTP
+- understood the orthogonality of actions and functions in OData
+- defined and provided the implementation for a custom function
+- tried the function out
+
 ---
 
 [Next](../12/)

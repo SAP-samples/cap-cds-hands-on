@@ -445,6 +445,18 @@ and how that expression traverses it (start at the bottom!):
 
 Phew!
 
+## Summary
+
+In this exercise, we:
+
+- understood where services fit and how they're useful
+- added a second service definition
+- examined the detail of the entity for valuations
+- explored how the values in the entityset are derived from the valuations constructs
+- marvelled at the "flatness" of the resulting projection
+- looked in more detail at the path expressions
+- visualised a path expression traversal through the CDL
+
 ---
 
 [Next](../11/)

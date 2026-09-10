@@ -176,6 +176,14 @@ workshop.
 
 Well done!
 
+## Summary
+
+In this exercise, we:
+
+- declared a bound action, to work on a product entity
+- added the implementation for this bound action
+- made a call and checked the result
+
 ---
 
 Let's now move on to the next part of the workshop, on [annotations and solid
