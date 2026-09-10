@@ -186,7 +186,7 @@ annotate Simple.Suppliers with {
 
 How you end up organising files that make up your CDS model is up to you, but
 adding constraints like this to a separate file in the `srv/` directory makes
-some sense. Also, we learn how to use the `annotate` keyword to _add_ a
+some sense. Also, we learn how to use the `annotate` directive to _add_ a
 contraint, referring to its target.
 
 It's [good practice to enclose the CXL expression in
@@ -253,6 +253,14 @@ With the combination of the declarative assertion mechanism and CXL, we can
 with our CAP modelling and avoid writing code with moving parts and that needs
 maintaining. We'll see another example of this in the next and final
 exercise[<sup>3</sup>](#footnotes).
+
+## Summary
+
+In this exercise, we:
+
+- considered the looseness of the applyDiscount action's percent specification
+- addressed the problem with a declarative constraint in the form of an @assert.range annotation
+- explored the more general @assert constraint, with expressions
 
 ---
 

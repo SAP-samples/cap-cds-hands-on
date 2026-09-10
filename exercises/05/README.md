@@ -126,7 +126,7 @@ the contents of our `db/schema.cds`, the compiler will load the entirety of
 > Why does it import all of `@sap/cds/common`? Well, one reason is that there's
 > no guarantee that the single definition (`Currency` here) being imported is
 > self-contained, i.e. does not rely on any further definitions in
-> `@sap/cds/common` ... which it does, actually, as we'll see.
+> `@sap/cds/common` ... (it does, actually, as we'll see).
 
 Instead, let's take a look at the sources of `@sap/cds/common`, as it will help
 us understand what is going on and what we will be getting with this `Currency`
@@ -163,7 +163,7 @@ code /usr/local/share/npm-global/lib/node_modules/@sap/cds-dk/node_modules/@sap/
 
 > We have deliberately still not installed CAP libraries locally in our
 > project, to keep things as simple as possible, and thereby show that
-> everything that we're doing so far is runtime (JavaScript or Java)
+> everything that we're doing so far is runtime (Node.js or Java)
 > independent. In other words, we're still relying on the globally installed
 > CDS development kit (`cds-dk`) which is perfectly fine for this work.
 >
@@ -472,6 +472,21 @@ code,symbol,minorUnit,name,descr
 ```
 
 We'll look at aspects in more detail in the next exercise.
+
+## Summary
+
+In this exercise, we:
+
+- compared the simple currency type to something closer to reality
+- explored the common reuse types and aspects library
+- thought about why reuse is important
+- imported and used the currency type from the common library
+- examined the resulting CSN
+- found and opened the `@sap/cds/common.cds` file
+- looked at how the currency type in there is defined
+- created our own cut-down version of the common library and used that
+- used the data facet and looked at the CSV headers to understand how the elements fit together
+- took a first look at aspects
 
 ---
 

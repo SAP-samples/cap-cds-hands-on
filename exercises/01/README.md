@@ -190,7 +190,7 @@ ID,name,stock
 > [Northwind](https://services.odata.org/V4/Northwind/Northwind.svc/) dataset.
 
 In the section of the CAP server log that we saw before announcing the use of
-SQLite, there is also an extra line telling us this CSV file has been found and
+SQLite, we now see an extra line telling us this CSV file has been found and
 initial data is being loaded from it:
 
 ```log
@@ -206,6 +206,18 @@ initial data is being loaded from it:
 > section of this part of the workshop for more info.
 
 Great! Time to explore our fledgling design.
+
+## Summary
+
+In this exercise, we:
+
+- used the `cds` command to initialize a new CAP Node.js project
+- created a very simple all-in-one CDS model, using CDL
+- added some initial data via the [mock
+  Data](https://qmacro.org/blog/posts/2026/05/11/local-first-dev-with-cap-node-js-mocking-data/)
+  Facility
+- saw evidence of CAP's embrace of [convention over
+  configuration](https://github.com/qmacro/capref/blob/main/axioms/AXI003.md)
 
 ---
 

@@ -30,7 +30,8 @@ but we didn't dwell on it. Let's think about what's happening here.
 
 While the declaration in this file is static, the outcome is a dynamic
 artifact, in our case a full fat OData service with complete support for all
-OData operations (Create, Read, Update, Delete and Query) out of the box:
+standard OData operations (Create, Read, Update, Delete and Query) out of the
+box:
 
 ```log
 [cds] - serving Simple {
@@ -66,10 +67,11 @@ service Simple {
 }
 ```
 
-> There's a short form of the `@protocol: 'odata'` annotation: `@odata` (see
-> the
+> There's a short form of the `@protocol: 'odata'` annotation: `@odata`. This
+> can also be combined with a value for the path; in other words, `@odata:
+> '/simple'` is the equivalent of what we have defined above. See the
 > [cds.protocols](https://cap.cloud.sap/docs/node.js/cds-serve#cds-protocols)
-> section in Capire).
+> section in Capire for more details.
 
 As the CAP server should still be running in watch mode, it will notice this
 change and restart, whereupon we should see the custom path `/simple`:
@@ -252,9 +254,9 @@ corresponding items, which should look something like this:
 > the currency details:
 > <http://localhost:4004/simple/Orders?$expand=items($expand=product($expand=price_currency))>.
 
-#### Send an OData create operation with header and items
+#### Send an OData Create operation with header and items
 
-Now it's time to try an OData create operation, supplying a JSON payload
+Now it's time to try an OData Create operation, supplying a JSON payload
 representing a new order with three items. A so-called "deep-insert".
 
 The data is in a file called `order.json` and looks like this:
@@ -461,7 +463,7 @@ This should show that there are now ... no item records!
 server:
 
 ```bash
-rm .env; cds watch
+rm .env db.sqlite; cds watch
 ```
 
 This should bring us back to in-memory persistence:
@@ -479,6 +481,17 @@ This should bring us back to in-memory persistence:
 
 Great stuff.
 
+## Summary
+
+In this exercise, we:
+
+- included the orders in the service
+- annotated the service
+- explored the OData metadata with respect to the orders and order items
+- added some orders data
+- tried out some OData operations
+- used a file-based persistence mechanism with SQLite to check the cascaded delete feature
+
 ---
 
 In the [next
@@ -490,10 +503,11 @@ explore what else we can do there.
 
 ## Footnotes
 
+1. Composition targets are auto-exposed in service interfaces, see the
+   [Compositions](https://cap.cloud.sap/docs/guides/domain/#compositions)
+   section of the domain modelling topic in Capire.
+
 1. See the blog post [ISO content for common CAP
    types](https://qmacro.org/blog/posts/2024/03/12/iso-content-for-common-cap-types/)
    for more on standard initial data like this.
 
-1. Composition targets are auto-exposed in service interfaces, see the
-   [Compositions](https://cap.cloud.sap/docs/guides/domain/#compositions)
-   section of the domain modelling topic in Capire.

@@ -52,7 +52,7 @@ entity Products {
 > too, for that matter.
 
 This looks neat and has an academic and abstract appeal, especially perhaps to
-those schooled in development in the context ABAP and the all-important Data
+those schooled in development in the context of ABAP and the all-important Data
 Dictionary, where there are Domains, Data Elements and Data Types supplying
 metadata at different layers, bringing about this kind of relationship:
 
@@ -248,6 +248,15 @@ used in other entity definitions as the model grows.
 > In other words, having `currency` flattened into the entity means that it can
 > be shared between multiple currency-based values such as (here) `price` and
 `cost`.
+
+## Summary
+
+In this exercise, we:
+
+- thought about definition abstraction
+- explored an anonymous custom type
+- replaced that with a named custom type
+- examined the difference at the CSN level
 
 ---
 

@@ -26,7 +26,7 @@ Being unbound, the function `outOfStockProducts` was simply listed alongside
 ## Declare the bound action
 
 For a bound function or action, we need a little bit more syntax to be able to
-connect it to the entity to which it should be bound.
+relate it to the entity to which it should be bound.
 
 👉 Define a bound action `applyDiscount` for the `Products` entity, so that it
 ends up looking like this:
@@ -175,6 +175,14 @@ we'll wrap this exercise up here, ready to move on to the next part of the
 workshop.
 
 Well done!
+
+## Summary
+
+In this exercise, we:
+
+- declared a bound action, to work on a product entity
+- added the implementation for this bound action
+- made a call and checked the result
 
 ---
 

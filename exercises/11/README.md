@@ -269,6 +269,15 @@ business logic code where it is.
 
 Good work!
 
+## Summary
+
+In this exercise, we:
+
+- thought about protocols, and in particular HTTP
+- understood the orthogonality of actions and functions in OData
+- defined and provided the implementation for a custom function
+- tried the function out
+
 ---
 
 [Next](../12/)
@@ -303,4 +312,4 @@ Good work!
        version
        does](https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Inplace.html)),
        hence the need for an intermediate file. For more on AWK, you may find
-       [these blog posts](https://qmacro.org/tags/awk/) interesting.
+       [this content](https://www.google.com/search?q=site%3Aqmacro.org+awk) interesting.

@@ -71,11 +71,12 @@ projection. Once you're done, the `Simple` service definition should look like
 this:
 
 ```cds
-@protocol: 'odata'
-@path    : '/simple'
 service Simple {
   @cds.redirection.target
-  entity Products           as projection on workshop.Products;
+  entity Products           as projection on workshop.Products
+    actions {
+      action applyDiscount(percent: Percentage) returns Products:price
+    };
 
   entity Suppliers          as projection on workshop.Suppliers;
   entity Orders             as projection on workshop.Orders;
@@ -88,8 +89,8 @@ service Simple {
 What have we done here? Importantly, we have:
 
 - moved from a procedural approach that required custom business logic,
-  to a purely declarative one using the power of CAP's domain modelling
-  language CDL
+  to a purely declarative one using the power of the CDS modelling
+  family of languages
 - that power specifically here is the `[stock <= 0]` part which is an [infix
   filter](https://cap.cloud.sap/docs/cds/cdl#publish-associations-with-filter)
 
@@ -310,6 +311,18 @@ project](01#start-a-new-cap-project), with no specific runtime (JavaScript or
 Java) needing to be specified[<sup>3</sup>](#footnotes).
 
 That's all we have time for in this workshop. Well done for reaching the end!
+
+## Summary
+
+In this exercise, we:
+
+- removed the unbound function and its corresponding custom JavaScript implementation
+- replaced it with a simple declarative construct, an infix filter
+- helped the CDS compiler with a target hint annotation
+- explored the "shift left" concept by adding a new element at the schema level
+- defined that new element using an expression
+- added an association-like calculated element to explore further succinct and declarative ways to achieve what the business might need
+- added a further calculated element with on-write persistence
 
 ---
 
