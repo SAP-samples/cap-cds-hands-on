@@ -150,13 +150,13 @@ too](https://cap.cloud.sap/docs/guides/services/constraints#served-to-fiori-uis)
 
 ## Explore more flexible constraint options
 
-The relatively new[<sup>1</sup>](#footnotes) "general assertion" mechanism
-lends a lot more flexibility for constraints than we have had so far with
-`@assert.range` and its siblings such as `@assert.format` and so on.
+The relatively new "general assertion" mechanism lends a lot more flexibility
+for constraints than we have had so far with `@assert.range` and its siblings
+such as `@assert.format` and so on.
 
 This general assertion mechanism combines the simple `@assert` annotation with
 an entire sub language in the CDS family, namely the CDS Expression Language
-([CXL](https://cap.cloud.sap/docs/cds/cxl))[<sup>2</sup>](#footnotes).
+([CXL](https://cap.cloud.sap/docs/cds/cxl))[<sup>1</sup>](#footnotes).
 
 Given that flexibility, there's a lot to explore. But let's just, erm,
 _constrain_ ourselves to one example, to keep this exercise brief.
@@ -252,7 +252,7 @@ With the combination of the declarative assertion mechanism and CXL, we can
 [shift left](https://qmacro.org/blog/posts/2026/02/09/shift-left-with-cap/)
 with our CAP modelling and avoid writing code with moving parts and that needs
 maintaining. We'll see another example of this in the next and final
-exercise[<sup>3</sup>](#footnotes).
+exercise[<sup>2</sup>](#footnotes).
 
 ## Summary
 
@@ -269,9 +269,6 @@ In this exercise, we:
 ---
 
 ## Footnotes
-
-1. It's in [Gamma](https://cap.cloud.sap/docs/releases/index#status-badges)
-   status at the time of writing, at CAP Node.js version 9.8.
 
 1. See the live stream series on the CDS Expression Language for lots of detail
    and deep diving into the topic: episode replays and accompanying notes are
