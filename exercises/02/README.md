@@ -314,10 +314,10 @@ which will produce output something like this:
 
 ```log
 building project with {
-  versions: { cds: '9.8.4', compiler: '6.8.0', dk: '9.8.3' },
+  versions: { cds: '10.1.0', compiler: '7.1.1', dk: '10.1.1' },
   target: 'gen',
   tasks: [
-    { src: 'db', for: 'hana', options: { model: [ 'db', 'srv', 'app', 'app/*', 'services', '@sap/cds/srv/outbox' ] } }
+    { src: 'db', for: 'hana', options: { model: [ 'db', 'srv', 'app', 'app/*', '@sap/cds/srv/outbox' ] } }
   ]
 }
 done > wrote output to:
