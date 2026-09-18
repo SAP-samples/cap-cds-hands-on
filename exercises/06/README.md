@@ -37,9 +37,11 @@ and `descr` elements that are defined in the `CodeList` aspect.
 ### Try using extend with an anonymous aspect
 
 👉 Modify the definitions inside the `sap.common` context in `db/common.cds` so
-it looks like this (leave the `type` definition as it is, it's not shown here):
+it looks like this (leaving the `type` definition as it is):
 
 ```cds
+type Currency : Association to sap.common.Currencies;
+
 context sap.common {
 
   entity Currencies {
