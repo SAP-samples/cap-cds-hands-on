@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Emits any <http://localhost:4004...> URLs found in an exercise's content
+# Will try to determine the exercise number (e.g. 01); failing that, it will
+# fall back to requiring it to be passed as a parameter.
+
+set -eo pipefail
+
+main() {
+
+  local here ex readme
+  here="$(dirname "$0")"
+  set +e
+  ex="$(pwd | grep -P -o '\d{2}$')"
+  set -e
+  if [[ -z $ex ]]; then
+    ex="$(printf "%02d" "${1:?Specify exercise number}")"
+  fi
+  readme="$here/../exercises/$ex/README.md"
+
+  grep -P -o '<http://localhost:4004.+>' "$readme"
+
+}
+
+main "$@"
