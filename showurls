@@ -16,9 +16,9 @@ main() {
   if [[ -z $ex ]]; then
     ex="$(printf "%02d" "${1:?Specify exercise number}")"
   fi
-  readme="$here/../exercises/$ex/README.md"
+  readme="$here/exercises/$ex/README.md"
 
-  grep -P -o '<http://localhost:4004.+>' "$readme"
+  grep -P -o '[<(]http://localhost:4004.+[)>]' "$readme"
 
 }
 
