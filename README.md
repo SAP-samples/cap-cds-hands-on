@@ -71,6 +71,7 @@ modelling with CDS.
   simple](https://qmacro.org/blog/posts/2026/04/07/cds-expressions-in-cap-notes-on-part-5/#keep-services-simple)
   section of the - notes on Part 5 of the CDS expressions in CAP series
 - Axiom [AXI004 Services are cheap](https://github.com/qmacro/capref/blob/main/axioms/AXI004.md)
+- A note on [initial, test and sample data](https://qmacro.org/blog/posts/2026/05/11/local-first-dev-with-cap-node-js-mocking-data/#initial-test-and-sample-data-terminology)
 
 ### Part 2 - More on structure with types, aspects and reuse
 
